@@ -171,4 +171,17 @@ public class SearchQueue {
 			return queue.isEmpty();
 		}
 	}
+	
+	/**
+	 * Returns the number of nodes in the queue
+	 */
+	public int size() {
+		if (strategy.getMode() == Mode.depthFirst) {
+			return stack.size();
+		} else if (strategy.getMode() == Mode.randomChoice) {
+			return list.size();
+		} else {
+			return queue.size();
+		}
+	}
 }
