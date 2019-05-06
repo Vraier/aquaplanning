@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import edu.kit.aquaplanning.Configuration;
-import edu.kit.aquaplanning.Configuration.HeuristicType;
-import edu.kit.aquaplanning.Configuration.PlannerType;
 import edu.kit.aquaplanning.model.ground.Action;
 import edu.kit.aquaplanning.model.ground.Goal;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
@@ -16,7 +14,6 @@ import edu.kit.aquaplanning.planning.datastructures.ActionIndex;
 import edu.kit.aquaplanning.planning.datastructures.SearchNode;
 import edu.kit.aquaplanning.planning.datastructures.SearchQueue;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
-import edu.kit.aquaplanning.planning.datastructures.SearchStrategy.Mode;
 import edu.kit.aquaplanning.planning.heuristic.Heuristic;
 import edu.kit.aquaplanning.util.Logger;
 
@@ -45,13 +42,15 @@ public class SimpelParallelPlanner extends Planner {
 		plan = null;
 		Random random = new Random(this.config.seed); // seed generator
 
+		Logger.log(Logger.INFO, "Starting to search for " + NUM_CUBES + " cubes.");
 		cubes = findCubes(problem, NUM_CUBES);
+		Logger.log(Logger.INFO, "Found " + cubes.size() + " cubes.");
 
 		if (plan != null) {
 			Logger.log(Logger.INFO, "Already found a plan while searching for cubes.");
 			return plan;
 		} else if (cubes == null) {
-			Logger.log(Logger.INFO, "Error occured. Unable to find cubes.");
+			Logger.log(Logger.INFO, "Error occured while searching for cubes. Unable to find any cubes.");
 			return null;
 		}
 
@@ -62,9 +61,7 @@ public class SimpelParallelPlanner extends Planner {
 			// Default configuration with random seed
 			Configuration config = this.config.copy();
 			config.seed = random.nextInt();
-			config.plannerType = PlannerType.forwardSSS;
-			config.searchStrategy = Mode.bestFirst;
-			config.heuristic = HeuristicType.ffWilliams;
+			int threadNum = i;
 
 			// partition the cubes into equal parts
 			// Round up integer division
@@ -72,52 +69,7 @@ public class SimpelParallelPlanner extends Planner {
 			List<SearchNode> localCubes = cubes.subList(partitionSize * i,
 					Math.min(partitionSize * (i + 1), cubes.size()));
 
-			// Create planners
-			List<SimplePlanner> planners = new ArrayList<SimplePlanner>();
-			for (SearchNode cube : localCubes) {
-				State tempState = cube.state;
-				GroundPlanningProblem tempProblem = new GroundPlanningProblem(problem);
-				tempProblem.setInitialState(tempState);
-				planners.add(new SimplePlanner(config, tempProblem));
-			}
-
-			// Create a thread running the planners
-			// TODO: can i use config or localCubes variable in the run() method?
-			int threadNum = i;
-			Thread thread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-
-					// Create planners
-					List<SimplePlanner> planners = new ArrayList<SimplePlanner>();
-					for (SearchNode cube : localCubes) {
-						State tempState = cube.state;
-						GroundPlanningProblem tempProblem = new GroundPlanningProblem(problem);
-						tempProblem.setInitialState(tempState);
-						planners.add(new SimplePlanner(config, tempProblem));
-					}
-
-					//TODO: stop Thread on interrupt
-					Plan localPlan = null;
-					int numExhausted = 0;
-					for (int i = 0;; i = (i + 1) % planners.size()) {
-						if (numExhausted >= planners.size()) {
-							// no Planner found a Plan
-							break;
-						} else if (planners.get(i).isExhausted()) {
-							numExhausted++;
-							continue;
-						} else {
-							numExhausted = 0;
-							localPlan = planners.get(i).calculateSteps(CUBE_ITERATIONS);
-							if (localPlan != null) {
-								Logger.log(Logger.INFO, "SimplePlanner \" (index " + threadNum + ") found a plan.");
-								onPlanFound(localPlan);
-							}
-						}
-					}
-				}
-			});
+			Thread thread = new Thread(new MyThread(config, threadNum, problem, localCubes));
 			threads.add(thread);
 
 			// Start the planner (non-blocking call)
@@ -157,13 +109,13 @@ public class SimpelParallelPlanner extends Planner {
 
 	private List<SearchNode> findCubes(GroundPlanningProblem problem, int numCubes) {
 
-		Logger.log(Logger.INFO, "Starting to search for " + numCubes + " cubes.");
 		State initState = problem.getInitialState();
 		Goal goal = problem.getGoal();
 		ActionIndex aindex = new ActionIndex(problem);
 		List<SearchNode> cubes;
 
 		// Initialize breadthFirst search
+		// TODO: implement own breadthFirstSerach for more controll over datastructures
 		SearchStrategy strategy = new SearchStrategy(SearchStrategy.Mode.breadthFirst);
 		SearchQueue frontier = new SearchQueue(strategy);
 		frontier.add(new SearchNode(null, initState));
@@ -200,10 +152,8 @@ public class SimpelParallelPlanner extends Planner {
 		}
 
 		if (frontier.isEmpty()) {
-			Logger.log(Logger.INFO, "Search space exhausted.");
 			return new ArrayList<SearchNode>();
 		} else if (!withinComputationalBounds(iteration)) {
-			Logger.log(Logger.INFO, "Interrupted and/or computational resources exhausted.");
 			return null;
 		} else {
 
@@ -213,6 +163,54 @@ public class SimpelParallelPlanner extends Planner {
 				cubes.add(frontier.get());
 			}
 			return cubes;
+		}
+	}
+
+	private class MyThread implements Runnable {
+
+		// TODO: implement means to interrupt Threads
+		Configuration config;
+		int threadNum;
+		GroundPlanningProblem problem;
+		List<SearchNode> localCubes;
+
+		public MyThread(Configuration config, int threadNum, GroundPlanningProblem problem, List<SearchNode> cubes) {
+			this.config = config;
+			this.threadNum = threadNum;
+			this.problem = problem;
+			this.localCubes = cubes;
+		}
+
+		@Override
+		public void run() {
+
+			// Create planners
+			List<SimplePlanner> planners = new ArrayList<SimplePlanner>();
+			for (SearchNode cube : localCubes) {
+				State tempState = cube.state;
+				GroundPlanningProblem tempProblem = new GroundPlanningProblem(problem);
+				tempProblem.setInitialState(tempState);
+				planners.add(new SimplePlanner(config, tempProblem));
+			}
+
+			Plan localPlan = null;
+			int numExhausted = 0;
+			for (int i = 0;; i = (i + 1) % planners.size()) {
+				if (numExhausted >= planners.size()) {
+					// no Planner found a Plan
+					break;
+				} else if (planners.get(i).isExhausted()) {
+					numExhausted++;
+					continue;
+				} else {
+					numExhausted = 0;
+					localPlan = planners.get(i).calculateSteps(CUBE_ITERATIONS);
+					if (localPlan != null) {
+						Logger.log(Logger.INFO, "SimplePlanner \" (index " + threadNum + ") found a plan.");
+						onPlanFound(localPlan);
+					}
+				}
+			}
 		}
 	}
 
