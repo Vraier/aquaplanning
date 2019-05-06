@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import edu.kit.aquaplanning.Configuration;
-import edu.kit.aquaplanning.Configuration.HeuristicType;
 import edu.kit.aquaplanning.grounding.Grounder;
 import edu.kit.aquaplanning.grounding.PlanningGraphGrounder;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
@@ -13,7 +12,6 @@ import edu.kit.aquaplanning.model.lifted.PlanningProblem;
 import edu.kit.aquaplanning.parsing.ProblemParser;
 import edu.kit.aquaplanning.planning.Planner;
 import edu.kit.aquaplanning.planning.SimpleParallelPlanner;
-import edu.kit.aquaplanning.planning.datastructures.SearchStrategy.Mode;
 import edu.kit.aquaplanning.validation.Validator;
 import junit.framework.TestCase;
 
@@ -21,25 +19,20 @@ public class TestSimpleParallelPlanner extends TestCase {
 
 	public void testSimpleParallelPlanner() throws IOException {
 		Configuration config = new Configuration();
-		config.numThreads = 4;
-		config.searchTimeSeconds = 20;
-		config.searchStrategy = Mode.bestFirst;
-		config.heuristic = HeuristicType.actionInterferenceRelaxation;
+		config.numThreads = 8;
+		config.searchTimeSeconds = 10;
 		SimpleParallelPlanner spp = new SimpleParallelPlanner(config);
-		testPlannerOnBenchmark(spp, "C:\\Users\\jpvdh\\Documents\\Bachelorarbeit\\aquaplanning\\benchmarks\\Barman/domain.pddl", "C:\\Users\\jpvdh\\Documents\\Bachelorarbeit\\aquaplanning\\benchmarks\\Barman/p01.pddl");
-	}
-	
-	private void testOnAll(Planner planner) throws IOException {
 		File benchdir = new File("benchmarks");
 		for (File domdir : benchdir.listFiles()) {
 			String domain = domdir.getCanonicalPath() + "/domain.pddl";
 			for (File f : domdir.listFiles()) {
 				if (f.getName().startsWith("p") && f.getName().endsWith(".pddl")) {
 					String problem = f.getCanonicalPath();
-					//testBenchmark(domain, problem);
-					testPlannerOnBenchmark(planner, domain, problem);
+					testPlannerOnBenchmark(spp, domain, problem);
+					break;
 				}
 			}
+			break;
 		}
 	}
 	
