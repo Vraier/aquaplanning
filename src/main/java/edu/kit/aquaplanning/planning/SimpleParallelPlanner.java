@@ -17,7 +17,7 @@ import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.planning.heuristic.Heuristic;
 import edu.kit.aquaplanning.util.Logger;
 
-public class SimpelParallelPlanner extends Planner {
+public class SimpleParallelPlanner extends Planner {
 
 	private static final int NUM_CUBES = 10000;
 	private static final int CUBE_ITERATIONS = 5000;
@@ -27,7 +27,7 @@ public class SimpelParallelPlanner extends Planner {
 
 	private int iteration;
 
-	public SimpelParallelPlanner(Configuration config) {
+	public SimpleParallelPlanner(Configuration config) {
 		super(config);
 		numThreads = config.numThreads;
 	}

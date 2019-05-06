@@ -1,0 +1,153 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (malloc) failed to allocate 1048576 bytes for AllocateHeap
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   In 32 bit mode, the process size limit was hit
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Use 64 bit Java on a 64 bit OS
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (memory/allocation.inline.hpp:61), pid=8344, tid=0x00000000000020f8
+#
+# JRE version:  (8.0_131-b11) (build )
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.131-b11 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00000000016ad800):  JavaThread "Unknown thread" [_thread_in_vm, id=8440, stack(0x0000000002f70000,0x0000000003070000)]
+
+Stack: [0x0000000002f70000,0x0000000003070000]
+[error occurred during error reporting (printing stack bounds), id 0xc0000005]
+
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+
+Other Threads:
+
+=>0x00000000016ad800 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=8440, stack(0x0000000002f70000,0x0000000003070000)]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap:
+ PSYoungGen      total 18944K, used 327K [0x00000000eb100000, 0x00000000ec600000, 0x0000000100000000)
+  eden space 16384K, 2% used [0x00000000eb100000,0x00000000eb151ec8,0x00000000ec100000)
+  from space 2560K, 0% used [0x00000000ec380000,0x00000000ec380000,0x00000000ec600000)
+  to   space 2560K, 0% used [0x00000000ec100000,0x00000000ec100000,0x00000000ec380000)
+ ParOldGen       total 44032K, used 0K [0x00000000c1200000, 0x00000000c3d00000, 0x00000000eb100000)
+  object space 44032K, 0% used [0x00000000c1200000,0x00000000c1200000,0x00000000c3d00000)
+ Metaspace       used 746K, capacity 4480K, committed 4480K, reserved 1056768K
+  class space    used 75K, capacity 384K, committed 384K, reserved 1048576K
+
+Card table byte_map: [0x0000000012590000,0x0000000012790000] byte_map_base: 0x0000000011f87000
+
+Marking Bits: (ParMarkBitMap*) 0x0000000061c7c720
+ Begin Bits: [0x0000000012ce0000, 0x0000000013c98000)
+ End Bits:   [0x0000000013c98000, 0x0000000014c50000)
+
+Polling page: 0x0000000000ff0000
+
+CodeCache: size=245760Kb used=328Kb max_used=328Kb free=245431Kb
+ bounds [0x00000000031d0000, 0x0000000003440000, 0x00000000121d0000]
+ total_blobs=58 nmethods=0 adapters=38
+ compilation: enabled
+
+Compilation events (0 events):
+No events
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (10 events):
+Event: 0.130 loading class java/lang/Short
+Event: 0.130 loading class java/lang/Short done
+Event: 0.130 loading class java/lang/Integer
+Event: 0.130 loading class java/lang/Integer done
+Event: 0.130 loading class java/lang/Long
+Event: 0.131 loading class java/lang/Long done
+Event: 0.132 loading class java/lang/NullPointerException
+Event: 0.132 loading class java/lang/NullPointerException done
+Event: 0.132 loading class java/lang/ArithmeticException
+Event: 0.132 loading class java/lang/ArithmeticException done
+
+
+Dynamic libraries:
+0x00007ff7f22d0000 - 0x00007ff7f2307000 	C:\Program Files\Java\jre1.8.0_131\bin\javaw.exe
+0x00007ffa96d80000 - 0x00007ffa96f61000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x00007ffa96c30000 - 0x00007ffa96ce1000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x00007ffa93e30000 - 0x00007ffa940a3000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x00007ffa94600000 - 0x00007ffa946a1000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x00007ffa94ad0000 - 0x00007ffa94b6e000 	C:\WINDOWS\System32\msvcrt.dll
+0x00007ffa945a0000 - 0x00007ffa945fb000 	C:\WINDOWS\System32\sechost.dll
+0x00007ffa96b00000 - 0x00007ffa96c24000 	C:\WINDOWS\System32\RPCRT4.dll
+0x00007ffa946b0000 - 0x00007ffa94840000 	C:\WINDOWS\System32\USER32.dll
+0x00007ffa93700000 - 0x00007ffa93720000 	C:\WINDOWS\System32\win32u.dll
+0x00007ffa94210000 - 0x00007ffa94238000 	C:\WINDOWS\System32\GDI32.dll
+0x00007ffa93250000 - 0x00007ffa933e2000 	C:\WINDOWS\System32\gdi32full.dll
+0x00007ffa933f0000 - 0x00007ffa9348f000 	C:\WINDOWS\System32\msvcp_win.dll
+0x00007ffa94110000 - 0x00007ffa94208000 	C:\WINDOWS\System32\ucrtbase.dll
+0x00007ffa842a0000 - 0x00007ffa84509000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.17134.706_none_fb43a2cb30647007\COMCTL32.dll
+0x00007ffa967d0000 - 0x00007ffa96af2000 	C:\WINDOWS\System32\combase.dll
+0x00007ffa93490000 - 0x00007ffa9350a000 	C:\WINDOWS\System32\bcryptPrimitives.dll
+0x00007ffa96780000 - 0x00007ffa967ad000 	C:\WINDOWS\System32\IMM32.DLL
+0x0000000062380000 - 0x0000000062452000 	C:\Program Files\Java\jre1.8.0_131\bin\msvcr100.dll
+0x0000000061460000 - 0x0000000061cfc000 	C:\Program Files\Java\jre1.8.0_131\bin\server\jvm.dll
+0x00007ffa964a0000 - 0x00007ffa964a8000 	C:\WINDOWS\System32\PSAPI.DLL
+0x00007ffa7d3f0000 - 0x00007ffa7d3f9000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007ffa96580000 - 0x00007ffa965ec000 	C:\WINDOWS\System32\WS2_32.dll
+0x00007ffa8fec0000 - 0x00007ffa8fee3000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x00007ffa7d420000 - 0x00007ffa7d42a000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x00007ffa8fe90000 - 0x00007ffa8feba000 	C:\WINDOWS\SYSTEM32\WINMMBASE.dll
+0x00007ffa93150000 - 0x00007ffa93199000 	C:\WINDOWS\System32\cfgmgr32.dll
+0x0000000061450000 - 0x000000006145f000 	C:\Program Files\Java\jre1.8.0_131\bin\verify.dll
+0x0000000061420000 - 0x0000000061449000 	C:\Program Files\Java\jre1.8.0_131\bin\java.dll
+0x0000000061400000 - 0x0000000061416000 	C:\Program Files\Java\jre1.8.0_131\bin\zip.dll
+
+VM Arguments:
+jvm_args: -ea -Dfile.encoding=Cp1252 
+java_command: org.eclipse.jdt.internal.junit.runner.RemoteTestRunner -version 3 -port 49902 -testLoaderClass org.eclipse.jdt.internal.junit.runner.junit3.JUnit3TestLoader -loaderpluginname org.eclipse.jdt.junit.runtime -classNames edu.kit.aquaplanning.aquaplanning.TestPlanners
+java_class_path (initial): C:\Users\jpvdh\Documents\Bachelorarbeit\aquaplanning\target\test-classes;C:\Users\jpvdh\Documents\Bachelorarbeit\aquaplanning\target\classes;C:\Users\jpvdh\Documents\Bachelorarbeit\aquaplanning\lib;C:\Users\jpvdh\.m2\repository\junit\junit\3.8.1\junit-3.8.1.jar;C:\Users\jpvdh\.m2\repository\org\antlr\antlr4\4.7\antlr4-4.7.jar;C:\Users\jpvdh\.m2\repository\org\antlr\antlr4-runtime\4.7\antlr4-runtime-4.7.jar;C:\Users\jpvdh\.m2\repository\org\antlr\antlr-runtime\3.5.2\antlr-runtime-3.5.2.jar;C:\Users\jpvdh\.m2\repository\org\antlr\ST4\4.0.8\ST4-4.0.8.jar;C:\Users\jpvdh\.m2\repository\org\abego\treelayout\org.abego.treelayout.core\1.0.3\org.abego.treelayout.core-1.0.3.jar;C:\Users\jpvdh\.m2\repository\org\glassfish\javax.json\1.0.4\javax.json-1.0.4.jar;C:\Users\jpvdh\.m2\repository\com\ibm\icu\icu4j\58.2\icu4j-58.2.jar;C:\Users\jpvdh\.m2\repository\org\sat4j\org.sat4j.core\2.3.1\org.sat4j.core-2.3.1.jar;C:\Users\jpvdh\.m2\repository\info\picocli\picocli\3.8.0\picocli-3.8.0.jar;C:\Users\jpvdh\eclipse\java-oxygen\eclipse\configuration\org.eclipse.osgi\229\0\.cp
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=C:/Program Files/Java/jre1.8.0_131/bin/server;C:/Program Files/Java/jre1.8.0_131/bin;C:/Program Files/Java/jre1.8.0_131/lib/amd64;C:\Program Files\Haskell\bin;C:\Program Files\Haskell Platform\8.4.3\lib\extralibs\bin;C:\Program Files\Haskell Platform\8.4.3\bin;C:\Program Files\Python36\Scripts\;C:\Program Files\Python36\;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Java\jdk1.8.0_121\bin;C:\Program Files\Java\jre1.8.0_121\bin;C:\Program Files\MiKTeX 2.9\miktex\bin\x64\;C:\Program Files\Chrome Driver\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\Haskell Platform\8.4.3\mingw\bin;C:\Users\jpvdh\AppData\Roaming\cabal\bin;C:\Users\jpvdh\AppData\Roaming\local\bin;C:\Users\jpvdh\AppData\Local\Microsoft\WindowsApps;C:\Users\jpvdh\AppData\Local\atom\bin;C:\Users\jpvdh\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Microsoft VS Code\bin;C:\Users\jpvdh\eclipse\java-oxygen\eclipse;
+USERNAME=jpvdh
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 78 Stepping 3, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 10.0 , 64 bit Build 17134 (10.0.17134.706)
+
+CPU:total 4 (initial active 4) (2 cores per cpu, 2 threads per core) family 6 model 78 stepping 3, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, 3dnowpref, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2, adx
+
+Memory: 4k page, physical 4117772k(293596k free), swap 5549324k(5692k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (25.131-b11) for windows-amd64 JRE (1.8.0_131-b11), built on Mar 15 2017 01:23:53 by "java_re" with MS VC++ 10.0 (VS2010)
+
+time: Mon May 06 15:05:07 2019
+elapsed time: 0 seconds (0d 0h 0m 0s)
+
