@@ -55,7 +55,7 @@ public class SimpelParallelPlanner extends Planner {
 			return null;
 		}
 
-		java.util.Collections.shuffle(cubes); // TODO: make shuffle deterministic
+		java.util.Collections.shuffle(cubes, random);
 
 		for (int i = 0; i < numThreads; i++) {
 
