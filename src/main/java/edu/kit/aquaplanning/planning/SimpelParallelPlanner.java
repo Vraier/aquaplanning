@@ -25,7 +25,6 @@ public class SimpelParallelPlanner extends Planner {
 	private List<Thread> threads;
 	private Plan plan;
 
-	private List<SearchNode> cubes;
 	private int iteration;
 
 	public SimpelParallelPlanner(Configuration config) {
@@ -40,11 +39,11 @@ public class SimpelParallelPlanner extends Planner {
 		iteration = 0;
 		threads = new ArrayList<>();
 		plan = null;
+		List<SearchNode> cubes;
 		Random random = new Random(this.config.seed); // seed generator
 
 		Logger.log(Logger.INFO, "Starting to search for " + NUM_CUBES + " cubes.");
 		cubes = findCubes(problem, NUM_CUBES);
-		Logger.log(Logger.INFO, "Found " + cubes.size() + " cubes.");
 
 		if (plan != null) {
 			Logger.log(Logger.INFO, "Already found a plan while searching for cubes.");
@@ -53,6 +52,7 @@ public class SimpelParallelPlanner extends Planner {
 			Logger.log(Logger.INFO, "Error occured while searching for cubes. Unable to find any cubes.");
 			return null;
 		}
+		Logger.log(Logger.INFO, "Found " + cubes.size() + " cubes.");
 
 		java.util.Collections.shuffle(cubes, random);
 
@@ -195,7 +195,7 @@ public class SimpelParallelPlanner extends Planner {
 
 			Plan localPlan = null;
 			int numExhausted = 0;
-			for (int i = 0;; i = (i + 1) % planners.size()) {
+			for (int i = 0; !Thread.interrupted(); i = (i + 1) % planners.size()) {
 				if (numExhausted >= planners.size()) {
 					// no Planner found a Plan
 					break;
@@ -225,6 +225,7 @@ public class SimpelParallelPlanner extends Planner {
 		private SearchStrategy strategy;
 
 		public SimplePlanner(Configuration config, GroundPlanningProblem problem) {
+			
 			isExhausted = false;
 			initState = problem.getInitialState();
 			goal = problem.getGoal();
@@ -258,6 +259,7 @@ public class SimpelParallelPlanner extends Planner {
 						plan.appendAtFront(node.lastAction);
 						node = node.parent;
 					}
+					isExhausted = true;
 					return plan;
 				}
 
