@@ -1,23 +1,16 @@
 package edu.kit.aquaplanning.planning;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.ground.Action;
-import edu.kit.aquaplanning.model.ground.Atom;
-import edu.kit.aquaplanning.model.ground.AtomSet;
 import edu.kit.aquaplanning.model.ground.Goal;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
 import edu.kit.aquaplanning.model.ground.State;
 import edu.kit.aquaplanning.planning.datastructures.ActionIndex;
-import edu.kit.aquaplanning.planning.datastructures.FullActionIndex;
 import edu.kit.aquaplanning.planning.datastructures.SearchNode;
 import edu.kit.aquaplanning.planning.datastructures.SearchQueue;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
@@ -25,12 +18,11 @@ import edu.kit.aquaplanning.util.Logger;
 
 public class SimpleParallelPlanner extends Planner {
 
-	private static final int NUM_CUBES = 80;
-	private static final int CUBE_ITERATIONS = 5000000;
+	private static final int NUM_CUBES = 12;
+	private static final int CUBE_ITERATIONS = 5000;
 	private int numThreads;
 	private List<Thread> threads;
 	private Plan plan;
-
 	private int iteration;
 
 	public SimpleParallelPlanner(Configuration config) {
@@ -45,24 +37,28 @@ public class SimpleParallelPlanner extends Planner {
 		iteration = 0;
 		threads = new ArrayList<>();
 		plan = null;
-		List<SearchNode> cubes;
 		Random random = new Random(this.config.seed); // seed generator
+		List<SearchNode> cubes;
 
 		Logger.log(Logger.INFO, "Starting to search for " + NUM_CUBES + " cubes.");
-		System.out.println("Starting to search for " + NUM_CUBES + " cubes");
+		// System.out.println("Starting to search for " + NUM_CUBES + " cubes");
 		cubes = findCubes(problem, NUM_CUBES);
 
 		if (plan != null) {
 			Logger.log(Logger.INFO, "Already found a plan while searching for cubes.");
-			System.out.println("Already found a plan while searching for cubes.");
+			// System.out.println("Already found a plan while searching for cubes.");
 			return plan;
-		} else if (cubes == null) {
-			Logger.log(Logger.INFO, "Error occured while searching for cubes. Unable to find any cubes.");
-			System.out.println("Error occured while searching for cubes. Unable to find any cubes.");
+		} else if (cubes.size() == 0) {
+			Logger.log(Logger.INFO, "Unable to find any cubes. Problem has no solution.");
+			// System.out.println("Unable to find any cubes. Problem has no solution.");
 			return null;
 		}
 		Logger.log(Logger.INFO, "Found " + cubes.size() + " cubes.");
-		System.out.println("Found " + cubes.size() + " cubes");
+		// System.out.println("Found " + cubes.size() + " cubes");
+
+		/*
+		 * for(SearchNode cube: cubes) { System.out.println(cube.state); }
+		 */
 
 		java.util.Collections.shuffle(cubes, random);
 
@@ -71,7 +67,7 @@ public class SimpleParallelPlanner extends Planner {
 			// Default configuration with random seed
 			Configuration config = this.config.copy();
 			config.seed = random.nextInt();
-			int threadNum = i;
+			int threadNum = i + 1;
 
 			// partition the cubes into equal parts
 			// Round up integer division
@@ -125,25 +121,24 @@ public class SimpleParallelPlanner extends Planner {
 		List<SearchNode> cubes;
 
 		// Initialize breadthFirst search
-		// TODO: implement own breadthFirstSerach for more controll over datastructures
 		SearchStrategy strategy = new SearchStrategy(SearchStrategy.Mode.breadthFirst);
 		SearchQueue frontier = new SearchQueue(strategy);
 		frontier.add(new SearchNode(null, initState));
 
-		while (withinComputationalBounds(iteration) && !frontier.isEmpty() && frontier.size() < numCubes) {
+		while (!frontier.isEmpty() && frontier.size() < numCubes) {
 
-			// Visit node (by the heuristic provided to the priority queue)
 			SearchNode node = frontier.get();
 
 			// Is the goal reached?
 			if (goal.isSatisfied(node.state)) {
 
 				// Extract plan
-				Plan plan = new Plan();
+				plan = new Plan();
 				while (node != null && node.lastAction != null) {
 					plan.appendAtFront(node.lastAction);
 					node = node.parent;
 				}
+				// no cubes to return because we already found a plan
 				return null;
 			}
 
@@ -161,34 +156,28 @@ public class SimpleParallelPlanner extends Planner {
 			iteration++;
 		}
 
-		if (frontier.isEmpty()) {
-			return new ArrayList<SearchNode>();
-		} else if (!withinComputationalBounds(iteration)) {
-			return null;
-		} else {
-
-			// retrieve all nodes from the queue
-			cubes = new ArrayList<SearchNode>();
-			while (!frontier.isEmpty()) {
-				cubes.add(frontier.get());
-			}
-			return cubes;
+		// retrieve all nodes from the queue
+		cubes = new ArrayList<SearchNode>();
+		while (!frontier.isEmpty()) {
+			cubes.add(frontier.get());
 		}
+		return cubes;
 	}
 
 	private class MyThread implements Runnable {
 
-		// TODO: implement means to interrupt Threads
-		Configuration config;
-		int threadNum;
-		GroundPlanningProblem problem;
-		List<SearchNode> localCubes;
+		private Configuration config;
+		private int threadNum;
+		private GroundPlanningProblem baseProblem;
+		private List<SearchNode> localCubes;
+		private Plan localPlan;
 
 		public MyThread(Configuration config, int threadNum, GroundPlanningProblem problem, List<SearchNode> cubes) {
 			this.config = config;
 			this.threadNum = threadNum;
-			this.problem = problem;
+			this.baseProblem = problem;
 			this.localCubes = cubes;
+			this.localPlan = null;
 		}
 
 		@Override
@@ -198,14 +187,13 @@ public class SimpleParallelPlanner extends Planner {
 			List<SimplePlanner> planners = new ArrayList<SimplePlanner>();
 			for (SearchNode cube : localCubes) {
 				State tempState = cube.state;
-				GroundPlanningProblem tempProblem = new GroundPlanningProblem(problem);
+				GroundPlanningProblem tempProblem = new GroundPlanningProblem(baseProblem);
 				tempProblem.setInitialState(tempState);
 				planners.add(new SimplePlanner(config, tempProblem));
 			}
 
-			Plan localPlan = null;
 			int numExhausted = 0;
-			//Round Robin over all Threads
+			// Round Robin over all Threads
 			for (int i = 0; !Thread.interrupted(); i = (i + 1) % planners.size()) {
 				if (numExhausted >= planners.size()) {
 					// no Planner found a Plan
@@ -215,11 +203,23 @@ public class SimpleParallelPlanner extends Planner {
 					continue;
 				} else {
 					numExhausted = 0;
-					System.out.printf("Thread %d running Planner %d out of %d planners.\n", threadNum, i, planners.size());
+					// System.out.printf("Thread %d running Planner %d out of %d planners.\n",
+					// threadNum, i + 1, planners.size());
 					localPlan = planners.get(i).calculateSteps(CUBE_ITERATIONS);
 					if (localPlan != null) {
 						Logger.log(Logger.INFO, "SimplePlanner \" (index " + threadNum + ") found a plan.");
+						// System.out.printf("SimplePlanner \" (index " + threadNum + ") found a
+						// plan.");
+
+						// Concate Plan from cube to the plan of the SimplePlanner
+						SearchNode node = localCubes.get(i);
+						while (node != null && node.lastAction != null) {
+							localPlan.appendAtFront(node.lastAction);
+							node = node.parent;
+						}
+
 						onPlanFound(localPlan);
+						break;
 					}
 				}
 			}
@@ -228,141 +228,79 @@ public class SimpleParallelPlanner extends Planner {
 
 	private class SimplePlanner {
 
-		private ArrayDeque<State> stateHistory;
-		private ArrayDeque<Action> plan;
-		// visitedStates = new MoveToFrontHashTable(64*1024*1024);
-		private HashSet<AtomSet> visitedStates;
-		private FullActionIndex aindex;
 		private State state;
 		private Goal goal;
-		private Collection<Action> applicableActions;
-		private int iterations = 0;
-		private Random rnd;
+		private ActionIndex aindex;
+		private SearchStrategy strategy;
+		private SearchQueue frontier;
+		private Plan plan;
+
+		private int iterations;
 		private boolean isExhausted;
 
 		public SimplePlanner(Configuration config, GroundPlanningProblem problem) {
 
-			stateHistory = new ArrayDeque<>();
-			plan = new ArrayDeque<>();
-			visitedStates = new HashSet<>();
-			aindex = new FullActionIndex(problem);
 			state = new State(problem.getInitialState());
 			goal = problem.getGoal();
-			applicableActions = aindex.getApplicableActions(state);
+			aindex = new ActionIndex(problem);
+
+			strategy = new SearchStrategy(SearchStrategy.Mode.depthFirst);
+			frontier = new SearchQueue(strategy);
+			frontier.add(new SearchNode(null, state));
+			plan = null;
+
 			iterations = 0;
 			isExhausted = false;
-			rnd = new Random(config.seed);
 		}
 
 		/**
-		 * Tries to search for a plan with a greedy approach. Only uses the given amount of steps.
-		 * Returns null if no plan is found or no plan exists. isExhausted() should be checked.
+		 * Tries to search for a plan with a greedy approach. Only uses the given amount
+		 * of steps. Returns null if no plan is found or no plan exists. isExhausted()
+		 * should be checked.
 		 */
 		public Plan calculateSteps(int steps) {
-			
+
 			int i = 0;
-			while (!goal.isSatisfied(state) || i < steps || !Thread.currentThread().isInterrupted()) {
+			while (!goal.isSatisfied(state) && i < steps && !Thread.currentThread().isInterrupted()
+					&& !frontier.isEmpty()) {
+
 				i++;
 				iterations++;
-				visitedStates.add(state.getAtomSet());
-				Action best = null;
-				int bestValue = -1;
+				SearchNode node = frontier.get();
 
-				for (Action a : applicableActions) {
-					State newState = a.apply(state);
-					if (visitedStates.contains(newState.getAtomSet())) {
-						continue;
-					} else {
-						int value = calculateManhattan(newState, goal);
-						if (value > bestValue) {
-							bestValue = value;
-							best = a;
-						}
+				// Is the goal reached?
+				if (goal.isSatisfied(node.state)) {
+
+					// Extract plan
+					plan = new Plan();
+					while (node != null && node.lastAction != null) {
+						plan.appendAtFront(node.lastAction);
+						node = node.parent;
 					}
+					// System.out.printf("Found a Plan after a total of %d iterations\n",
+					// iterations);
+					return plan;
 				}
 
-				if (best == null) {
-					if (plan.size() == 0) {
-						// Plan does not exist
-						System.out.printf("Some planner ran for %d iterations and found no plan.\n", iterations);
-						isExhausted = true;
-						return null;
-					}
-					// backtracking
-					plan.removeLast();
-					State newState = stateHistory.pollLast();
-					updateApplicableActionsChanges(applicableActions, state, newState, aindex);
-					state = newState;
-				} else {
-					// select the best action
-					plan.addLast(best);
-					stateHistory.addLast(state);
-					State newState = best.apply(state);
-					updateApplicableActionsChanges(applicableActions, state, newState, aindex);
-					state = newState;
-				}
-			}
+				// Expand node: iterate over operators
+				for (Action action : aindex.getApplicableActions(node.state)) {
+					// Create new node by applying the operator
+					State newState = action.apply(node.state);
 
-			System.out.println("HELLO");
-			if (goal.isSatisfied(state)) {
-				// make the plan
-				Plan finalplan = new Plan();
-				for (Action a : plan) {
-					finalplan.appendAtBack(a);
-				}
-				Logger.log(Logger.INFO, String.format(
-						"successfull greedy search, visited %d states, did %d iterations, found plan of length %d",
-						visitedStates.size(), iterations, plan.size()));
-				return finalplan;
-			} else {
-				System.out.printf("Calculated %d steps", i);
-				return null;
-			}
-		}
-
-		private void updateApplicableActionsChanges(Collection<Action> actions, State oldState, State newState,
-				FullActionIndex aindex) {
-			// first remove actions that are no more applicable
-			Iterator<Action> iter = actions.iterator();
-			while (iter.hasNext()) {
-				Action a = iter.next();
-				if (!a.isApplicable(newState)) {
-					iter.remove();
+					// Add new node to frontier
+					SearchNode newNode = new SearchNode(node, newState);
+					newNode.lastAction = action;
+					frontier.add(newNode);
 				}
 			}
-			// add new applicable actions for changed state variables
-			if (aindex.getNoPrecondActions() != null) {
-				for (Action a : aindex.getNoPrecondActions()) {
-					if (a.isApplicable(newState)) {
-						actions.add(a);
-					}
-				}
+			// no plan exists
+			if (frontier.isEmpty()) {
+				// System.out.printf("Some planner ran for %d iterations and found no plan.\n",
+				// iterations);
+				isExhausted = true;
 			}
-			// Check and debug
-			AtomSet changes = oldState.getAtomSet().xor(newState.getAtomSet());
-			int changeId = changes.getFirstTrueAtom();
-			while (changeId != -1) {
-				int precondIndex = newState.getAtomSet().get(changeId) ? changeId + 1 : -changeId - 1;
-				List<Action> cands = aindex.getActionsWithPrecondition(precondIndex);
-				if (cands != null) {
-					for (Action a : cands) {
-						if (a.isApplicable(newState)) {
-							actions.add(a);
-						}
-					}
-				}
-				changeId = changes.getNextTrueAtom(changeId + 1);
-			}
-		}
-
-		private int calculateManhattan(State state, Goal goal) {
-			int satisfiedGoals = 0;
-			for (Atom g : goal.getAtoms()) {
-				if (state.holds(g)) {
-					satisfiedGoals++;
-				}
-			}
-			return 10 * (satisfiedGoals) + rnd.nextInt(10);
+			// System.out.printf("Calculated %d steps\n", i);
+			return null;
 		}
 
 		public boolean isExhausted() {

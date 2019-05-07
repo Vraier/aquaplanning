@@ -19,7 +19,7 @@ public class TestSimpleParallelPlanner extends TestCase {
 
 	public void testSimpleParallelPlanner() throws IOException {
 		Configuration config = new Configuration();
-		config.numThreads = 8;
+		config.numThreads = 2;
 		config.searchTimeSeconds = 10;
 		SimpleParallelPlanner spp = new SimpleParallelPlanner(config);
 		File benchdir = new File("benchmarks");
@@ -29,10 +29,8 @@ public class TestSimpleParallelPlanner extends TestCase {
 				if (f.getName().startsWith("p") && f.getName().endsWith(".pddl")) {
 					String problem = f.getCanonicalPath();
 					testPlannerOnBenchmark(spp, domain, problem);
-					break;
 				}
 			}
-			break;
 		}
 	}
 	
