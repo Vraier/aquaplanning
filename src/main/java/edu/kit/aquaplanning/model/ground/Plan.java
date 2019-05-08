@@ -16,6 +16,10 @@ public class Plan implements Iterable<Action> {
 		actions.add(action);
 	}
 	
+	public void concateAtBack(Plan plan) {	
+		actions.addAll(plan.actions);
+	}
+	
 	public void appendAtFront(Action action) {
 		actions.add(0, action);
 	}

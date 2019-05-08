@@ -29,11 +29,13 @@ public class TestSimpleParallelPlanner extends TestCase {
 				if (f.getName().startsWith("p") && f.getName().endsWith(".pddl")) {
 					String problem = f.getCanonicalPath();
 					testPlannerOnBenchmark(spp, domain, problem);
+					//break;
 				}
 			}
+			break;
 		}
 	}
-	
+
 	private void testPlannerOnBenchmark(Planner planner, String domain, String problem) throws IOException {
 		System.out.println("Testing planner on " + domain + ", " + problem);
 		PlanningProblem pp = new ProblemParser().parse(domain, problem);
@@ -41,7 +43,7 @@ public class TestSimpleParallelPlanner extends TestCase {
 		GroundPlanningProblem gpp = grounder.ground(pp);
 		Plan p = planner.findPlan(gpp);
 		if (p != null) {
-			System.out.println(p);
+			//System.out.println(p);
 			System.out.println("Plan is valid:" + Validator.planIsValid(gpp, p));
 		} else {
 			System.out.println("TIMEOUT");
