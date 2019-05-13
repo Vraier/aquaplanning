@@ -4,29 +4,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.kit.aquaplanning.model.ground.Plan;
-import edu.kit.aquaplanning.planning.CubePlanner;
 
 public class ExponentialScheduler implements Scheduler {
 
 	private List<CubePlanner> planners;
 	private List<CubePlanner> runningPlanners;
-	private int initialIterations;
+	private Plan plan = null;
+
+	// Computational Bounds Variables
+	private int initialIterations = 0;
+	private long initialTime = 0;
+	private double exponentialGrowth = 0;
+
 	private int queueIndex;
 	private int queueCycles;
-	private Plan plan;
-	private double exponentialGrowth;
 
-	public ExponentialScheduler(List<CubePlanner> planners, int initialIterations, double exponentialGrowth) {
+	public ExponentialScheduler(List<CubePlanner> planners) {
 		this.planners = planners;
 		this.runningPlanners = new ArrayList<CubePlanner>();
 		this.queueIndex = 0;
 		this.queueCycles = -1;
+	}
+
+	public void setIterations(int initialIterations, double exponentialGrowth) {
 		this.initialIterations = initialIterations;
+		this.exponentialGrowth = exponentialGrowth;
+	}
+
+	public void setTime(long initialTime, double exponentialGrowth) {
+		this.initialTime = initialTime;
 		this.exponentialGrowth = exponentialGrowth;
 	}
 
 	@Override
 	public ExitStatus scheduleNext() {
+
+		if (initialIterations == 0 && initialTime == 0) {
+			return ExitStatus.error;
+		}
 
 		// All Planners for the Queue ran one time. Add a new Planner to the
 		// runningQueue if possible
@@ -50,11 +65,20 @@ public class ExponentialScheduler implements Scheduler {
 		} else {
 			// TODO: maybe watch out for integer overflow. But the runtime probably kills us
 			// anyways if we get near an overflow.
-			int currentIterations = initialIterations * (int) Math.pow(exponentialGrowth, queueCycles - queueIndex);
+
 			CubePlanner currentPlanner = runningPlanners.get(queueIndex);
-			currentPlanner.setIterationLimit(currentIterations);
+
+			if (initialIterations > 0) {
+				int currentIterations = initialIterations * (int) Math.pow(exponentialGrowth, queueCycles - queueIndex);
+				currentPlanner.setIterationLimit(currentIterations);
+			}
+			if (initialTime > 0) {
+				long currentTime = initialTime * (long) Math.pow(exponentialGrowth, queueCycles - queueIndex);
+				currentPlanner.setTimeLimit(currentTime);
+			}
+
 			plan = currentPlanner.calculateSteps();
-			
+
 			queueIndex++;
 			if (plan != null) {
 				return ExitStatus.foundPlan;

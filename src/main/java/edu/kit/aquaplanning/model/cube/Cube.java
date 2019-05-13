@@ -12,16 +12,14 @@ public class Cube {
 
 	public Cube(GroundPlanningProblem problem, SearchNode node) {
 
-		this.problem = problem;
+		GroundPlanningProblem newProblem = new GroundPlanningProblem(problem);
+		newProblem.setInitialState(node.state);
+		this.problem = newProblem;
 		this.node = node;
 	}
 
 	public GroundPlanningProblem getProblem() {
-
-		GroundPlanningProblem newProblem = new GroundPlanningProblem(problem);
-		newProblem.setInitialState(node.state);
-
-		return newProblem;
+		return problem;
 	}
 
 	public Plan extractPlan() {

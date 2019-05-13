@@ -1,4 +1,4 @@
-package edu.kit.aquaplanning.planning;
+package edu.kit.aquaplanning.planning.cube;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.cube.Cube;
@@ -11,6 +11,7 @@ public abstract class CubePlanner {
 	protected Configuration config;
 	protected boolean isExhausted = false;
 	protected int totalIterations = 0;
+	protected long totalTime = 0;
 
 	// Variable for checking computational Bounds
 	protected long searchStartMillis = 0;
@@ -41,6 +42,10 @@ public abstract class CubePlanner {
 	public int getTotalIterations() {
 		return totalIterations;
 	}
+	
+	public long getTotalTime() {
+		return totalTime;
+	}
 
 	protected void startSearch() {
 		searchStartMillis = System.currentTimeMillis();
@@ -61,8 +66,9 @@ public abstract class CubePlanner {
 	 */
 	protected boolean withinComputationalBounds(int iterations) {
 
-		if (Thread.currentThread().isInterrupted())
+		if (Thread.currentThread().isInterrupted()) {
 			return false;
+		}
 
 		if (iterationLimit > 0 && iterations >= iterationLimit) {
 			return false;

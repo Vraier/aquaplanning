@@ -12,11 +12,12 @@ public interface Scheduler {
 
 		foundPlan,
 
-		foundNoPlan;
+		foundNoPlan,
+		
+		error;
 	}
 
 	public ExitStatus scheduleNext();
 
 	public Plan getPlan();
-
 }

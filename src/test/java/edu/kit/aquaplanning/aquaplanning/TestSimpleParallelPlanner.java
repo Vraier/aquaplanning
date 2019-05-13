@@ -29,7 +29,7 @@ public class TestSimpleParallelPlanner extends TestCase {
 				if (f.getName().startsWith("p") && f.getName().endsWith(".pddl")) {
 					String problem = f.getCanonicalPath();
 					testPlannerOnBenchmark(spp, domain, problem);
-					//break;
+					break;
 				}
 			}
 			break;

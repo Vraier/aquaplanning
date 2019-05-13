@@ -1,4 +1,4 @@
-package edu.kit.aquaplanning.planning;
+package edu.kit.aquaplanning.planning.cube;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.cube.Cube;
@@ -11,6 +11,7 @@ import edu.kit.aquaplanning.planning.datastructures.ActionIndex;
 import edu.kit.aquaplanning.planning.datastructures.SearchNode;
 import edu.kit.aquaplanning.planning.datastructures.SearchQueue;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
+import edu.kit.aquaplanning.planning.heuristic.Heuristic;
 
 // TODO: implement possibility to use the config file
 // TODO: support computationalBounds()
@@ -29,26 +30,24 @@ public class ForwardSearchCubePlanner extends CubePlanner {
 		problem = cube.getProblem();
 		state = new State(problem.getInitialState());
 		goal = problem.getGoal();
-		aindex = new ActionIndex(problem);
+		aindex = new ActionIndex(problem);		
 
-		strategy = new SearchStrategy(SearchStrategy.Mode.depthFirst);
-		frontier = new SearchQueue(strategy);
+		strategy = new SearchStrategy(config);
+		if (strategy.isHeuristical()) {
+			Heuristic heuristic = Heuristic.getHeuristic(problem, config);
+			frontier = new SearchQueue(strategy, heuristic);
+		} else {
+			frontier = new SearchQueue(strategy);
+		}
 		frontier.add(new SearchNode(null, state));
-
-		/*
-		 * strategy = new SearchStrategy(config); if (strategy.isHeuristical()) {
-		 * Heuristic heuristic = Heuristic.getHeuristic(problem, config); frontier = new
-		 * SearchQueue(strategy, heuristic); } else { frontier = new
-		 * SearchQueue(strategy); }
-		 */
 	}
 
 	@Override
 	public Plan calculateSteps() {
-		
+
 		startSearch();
 		int i = 0;
-		
+
 		while (withinComputationalBounds(i) && !frontier.isEmpty()) {
 
 			SearchNode node = frontier.get();
@@ -64,6 +63,10 @@ public class ForwardSearchCubePlanner extends CubePlanner {
 					node = node.parent;
 				}
 				cubePlan.concateAtBack(plan);
+				totalIterations += i;
+				totalTime += System.currentTimeMillis() - searchStartMillis;
+				System.out.printf("ForwardSearchPlanner found a plan after %d steps in %d millisecs.\n",
+						totalIterations, totalTime);
 				return cubePlan;
 			}
 
@@ -77,15 +80,17 @@ public class ForwardSearchCubePlanner extends CubePlanner {
 				newNode.lastAction = action;
 				frontier.add(newNode);
 			}
+			i++;
 		}
 		// no plan exists
 		if (frontier.isEmpty()) {
 			isExhausted = true;
 		}
 
-		i++;
-		totalIterations++;
-		// System.out.printf("Calculated %d steps\n", i);
+		totalIterations += i;
+		totalTime += System.currentTimeMillis() - searchStartMillis;
+		System.out.printf("ForwardSearchPlanner calculated %d steps in %d millisecs.\n", i,
+				System.currentTimeMillis() - searchStartMillis);
 		return null;
 	}
 }
