@@ -51,7 +51,10 @@ public class ExponentialScheduler implements Scheduler {
 			// TODO: maybe watch out for integer overflow. But the runtime probably kills us
 			// anyways if we get near an overflow.
 			int currentIterations = initialIterations * (int) Math.pow(exponentialGrowth, queueCycles - queueIndex);
-			plan = runningPlanners.get(queueIndex).calculateSteps(currentIterations);
+			CubePlanner currentPlanner = runningPlanners.get(queueIndex);
+			currentPlanner.setIterationLimit(currentIterations);
+			plan = currentPlanner.calculateSteps();
+			
 			queueIndex++;
 			if (plan != null) {
 				return ExitStatus.foundPlan;

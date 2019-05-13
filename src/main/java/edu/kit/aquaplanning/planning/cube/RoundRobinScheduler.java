@@ -36,7 +36,11 @@ public class RoundRobinScheduler implements Scheduler {
 
 		} else {
 			numExhausted = 0;
-			plan = planners.get(nextRunning).calculateSteps(numIterations);
+			
+			CubePlanner currentPlanner = planners.get(nextRunning);
+			currentPlanner.setIterationLimit(numIterations);
+			plan = currentPlanner.calculateSteps();
+
 			nextRunning = (nextRunning + 1) % planners.size();
 			if (plan != null) {
 				return ExitStatus.foundPlan;

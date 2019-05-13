@@ -23,9 +23,6 @@ public class ForwardSearchCubePlanner extends CubePlanner {
 	private SearchStrategy strategy;
 	private SearchQueue frontier;
 
-	private int iterations;
-	private boolean isExhausted;
-
 	public ForwardSearchCubePlanner(Configuration config, Cube cube) {
 
 		super(config, cube);
@@ -44,19 +41,16 @@ public class ForwardSearchCubePlanner extends CubePlanner {
 		 * SearchQueue(strategy, heuristic); } else { frontier = new
 		 * SearchQueue(strategy); }
 		 */
-
-		iterations = 0;
-		isExhausted = false;
 	}
 
 	@Override
-	public Plan calculateSteps(int steps) {
-
+	public Plan calculateSteps() {
+		
+		startSearch();
 		int i = 0;
-		while (i < steps && !Thread.currentThread().isInterrupted() && !frontier.isEmpty()) {
+		
+		while (withinComputationalBounds(i) && !frontier.isEmpty()) {
 
-			i++;
-			iterations++;
 			SearchNode node = frontier.get();
 
 			// Is the goal reached?
@@ -84,25 +78,14 @@ public class ForwardSearchCubePlanner extends CubePlanner {
 				frontier.add(newNode);
 			}
 		}
-		if (Thread.currentThread().isInterrupted()) {
-			return null;
-		}
 		// no plan exists
 		if (frontier.isEmpty()) {
 			isExhausted = true;
 		}
 
+		i++;
+		totalIterations++;
 		// System.out.printf("Calculated %d steps\n", i);
 		return null;
-	}
-
-	@Override
-	public boolean isExhausted() {
-		return isExhausted;
-	}
-
-	@Override
-	public int getTotalIterations() {
-		return iterations;
 	}
 }
