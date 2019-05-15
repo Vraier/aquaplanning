@@ -111,7 +111,7 @@ public class AtomSet {
 	 * @param other
 	 * 		The other AtomSet
 	 * @return
-	 * 		The logical AND of this and the other AtomSet
+	 * 		The logical XOR of this and the other AtomSet
 	 */
 	public AtomSet xor(AtomSet other) {
 		AtomSet b = (AtomSet) this.clone();
@@ -158,7 +158,7 @@ public class AtomSet {
 	
 	private AtomSet() {}
 	@Override
-	protected Object clone() {
+	public Object clone() {
 		AtomSet newSet = new AtomSet();
 		newSet.atoms = (BitSet) this.atoms.clone();
 		return newSet;
