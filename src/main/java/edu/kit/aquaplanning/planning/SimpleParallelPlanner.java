@@ -7,22 +7,14 @@ import java.util.Random;
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.Configuration.HeuristicType;
 import edu.kit.aquaplanning.model.cube.Cube;
-import edu.kit.aquaplanning.model.ground.Action;
-import edu.kit.aquaplanning.model.ground.Goal;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
-import edu.kit.aquaplanning.model.ground.State;
 import edu.kit.aquaplanning.planning.cube.CubeFinder;
 import edu.kit.aquaplanning.planning.cube.CubePlanner;
 import edu.kit.aquaplanning.planning.cube.ExponentialScheduler;
 import edu.kit.aquaplanning.planning.cube.ForwardSearchCubeFinder;
 import edu.kit.aquaplanning.planning.cube.ForwardSearchCubePlanner;
-import edu.kit.aquaplanning.planning.cube.RoundRobinScheduler;
-import edu.kit.aquaplanning.planning.cube.Scheduler;
 import edu.kit.aquaplanning.planning.cube.Scheduler.ExitStatus;
-import edu.kit.aquaplanning.planning.datastructures.ActionIndex;
-import edu.kit.aquaplanning.planning.datastructures.SearchNode;
-import edu.kit.aquaplanning.planning.datastructures.SearchQueue;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.util.Logger;
 
@@ -55,11 +47,12 @@ public class SimpleParallelPlanner extends Planner {
 		newConfig.searchStrategy = SearchStrategy.Mode.aStar;
 		newConfig.heuristic = HeuristicType.ffWilliams;
 		
+		// Search for the Cubes
 		CubeFinder cFinder = new ForwardSearchCubeFinder(newConfig);
+		
 		cubes = cFinder.findCubes(problem, NUM_CUBES);
 		// check if we already found a Plan.
 		plan = cFinder.getPlan();
-
 		if (plan != null) {
 			Logger.log(Logger.INFO, "Already found a plan while searching for cubes.");
 			// System.out.println("Already found a plan while searching for cubes.");
@@ -71,10 +64,6 @@ public class SimpleParallelPlanner extends Planner {
 		}
 		Logger.log(Logger.INFO, "Found " + cubes.size() + " cubes.");
 		System.out.println("Found " + cubes.size() + " cubes");
-
-		/*
-		 * for(SearchNode cube: cubes) { System.out.println(cube.state); }
-		 */
 
 		java.util.Collections.shuffle(cubes, random);
 
@@ -128,54 +117,6 @@ public class SimpleParallelPlanner extends Planner {
 		}
 	}
 
-	private List<Cube> findCubes(GroundPlanningProblem problem, int numCubes) {
-
-		State initState = problem.getInitialState();
-		Goal goal = problem.getGoal();
-		ActionIndex aindex = new ActionIndex(problem);
-		List<Cube> cubes;
-
-		// Initialize breadthFirst search
-		SearchStrategy strategy = new SearchStrategy(SearchStrategy.Mode.breadthFirst);
-		SearchQueue frontier = new SearchQueue(strategy);
-		frontier.add(new SearchNode(null, initState));
-
-		while (!frontier.isEmpty() && frontier.size() < numCubes) {
-
-			SearchNode node = frontier.get();
-
-			// Is the goal reached?
-			if (goal.isSatisfied(node.state)) {
-
-				// Extract plan
-				plan = new Plan();
-				while (node != null && node.lastAction != null) {
-					plan.appendAtFront(node.lastAction);
-					node = node.parent;
-				}
-				// no cubes to return because we already found a plan
-				return null;
-			}
-
-			// Expand node: iterate over operators
-			for (Action action : aindex.getApplicableActions(node.state)) {
-				// Create new node by applying the operator
-				State newState = action.apply(node.state);
-
-				// Add new node to frontier
-				SearchNode newNode = new SearchNode(node, newState);
-				newNode.lastAction = action;
-				frontier.add(newNode);
-			}
-		}
-
-		// retrieve all nodes from the queue
-		cubes = new ArrayList<Cube>();
-		while (!frontier.isEmpty()) {
-			cubes.add(new Cube(problem, frontier.get()));
-		}
-		return cubes;
-	}
 
 	private class MyThread implements Runnable {
 

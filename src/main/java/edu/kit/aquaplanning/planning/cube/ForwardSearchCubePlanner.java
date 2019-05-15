@@ -13,8 +13,6 @@ import edu.kit.aquaplanning.planning.datastructures.SearchQueue;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.planning.heuristic.Heuristic;
 
-// TODO: implement possibility to use the config file
-// TODO: support computationalBounds()
 public class ForwardSearchCubePlanner extends CubePlanner {
 
 	private GroundPlanningProblem problem;
@@ -56,18 +54,16 @@ public class ForwardSearchCubePlanner extends CubePlanner {
 			if (goal.isSatisfied(node.state)) {
 
 				// Extract plan
-				Plan cubePlan = cube.extractPlan();
 				Plan plan = new Plan();
 				while (node != null && node.lastAction != null) {
 					plan.appendAtFront(node.lastAction);
 					node = node.parent;
 				}
-				cubePlan.concateAtBack(plan);
 				totalIterations += i;
 				totalTime += System.currentTimeMillis() - searchStartMillis;
 				System.out.printf("ForwardSearchPlanner found a plan after %d steps in %d millisecs.\n",
 						totalIterations, totalTime);
-				return cubePlan;
+				return cube.concatePlan(plan);
 			}
 
 			// Expand node: iterate over operators
