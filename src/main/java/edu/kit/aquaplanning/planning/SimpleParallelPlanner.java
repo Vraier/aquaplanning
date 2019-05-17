@@ -9,6 +9,7 @@ import edu.kit.aquaplanning.Configuration.HeuristicType;
 import edu.kit.aquaplanning.model.cube.Cube;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
+import edu.kit.aquaplanning.planning.cube.BackwardSearchCubeFinder;
 import edu.kit.aquaplanning.planning.cube.CubeFinder;
 import edu.kit.aquaplanning.planning.cube.CubePlanner;
 import edu.kit.aquaplanning.planning.cube.ExponentialScheduler;
@@ -48,7 +49,7 @@ public class SimpleParallelPlanner extends Planner {
 		newConfig.heuristic = HeuristicType.ffWilliams;
 		
 		// Search for the Cubes
-		CubeFinder cFinder = new ForwardSearchCubeFinder(newConfig);
+		CubeFinder cFinder = new BackwardSearchCubeFinder(newConfig);
 		
 		cubes = cFinder.findCubes(problem, NUM_CUBES);
 		// check if we already found a Plan.

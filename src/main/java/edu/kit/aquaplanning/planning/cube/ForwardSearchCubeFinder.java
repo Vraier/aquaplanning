@@ -76,7 +76,8 @@ public class ForwardSearchCubeFinder implements CubeFinder {
 		// retrieve all nodes from the queue
 		cubes = new ArrayList<Cube>();
 		while (!frontier.isEmpty()) {
-			cubes.add(new Cube(problem, frontier.get()));
+			SearchNode node = frontier.get();
+			cubes.add(new Cube(problem, node.state, node.getPartialPlan()));
 		}
 		return cubes;
 	}

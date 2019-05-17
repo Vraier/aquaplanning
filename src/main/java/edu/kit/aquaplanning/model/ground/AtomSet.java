@@ -92,6 +92,13 @@ public class AtomSet {
 		}
 		return true;
 	}
+	
+	/**
+	 * True iff the other atomSet has some bits set to true that are also true in this atomSet.
+	 */
+	public boolean intersects(AtomSet other) {
+		return this.atoms.intersects(other.atoms);
+	}
 
 	/**
 	 * Calculates the logical AND of this AtomSet with another AtomSets and returns the result.

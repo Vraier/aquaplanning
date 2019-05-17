@@ -1,21 +1,32 @@
 package edu.kit.aquaplanning.model.cube;
 
+import edu.kit.aquaplanning.model.ground.Goal;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
-import edu.kit.aquaplanning.planning.datastructures.SearchNode;
+import edu.kit.aquaplanning.model.ground.State;
 
-//TODO: Think more about other possibilities of a cube. Think of a different interface.
 public class Cube {
 
 	private GroundPlanningProblem problem;
-	private SearchNode node;
+	private Plan partialPlanFront;
+	private Plan partialPlanBack;
 
-	public Cube(GroundPlanningProblem problem, SearchNode node) {
+	public Cube(GroundPlanningProblem problem, State state, Plan plan) {
 
 		GroundPlanningProblem newProblem = new GroundPlanningProblem(problem);
-		newProblem.setInitialState(node.state);
+		newProblem.setInitialState(state);
 		this.problem = newProblem;
-		this.node = node;
+		this.partialPlanFront = plan;
+		this.partialPlanBack = new Plan();
+	}
+	
+	public Cube(GroundPlanningProblem problem, Goal goal, Plan plan) {
+		
+		GroundPlanningProblem newProblem = new GroundPlanningProblem(problem);
+		newProblem.setGoal(goal);
+		this.problem = newProblem;
+		this.partialPlanFront = new Plan();
+		this.partialPlanBack = plan;
 	}
 
 	public GroundPlanningProblem getProblem() {
@@ -27,12 +38,8 @@ public class Cube {
 	 * a valid solution for the original Problem.
 	 */
 	public Plan concatePlan(Plan plan) {
-		Plan cubePlan = new Plan();
-		while (node != null && node.lastAction != null) {
-			cubePlan.appendAtFront(node.lastAction);
-			node = node.parent;
-		}
-		cubePlan.concateAtBack(plan);
-		return cubePlan;
+		plan.concateAtFront(partialPlanFront);
+		plan.concateAtBack(partialPlanBack);
+		return plan;
 	}
 }

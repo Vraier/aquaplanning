@@ -1,6 +1,7 @@
 package edu.kit.aquaplanning.planning.datastructures;
 
 import edu.kit.aquaplanning.model.ground.Action;
+import edu.kit.aquaplanning.model.ground.Plan;
 import edu.kit.aquaplanning.model.ground.State;
 
 /**
@@ -38,6 +39,18 @@ public class SearchNode {
 			node = node.parent;
 		}
 		return false;
+	}
+	
+	public Plan getPartialPlan() {
+		
+		Plan plan = new Plan();
+		SearchNode node = this;
+		while(node != null && node.lastAction != null) {
+			plan.appendAtFront(node.lastAction);
+			node = node.parent;
+		}
+		
+		return plan;
 	}
 	
 	/**
