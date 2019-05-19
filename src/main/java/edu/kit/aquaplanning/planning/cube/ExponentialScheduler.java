@@ -3,13 +3,12 @@ package edu.kit.aquaplanning.planning.cube;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.ground.Plan;
 
-public class ExponentialScheduler implements Scheduler {
+public class ExponentialScheduler extends Scheduler {
 
-	private List<CubePlanner> planners;
-	private List<CubePlanner> runningPlanners;
-	private Plan plan = null;
+	private List<CubeSolver> runningPlanners;
 
 	// Computational Bounds Variables
 	private int initialIterations = 0;
@@ -20,9 +19,12 @@ public class ExponentialScheduler implements Scheduler {
 	private int queueCycles = -1;
 	private int addedPlanners = 0;
 
-	public ExponentialScheduler(List<CubePlanner> planners) {
-		this.planners = planners;
-		this.runningPlanners = new ArrayList<CubePlanner>();
+	public ExponentialScheduler(Configuration config, List<CubeSolver> planners) {
+		super(config, planners);
+		this.initialIterations = config.schedulerIterations;
+		this.initialTime = config.schedulerTime;
+		this.exponentialGrowth = config.schedulerGrowth;
+		this.runningPlanners = new ArrayList<CubeSolver>();
 	}
 
 	public void setIterations(int initialIterations, double exponentialGrowth) {
@@ -68,7 +70,7 @@ public class ExponentialScheduler implements Scheduler {
 			// TODO: maybe watch out for integer overflow. But the runtime probably kills us
 			// anyways if we get near an overflow.
 
-			CubePlanner currentPlanner = runningPlanners.get(queueIndex);
+			CubeSolver currentPlanner = runningPlanners.get(queueIndex);
 
 			if (initialIterations > 0) {
 				int currentIterations = initialIterations * (int) Math.pow(exponentialGrowth, queueCycles - queueIndex);

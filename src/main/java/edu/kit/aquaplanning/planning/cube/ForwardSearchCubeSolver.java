@@ -13,7 +13,7 @@ import edu.kit.aquaplanning.planning.datastructures.SearchQueue;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.planning.heuristic.Heuristic;
 
-public class ForwardSearchCubePlanner extends CubePlanner {
+public class ForwardSearchCubeSolver extends CubeSolver {
 
 	private GroundPlanningProblem problem;
 	private State state;
@@ -22,9 +22,15 @@ public class ForwardSearchCubePlanner extends CubePlanner {
 	private SearchStrategy strategy;
 	private SearchQueue frontier;
 
-	public ForwardSearchCubePlanner(Configuration config, Cube cube) {
+	public ForwardSearchCubeSolver(Configuration config, Cube cube) {
 
 		super(config, cube);
+		Configuration newConfig = config.copy();
+		newConfig.searchStrategy = config.cubeSolveSearchStrategy;
+		newConfig.heuristic = config.cubeSolveHeuristic;
+		newConfig.cubeFindHeuristicWeight = config.cubeSolveHeuristicWeight;
+		this.config = newConfig;
+		
 		problem = cube.getProblem();
 		state = new State(problem.getInitialState());
 		goal = problem.getGoal();

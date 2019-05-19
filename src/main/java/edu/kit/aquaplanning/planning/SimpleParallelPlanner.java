@@ -5,30 +5,32 @@ import java.util.List;
 import java.util.Random;
 
 import edu.kit.aquaplanning.Configuration;
-import edu.kit.aquaplanning.Configuration.HeuristicType;
 import edu.kit.aquaplanning.model.cube.Cube;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
-import edu.kit.aquaplanning.planning.cube.BackwardSearchCubeFinder;
 import edu.kit.aquaplanning.planning.cube.CubeFinder;
-import edu.kit.aquaplanning.planning.cube.CubePlanner;
-import edu.kit.aquaplanning.planning.cube.ExponentialScheduler;
-import edu.kit.aquaplanning.planning.cube.ForwardSearchCubeFinder;
-import edu.kit.aquaplanning.planning.cube.ForwardSearchCubePlanner;
+import edu.kit.aquaplanning.planning.cube.CubeSolver;
+import edu.kit.aquaplanning.planning.cube.ForwardSearchCubeSolver;
+import edu.kit.aquaplanning.planning.cube.Scheduler;
 import edu.kit.aquaplanning.planning.cube.Scheduler.ExitStatus;
-import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.util.Logger;
 
 //TODO: clear all those messy log and system.out entries
+//TODO: add computational bounds for finding the cubes and update time for cube finding phase
 //TODO: check if synchronization works correctly
+//TODO: i need an explanation for serachTimeSeconds and maxTimeSeconds
 public class SimpleParallelPlanner extends Planner {
 
-	private static final int NUM_CUBES = 50;
-	private static final int CUBE_ITERATIONS = 5000;
 	private int numThreads;
 	private List<Thread> threads;
 	private Plan plan = null;
 
+	/**
+	 * Creates a new parallel planner. This planner uses a cube and conquer
+	 * approach. The planner can be modified by the given configuration.
+	 * 
+	 * @param config holds options to modify this planner
+	 */
 	public SimpleParallelPlanner(Configuration config) {
 		super(config);
 		numThreads = config.numThreads;
@@ -37,37 +39,33 @@ public class SimpleParallelPlanner extends Planner {
 	@Override
 	public Plan findPlan(GroundPlanningProblem problem) {
 		startSearch();
-		
-		threads = new ArrayList<>();
-		Random random = new Random(this.config.seed); // seed generator
-		List<Cube> cubes;
 
-		Logger.log(Logger.INFO, "Starting to search for " + NUM_CUBES + " cubes.");
-		// System.out.println("Starting to search for " + NUM_CUBES + " cubes");
-		Configuration newConfig = config.copy();
-		newConfig.searchStrategy = SearchStrategy.Mode.aStar;
-		newConfig.heuristic = HeuristicType.ffWilliams;
-		
-		// Search for the Cubes
-		CubeFinder cFinder = new BackwardSearchCubeFinder(newConfig);
-		
-		cubes = cFinder.findCubes(problem, NUM_CUBES);
-		// check if we already found a Plan.
+		Random random;
+		List<Cube> cubes;
+		CubeFinder cFinder;
+
+		// Search for cubes
+		Logger.log(Logger.INFO, "Starting to search for " + config.numCubes + " cubes.");
+		cFinder = CubeFinder.getCubeFinder(config);
+		cubes = cFinder.findCubes(problem, config.numCubes);
+
+		// check if we already found a Plan
 		plan = cFinder.getPlan();
 		if (plan != null) {
 			Logger.log(Logger.INFO, "Already found a plan while searching for cubes.");
-			// System.out.println("Already found a plan while searching for cubes.");
 			return plan;
 		} else if (cubes.size() == 0) {
 			Logger.log(Logger.INFO, "Unable to find any cubes. Problem has no solution.");
-			// System.out.println("Unable to find any cubes. Problem has no solution.");
 			return null;
 		}
-		Logger.log(Logger.INFO, "Found " + cubes.size() + " cubes.");
-		System.out.println("Found " + cubes.size() + " cubes");
 
+		Logger.log(Logger.INFO, "Found " + cubes.size() + " cubes.");
+
+		// Shuffle Cubes
+		random = new Random(config.seed);
 		java.util.Collections.shuffle(cubes, random);
 
+		// Split cubes evenly
 		for (int i = 0; i < numThreads; i++) {
 
 			// Default configuration with random seed
@@ -75,8 +73,7 @@ public class SimpleParallelPlanner extends Planner {
 			config.seed = random.nextInt();
 			int threadNum = i + 1;
 
-			// partition the cubes into equal parts
-			// Round up integer division
+			// Round up integer division to partition cubes evenly
 			int partitionSize = ((cubes.size() + numThreads - 1) / numThreads);
 			List<Cube> localCubes = cubes.subList(partitionSize * i, Math.min(partitionSize * (i + 1), cubes.size()));
 
@@ -84,6 +81,7 @@ public class SimpleParallelPlanner extends Planner {
 			threads.add(thread);
 
 			// Start the planner (non-blocking call)
+			Logger.log(Logger.INFO, "Starting Thread " + threadNum + " with " + localCubes.size() + " cubes.");
 			thread.start();
 		}
 
@@ -118,58 +116,65 @@ public class SimpleParallelPlanner extends Planner {
 		}
 	}
 
-
+	/**
+	 * Encapsulates the logic for the Threads of our Cube and Conquer approach. The
+	 * task of a thread is given a list of cubes to try to solve them. Some form of
+	 * distributing the calculation time between the cubes should be ensured.
+	 */
 	private class MyThread implements Runnable {
 
 		private Configuration config;
 		private int threadNum;
 		private List<Cube> localCubes;
-		private Plan localPlan;
+		private Plan localPlan = null;
 
 		public MyThread(Configuration config, int threadNum, List<Cube> cubes) {
 			this.config = config;
 			this.threadNum = threadNum;
 			this.localCubes = cubes;
-			this.localPlan = null;
 		}
 
 		@Override
 		public void run() {
 
 			// Create planners
-			List<CubePlanner> planners = new ArrayList<CubePlanner>();
+			List<CubeSolver> planners = new ArrayList<CubeSolver>();
 			for (Cube cube : localCubes) {
-				Configuration newConfig = config.copy();
-				newConfig.searchStrategy = SearchStrategy.Mode.aStar;
-				newConfig.heuristic = HeuristicType.manhattanGoalDistance;
-				planners.add(new ForwardSearchCubePlanner(newConfig, cube));
+				planners.add(new ForwardSearchCubeSolver(config, cube));
 			}
 
 			// Initialize Scheduler
-			//Scheduler scheduler = new RoundRobinScheduler(planners, CUBE_ITERATIONS);
-			ExponentialScheduler scheduler = new ExponentialScheduler(planners);
-			scheduler.setTime(200, 2);
+			Scheduler scheduler = Scheduler.getScheduler(config, planners);
 
 			// Search for a plan
 			ExitStatus status = ExitStatus.foundNoPlan;
-			while (!Thread.interrupted() && status != ExitStatus.exhausted && status != ExitStatus.foundPlan) {
+			while (!Thread.currentThread().isInterrupted() && status != ExitStatus.exhausted
+					&& status != ExitStatus.foundPlan) {
 				status = scheduler.scheduleNext();
-				assert(status != ExitStatus.error);
+				assert (status != ExitStatus.error);
 			}
+
+			// Calculate information about the computation time of our planners
+			int totalIterations = 0;
+			long totalTime = 0;
+			for (CubeSolver p : planners) {
+				totalIterations += p.getTotalIterations();
+				totalTime += p.getTotalTime();
+			}
+
+			// Our Thread found a plan
 			if (status == ExitStatus.foundPlan) {
 				localPlan = scheduler.getPlan();
-
-				int totalIterations = 0;
-				long totalTime = 0;
-				for (CubePlanner p : planners) {
-					totalIterations += p.getTotalIterations();
-					totalTime += p.getTotalTime();
-				}
-
-				System.out.printf("Thread %d found a Plan. The total sum of the iterations is %d and time is %d millisecs.\n",
-						threadNum, totalIterations, totalTime);
+				Logger.log(Logger.INFO, "Thread " + threadNum + " found a Plan. The total sum of the iterations is "
+						+ totalIterations + " and time is " + totalTime + " millisecs.");
 				onPlanFound(localPlan);
 			}
+
+			Logger.log(Logger.INFO,
+					"Thread " + threadNum + " found no Plan. The total sum of the iterations is " + totalIterations
+							+ " and time is " + totalTime + " millisecs. The interruptFlag is: "
+							+ Thread.currentThread().isInterrupted() + ", and the exit status of the scheduler is: "
+							+ status + ".");
 		}
 	}
 }

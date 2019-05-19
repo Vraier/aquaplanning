@@ -4,7 +4,7 @@ import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.cube.Cube;
 import edu.kit.aquaplanning.model.ground.Plan;
 
-public abstract class CubePlanner {
+public abstract class CubeSolver {
 
 	// Variables that hold the state of the Plannner
 	protected Cube cube;
@@ -18,7 +18,7 @@ public abstract class CubePlanner {
 	protected int iterationLimit = 0;
 	protected long timeLimit = 0;
 
-	public CubePlanner(Configuration config, Cube cube) {
+	public CubeSolver(Configuration config, Cube cube) {
 		this.config = config;
 		this.cube = cube;
 	}

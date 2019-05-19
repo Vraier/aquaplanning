@@ -98,7 +98,7 @@ public class Configuration {
 	 */
 	
 	public enum PlannerType {
-		forwardSSS, satBased, hegemannSat, parallel, greedy, seqpfolio;
+		forwardSSS, satBased, hegemannSat, parallel, greedy, seqpfolio, cubePlanner;
 	}
 	@Option(paramLabel = "plannerType", names = {"-p", "--planner"}, 
 			description = "Planner type to use: " + USAGE_OPTIONS_AND_DEFAULT, 
@@ -141,6 +141,61 @@ public class Configuration {
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "sat4j")
 	public SatSolverMode satSolverMode;
 	
+	
+	/* Cube an Conquer planning */
+	
+	@Option(names = {"-c", "--cubes"}, description = "The number of cubes to search for before trying to solve them: "
+			+ USAGE_DEFAULT, defaultValue = "200")
+	public int numCubes;
+	public enum CubeFinderMode {
+		forwardSearch, backwardSearch;
+	}
+	@Option(names = {"--cubeFinder"}, description = "The desired mode to find the Cubes: "
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "forwardSearch")
+	public CubeFinderMode cubeFinderMode;
+	
+	public enum SchedulerMode {
+		roundRobin, exponential;
+	}
+	@Option(names = {"-sched", "--scheduler"}, description = "Which scheduler to use to split up computation time between cubes: "
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "exponential")
+	public SchedulerMode schedulerMode;
+	@Option(names = {"-schedI"}, description = "Amount of iterations each cube gets while beeing scheduled: "
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "0")
+	public int schedulerIterations;
+	@Option(names = {"-schedT"}, description = "Amount of time each cube gets while beeing scheduled (in milliseconds): "
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1000")
+	public long schedulerTime;
+	@Option(names = {"-schedExpG"}, description = "The growth value of the exponential scheduler: "
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1.5")
+	public double schedulerGrowth;
+	
+	
+	@Option(paramLabel = "cubeFindHeuristic", names = {"-cfh", "--cube-find-heuristic"}, 
+			description = "Heuristic for forward search while searching for cubes: " + USAGE_OPTIONS_AND_DEFAULT, 
+			defaultValue = "ffTrautmann")
+	public HeuristicType cubeFindHeuristic;
+	@Option(paramLabel = "cubeFindheuristicWeight", names = {"-cfw", "--cube-find-heuristic-weight"},
+			description = "Weight of heuristic when using a weighted search strategy while searching for cubes: " + USAGE_DEFAULT, 
+			defaultValue = "10")
+	public int cubeFindHeuristicWeight;
+	@Option(paramLabel = "cubeFindeSearchStrategy", names = {"-cfs", "--cube-find-searchstrategy"}, 
+			description = "Search strategy for forward search while searching for cubes: " + USAGE_OPTIONS_AND_DEFAULT, 
+			defaultValue = "bestFirst")
+	public SearchStrategy.Mode cubeFindeSearchStrategy;
+	
+	@Option(paramLabel = "cubeSolveHeuristic", names = {"-csh", "--cube-solve-heuristic"}, 
+			description = "Heuristic for forward search while solving cubes: " + USAGE_OPTIONS_AND_DEFAULT, 
+			defaultValue = "ffTrautmann")
+	public HeuristicType cubeSolveHeuristic;
+	@Option(paramLabel = "cubeSolveHeuristicWeight", names = {"-csh", "--cube-solve-heuristic-weight"},
+			description = "Weight of heuristic when using a weighted search strategy while solving cubes: " + USAGE_DEFAULT, 
+			defaultValue = "10")
+	public int cubeSolveHeuristicWeight;
+	@Option(paramLabel = "cubeSolveSearchStrategy", names = {"-css", "--cube-solve-searchstrategy"}, 
+			description = "Search strategy for forward search while solving cubes:  " + USAGE_OPTIONS_AND_DEFAULT, 
+			defaultValue = "bestFirst")
+	public SearchStrategy.Mode cubeSolveSearchStrategy;
 	
 	/* 
 	 * Post-processing 

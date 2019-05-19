@@ -82,6 +82,8 @@ public abstract class Planner {
 			return new GreedyBestFirstSearchPlanner(config);
 		case seqpfolio:
 			return new SequentialPortfolioPlanner(config);
+		case cubePlanner:
+			return new SimpleParallelPlanner(config);
 		default:
 			break;
 		}

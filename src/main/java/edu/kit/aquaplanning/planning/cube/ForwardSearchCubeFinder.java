@@ -16,19 +16,24 @@ import edu.kit.aquaplanning.planning.datastructures.SearchQueue;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.planning.heuristic.Heuristic;
 
-public class ForwardSearchCubeFinder implements CubeFinder {
-
-	Configuration config;
-	Plan plan = null;
+public class ForwardSearchCubeFinder extends CubeFinder {
 
 	public ForwardSearchCubeFinder(Configuration config) {
-		this.config = config;
+		super(config);
+
+		// update our configuration for easier usage while creating the forward search
+		// datastructures
+		Configuration newConfig = config.copy();
+		newConfig.searchStrategy = config.cubeFindeSearchStrategy;
+		newConfig.heuristic = config.cubeFindHeuristic;
+		newConfig.cubeFindHeuristicWeight = config.cubeFindHeuristicWeight;
+		this.config = newConfig;
 	}
 
 	@Override
 	public List<Cube> findCubes(GroundPlanningProblem problem, int numCubes) {
 
-		List<Cube> cubes = null;
+		List<Cube> cubes;
 		State initState = problem.getInitialState();
 		Goal goal = problem.getGoal();
 		ActionIndex aindex = new ActionIndex(problem);
@@ -81,7 +86,8 @@ public class ForwardSearchCubeFinder implements CubeFinder {
 		}
 		return cubes;
 	}
-	
+
+	@Override
 	public Plan getPlan() {
 		return plan;
 	}

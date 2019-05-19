@@ -11,6 +11,15 @@ public class Cube {
 	private Plan partialPlanFront;
 	private Plan partialPlanBack;
 
+	/**
+	 * Constructs a new Cube. In this case the cube represents a Problem with a new
+	 * initial state. This type of cube results from a forward search.
+	 * 
+	 * @param problem The original problem
+	 * @param state   the new initial state of the new problem
+	 * @param plan    a partial Plan leading from the initial state of the original
+	 *                problem to the new initial state
+	 */
 	public Cube(GroundPlanningProblem problem, State state, Plan plan) {
 
 		GroundPlanningProblem newProblem = new GroundPlanningProblem(problem);
@@ -19,9 +28,18 @@ public class Cube {
 		this.partialPlanFront = plan;
 		this.partialPlanBack = new Plan();
 	}
-	
+
+	/**
+	 * Constructs a new Cube. In this case the cube represents a Problem with a new
+	 * goal. This type of cube results from a backward search.
+	 * 
+	 * @param problem The original problem
+	 * @param state   the new goal of the new problem
+	 * @param plan    a partial Plan leading from the goal of the original problem
+	 *                to the new goal
+	 */
 	public Cube(GroundPlanningProblem problem, Goal goal, Plan plan) {
-		
+
 		GroundPlanningProblem newProblem = new GroundPlanningProblem(problem);
 		newProblem.setGoal(goal);
 		this.problem = newProblem;
@@ -29,13 +47,16 @@ public class Cube {
 		this.partialPlanBack = plan;
 	}
 
+	/**
+	 * Returns the problem that this cube is representing
+	 */
 	public GroundPlanningProblem getProblem() {
 		return problem;
 	}
 
 	/**
-	 * takes a partial Plan and concate it with the partial plan for the cube to get
-	 * a valid solution for the original Problem.
+	 * Takes a partial Plan for the problem of the cube and concates it with another
+	 * partial plan to get a valid solution for the original Problem.
 	 */
 	public void finalizePlan(Plan plan) {
 		plan.concateAtFront(partialPlanFront);

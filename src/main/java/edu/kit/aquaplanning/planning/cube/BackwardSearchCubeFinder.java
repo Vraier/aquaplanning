@@ -15,18 +15,17 @@ import edu.kit.aquaplanning.model.ground.AtomSet;
 import edu.kit.aquaplanning.model.ground.Goal;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
-import edu.kit.aquaplanning.model.ground.State;
 
 // TODO: check if node satisfies the startingState. If so we are done and
 // already found a plan. This is pretty resource intensive though.
-public class BackwardSearchCubeFinder implements CubeFinder {
+// TODO: when do we stop the backwardSearch. What happens in the special cases?
+public class BackwardSearchCubeFinder extends CubeFinder {
 
-	Configuration config;
 	Queue<BackwardSearchNode> queue;
 	Set<BackwardSearchNode> visitedGoals;
 
 	public BackwardSearchCubeFinder(Configuration config) {
-		this.config = config;
+		super(config);
 	}
 
 	@Override
@@ -35,7 +34,7 @@ public class BackwardSearchCubeFinder implements CubeFinder {
 		queue = new ArrayDeque<BackwardSearchNode>();
 		visitedGoals = new HashSet<BackwardSearchNode>();
 
-		State startingState = problem.getInitialState();
+		// State startingState = problem.getInitialState();
 		BackwardSearchNode startNode = new BackwardSearchNode(problem.getGoal());
 		queue.add(startNode);
 		visitedGoals.add(startNode);
@@ -44,7 +43,8 @@ public class BackwardSearchCubeFinder implements CubeFinder {
 		while (!queue.isEmpty() && queue.size() <= numCubes) {
 
 			BackwardSearchNode node = queue.poll();
-			// System.out.println("I poll a node " + node.trueAtoms + " " + node.falseAtoms + ".");
+			// System.out.println("I poll a node " + node.trueAtoms + " " + node.falseAtoms
+			// + ".");
 
 			for (Action a : actions) {
 
@@ -86,7 +86,7 @@ public class BackwardSearchCubeFinder implements CubeFinder {
 
 	@Override
 	public Plan getPlan() {
-		// TODO Auto-generated method stub
+		// TODO at the moment this feature is not implemented.
 		return null;
 	}
 
@@ -104,7 +104,8 @@ public class BackwardSearchCubeFinder implements CubeFinder {
 		AtomSet fSet = action.getEffectsNeg();
 
 		// return n.trueAtoms.all(pSet) && n.falseAtoms.all(nSet); This does not work
-		return (node.trueAtoms.intersects(tSet) || node.falseAtoms.intersects(fSet)) && !node.trueAtoms.intersects(fSet) && !node.falseAtoms.intersects(tSet);
+		return (node.trueAtoms.intersects(tSet) || node.falseAtoms.intersects(fSet)) && !node.trueAtoms.intersects(fSet)
+				&& !node.falseAtoms.intersects(tSet);
 	}
 
 	private BackwardSearchNode getPredecessor(Action a, BackwardSearchNode n) {

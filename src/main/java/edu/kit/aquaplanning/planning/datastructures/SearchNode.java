@@ -41,6 +41,10 @@ public class SearchNode {
 		return false;
 	}
 	
+	/**
+	 * Returns the partial plan described by the parent field of this node.
+	 * @return a partial plan described by the parent field
+	 */
 	public Plan getPartialPlan() {
 		
 		Plan plan = new Plan();
