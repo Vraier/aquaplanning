@@ -44,8 +44,7 @@ public class BackwardSearchCubeFinder implements CubeFinder {
 		while (!queue.isEmpty() && queue.size() <= numCubes) {
 
 			BackwardSearchNode node = queue.poll();
-			// System.out.println("I poll a node " + node.trueAtoms + " " + node.falseAtoms
-			// + ".");
+			// System.out.println("I poll a node " + node.trueAtoms + " " + node.falseAtoms + ".");
 
 			for (Action a : actions) {
 

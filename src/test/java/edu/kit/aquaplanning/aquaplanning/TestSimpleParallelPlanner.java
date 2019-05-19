@@ -32,7 +32,7 @@ public class TestSimpleParallelPlanner extends TestCase {
 					break;
 				}
 			}
-			break;
+			//break;
 		}
 	}
 

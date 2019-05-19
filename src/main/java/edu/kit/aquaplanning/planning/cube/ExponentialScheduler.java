@@ -16,14 +16,13 @@ public class ExponentialScheduler implements Scheduler {
 	private long initialTime = 0;
 	private double exponentialGrowth = 0;
 
-	private int queueIndex;
-	private int queueCycles;
+	private int queueIndex = 0;
+	private int queueCycles = -1;
+	private int addedPlanners = 0;
 
 	public ExponentialScheduler(List<CubePlanner> planners) {
 		this.planners = planners;
 		this.runningPlanners = new ArrayList<CubePlanner>();
-		this.queueIndex = 0;
-		this.queueCycles = -1;
 	}
 
 	public void setIterations(int initialIterations, double exponentialGrowth) {
@@ -46,10 +45,13 @@ public class ExponentialScheduler implements Scheduler {
 		// All Planners for the Queue ran one time. Add a new Planner to the
 		// runningQueue if possible
 		if (queueIndex >= runningPlanners.size()) {
-			if (runningPlanners.size() < planners.size()) {
-				runningPlanners.add(planners.get(runningPlanners.size()));
+			
+			// Check if we already added all cubes from the readyQueue
+			if (addedPlanners < planners.size()) {
+				runningPlanners.add(planners.get(addedPlanners));
+				addedPlanners++;
 			}
-			// Start for the beginning of the runningQueue again
+			// Start from the beginning of the runningQueue again
 			queueIndex = 0;
 			queueCycles++;
 		}
