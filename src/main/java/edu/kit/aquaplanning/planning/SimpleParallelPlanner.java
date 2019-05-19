@@ -23,7 +23,7 @@ import edu.kit.aquaplanning.util.Logger;
 //TODO: check if synchronization works correctly
 public class SimpleParallelPlanner extends Planner {
 
-	private static final int NUM_CUBES = 50;
+	private static final int NUM_CUBES = 500;
 	private static final int CUBE_ITERATIONS = 5000;
 	private int numThreads;
 	private List<Thread> threads;
@@ -37,7 +37,7 @@ public class SimpleParallelPlanner extends Planner {
 	@Override
 	public Plan findPlan(GroundPlanningProblem problem) {
 		startSearch();
-
+		
 		threads = new ArrayList<>();
 		Random random = new Random(this.config.seed); // seed generator
 		List<Cube> cubes;

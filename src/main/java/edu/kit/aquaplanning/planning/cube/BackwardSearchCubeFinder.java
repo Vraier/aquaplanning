@@ -44,7 +44,8 @@ public class BackwardSearchCubeFinder implements CubeFinder {
 		while (!queue.isEmpty() && queue.size() <= numCubes) {
 
 			BackwardSearchNode node = queue.poll();
-			// System.out.println("I poll a node " + node.trueAtoms + " " + node.falseAtoms + ".");			
+			// System.out.println("I poll a node " + node.trueAtoms + " " + node.falseAtoms
+			// + ".");
 
 			for (Action a : actions) {
 
@@ -98,13 +99,13 @@ public class BackwardSearchCubeFinder implements CubeFinder {
 	 * goal. This means that all true atoms in the effects of the action are set in
 	 * the goal and all negative atoms are not set.
 	 */
-	private boolean canApplyTo(Action a, BackwardSearchNode n) {
+	private boolean canApplyTo(Action action, BackwardSearchNode node) {
 
-		AtomSet pSet = a.getEffectsPos();
-		AtomSet nSet = a.getEffectsNeg();
+		AtomSet tSet = action.getEffectsPos();
+		AtomSet fSet = action.getEffectsNeg();
 
-		//return n.trueAtoms.all(pSet) && n.falseAtoms.all(nSet); This does not work
-		return n.trueAtoms.intersects(pSet) || n.falseAtoms.intersects(nSet);
+		// return n.trueAtoms.all(pSet) && n.falseAtoms.all(nSet); This does not work
+		return (node.trueAtoms.intersects(tSet) || node.falseAtoms.intersects(fSet)) && !node.trueAtoms.intersects(fSet) && !node.falseAtoms.intersects(tSet);
 	}
 
 	private BackwardSearchNode getPredecessor(Action a, BackwardSearchNode n) {
@@ -119,13 +120,16 @@ public class BackwardSearchCubeFinder implements CubeFinder {
 		fAtoms.applyTrueAtomsAsFalse(a.getEffectsNeg());
 		fAtoms.applyTrueAtoms(a.getPreconditionsNeg());
 
+		assert (!fAtoms.intersects(tAtoms));
+
 		return new BackwardSearchNode(tAtoms, fAtoms, n, a);
 	}
 
 	private void add(BackwardSearchNode node) {
 
 		if (!visitedGoals.contains(node)) {
-			// System.out.println("I add a node " + node.trueAtoms + " " + node.falseAtoms + ".");
+			// System.out.println("I add a node " + node.trueAtoms + " " + node.falseAtoms +
+			// ".");
 			queue.add(node);
 			visitedGoals.add(node);
 		}

@@ -37,9 +37,8 @@ public class Cube {
 	 * takes a partial Plan and concate it with the partial plan for the cube to get
 	 * a valid solution for the original Problem.
 	 */
-	public Plan concatePlan(Plan plan) {
+	public void finalizePlan(Plan plan) {
 		plan.concateAtFront(partialPlanFront);
 		plan.concateAtBack(partialPlanBack);
-		return plan;
 	}
 }

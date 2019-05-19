@@ -19,7 +19,7 @@ public class TestSimpleParallelPlanner extends TestCase {
 
 	public void testSimpleParallelPlanner() throws IOException {
 		Configuration config = new Configuration();
-		config.numThreads = 2;
+		config.numThreads = 4;
 		config.searchTimeSeconds = 10;
 		SimpleParallelPlanner spp = new SimpleParallelPlanner(config);
 		File benchdir = new File("benchmarks");

@@ -31,7 +31,7 @@ public class BackwardSearchNode {
 		Plan plan = new Plan();
 		BackwardSearchNode node = this;
 		while(node != null && node.lastAction != null) {
-			plan.appendAtFront(node.lastAction);
+			plan.appendAtBack(node.lastAction);
 			node = node.parent;
 		}
 		

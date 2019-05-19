@@ -28,7 +28,7 @@ public class ForwardSearchCubePlanner extends CubePlanner {
 		problem = cube.getProblem();
 		state = new State(problem.getInitialState());
 		goal = problem.getGoal();
-		aindex = new ActionIndex(problem);		
+		aindex = new ActionIndex(problem);
 
 		strategy = new SearchStrategy(config);
 		if (strategy.isHeuristical()) {
@@ -55,15 +55,17 @@ public class ForwardSearchCubePlanner extends CubePlanner {
 
 				// Extract plan
 				Plan plan = new Plan();
+				int k = 0;
 				while (node != null && node.lastAction != null) {
+					k++;
 					plan.appendAtFront(node.lastAction);
 					node = node.parent;
 				}
 				totalIterations += i;
 				totalTime += System.currentTimeMillis() - searchStartMillis;
-				System.out.printf("ForwardSearchPlanner found a plan after %d steps in %d millisecs.\n",
-						totalIterations, totalTime);
-				return cube.concatePlan(plan);
+				//System.out.printf("ForwardSearchPlanner found a plan after %d steps in %d millisecs.\n", totalIterations, totalTime);
+				cube.finalizePlan(plan);
+				return plan;
 			}
 
 			// Expand node: iterate over operators
@@ -85,8 +87,8 @@ public class ForwardSearchCubePlanner extends CubePlanner {
 
 		totalIterations += i;
 		totalTime += System.currentTimeMillis() - searchStartMillis;
-		System.out.printf("ForwardSearchPlanner calculated %d steps in %d millisecs.\n", i,
-				System.currentTimeMillis() - searchStartMillis);
+		// System.out.printf("ForwardSearchPlanner calculated %d steps in %d
+		// millisecs.\n", i, System.currentTimeMillis() - searchStartMillis);
 		return null;
 	}
 }
