@@ -28,7 +28,7 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 		Configuration newConfig = config.copy();
 		newConfig.searchStrategy = config.cubeSolveSearchStrategy;
 		newConfig.heuristic = config.cubeSolveHeuristic;
-		newConfig.cubeFindHeuristicWeight = config.cubeSolveHeuristicWeight;
+		newConfig.heuristicWeight = config.cubeSolveHeuristicWeight;
 		this.config = newConfig;
 		
 		problem = cube.getProblem();
@@ -36,9 +36,9 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 		goal = problem.getGoal();
 		aindex = new ActionIndex(problem);
 
-		strategy = new SearchStrategy(config);
+		strategy = new SearchStrategy(this.config);
 		if (strategy.isHeuristical()) {
-			Heuristic heuristic = Heuristic.getHeuristic(problem, config);
+			Heuristic heuristic = Heuristic.getHeuristic(problem, this.config);
 			frontier = new SearchQueue(strategy, heuristic);
 		} else {
 			frontier = new SearchQueue(strategy);

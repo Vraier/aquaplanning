@@ -15,7 +15,6 @@ import edu.kit.aquaplanning.planning.cube.Scheduler;
 import edu.kit.aquaplanning.planning.cube.Scheduler.ExitStatus;
 import edu.kit.aquaplanning.util.Logger;
 
-//TODO: clear all those messy log and system.out entries
 //TODO: add computational bounds for finding the cubes and update time for cube finding phase
 //TODO: check if synchronization works correctly
 //TODO: i need an explanation for serachTimeSeconds and maxTimeSeconds
@@ -29,7 +28,8 @@ public class SimpleParallelPlanner extends Planner {
 	 * Creates a new parallel planner. This planner uses a cube and conquer
 	 * approach. The planner can be modified by the given configuration.
 	 * 
-	 * @param config holds options to modify this planner
+	 * @param config
+	 *            holds options to modify this planner
 	 */
 	public SimpleParallelPlanner(Configuration config) {
 		super(config);
@@ -46,6 +46,8 @@ public class SimpleParallelPlanner extends Planner {
 
 		// Search for cubes
 		Logger.log(Logger.INFO, "Starting to search for " + config.numCubes + " cubes.");
+		Logger.log(Logger.INFO,
+				"Constructing a new cube finder with the configuration: " + config.cubeFinderMode + ".");
 		cFinder = CubeFinder.getCubeFinder(config);
 		cubes = cFinder.findCubes(problem, config.numCubes);
 
@@ -62,10 +64,12 @@ public class SimpleParallelPlanner extends Planner {
 		Logger.log(Logger.INFO, "Found " + cubes.size() + " cubes.");
 
 		// Shuffle Cubes
+		Logger.log(Logger.INFO, "Shuffleing the cubes.");
 		random = new Random(config.seed);
 		java.util.Collections.shuffle(cubes, random);
 
 		// Split cubes evenly
+		threads = new ArrayList<Thread>();
 		for (int i = 0; i < numThreads; i++) {
 
 			// Default configuration with random seed
@@ -75,7 +79,7 @@ public class SimpleParallelPlanner extends Planner {
 
 			// Round up integer division to partition cubes evenly
 			int partitionSize = ((cubes.size() + numThreads - 1) / numThreads);
-			List<Cube> localCubes = cubes.subList(partitionSize * i, Math.min(partitionSize * (i + 1), cubes.size()));
+			List<Cube> localCubes = cubes.subList(Math.min(partitionSize * i, cubes.size()), Math.min(partitionSize * (i + 1), cubes.size()));
 
 			Thread thread = new Thread(new MyThread(config, threadNum, localCubes));
 			threads.add(thread);
@@ -168,13 +172,14 @@ public class SimpleParallelPlanner extends Planner {
 				Logger.log(Logger.INFO, "Thread " + threadNum + " found a Plan. The total sum of the iterations is "
 						+ totalIterations + " and time is " + totalTime + " millisecs.");
 				onPlanFound(localPlan);
-			}
+			} else {
 
-			Logger.log(Logger.INFO,
-					"Thread " + threadNum + " found no Plan. The total sum of the iterations is " + totalIterations
-							+ " and time is " + totalTime + " millisecs. The interruptFlag is: "
-							+ Thread.currentThread().isInterrupted() + ", and the exit status of the scheduler is: "
-							+ status + ".");
+				Logger.log(Logger.INFO,
+						"Thread " + threadNum + " found no Plan. The total sum of the iterations is " + totalIterations
+								+ " and time is " + totalTime + " millisecs. The interruptFlag is: "
+								+ Thread.currentThread().isInterrupted() + ", and the exit status of the scheduler is: "
+								+ status + ".");
+			}
 		}
 	}
 }

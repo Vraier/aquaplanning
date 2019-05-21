@@ -170,7 +170,7 @@ public class Configuration {
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1.5")
 	public double schedulerGrowth;
 	
-	
+	// not available for backwards cube finding only for forward search cube finding
 	@Option(paramLabel = "cubeFindHeuristic", names = {"-cfh", "--cube-find-heuristic"}, 
 			description = "Heuristic for forward search while searching for cubes: " + USAGE_OPTIONS_AND_DEFAULT, 
 			defaultValue = "ffTrautmann")
@@ -182,13 +182,13 @@ public class Configuration {
 	@Option(paramLabel = "cubeFindeSearchStrategy", names = {"-cfs", "--cube-find-searchstrategy"}, 
 			description = "Search strategy for forward search while searching for cubes: " + USAGE_OPTIONS_AND_DEFAULT, 
 			defaultValue = "bestFirst")
-	public SearchStrategy.Mode cubeFindeSearchStrategy;
+	public SearchStrategy.Mode cubeFindSearchStrategy;
 	
 	@Option(paramLabel = "cubeSolveHeuristic", names = {"-csh", "--cube-solve-heuristic"}, 
 			description = "Heuristic for forward search while solving cubes: " + USAGE_OPTIONS_AND_DEFAULT, 
 			defaultValue = "ffTrautmann")
 	public HeuristicType cubeSolveHeuristic;
-	@Option(paramLabel = "cubeSolveHeuristicWeight", names = {"-csh", "--cube-solve-heuristic-weight"},
+	@Option(paramLabel = "cubeSolveHeuristicWeight", names = {"-csw", "--cube-solve-heuristic-weight"},
 			description = "Weight of heuristic when using a weighted search strategy while solving cubes: " + USAGE_DEFAULT, 
 			defaultValue = "10")
 	public int cubeSolveHeuristicWeight;

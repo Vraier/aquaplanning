@@ -1,0 +1,1 @@
+exclusive java -jar target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar testfiles/barman/domain.pddl testfiles/barman/p01.pddl -p=cubePlanner -T=4 -c=50 -sched=roundRobin -schedT=3000

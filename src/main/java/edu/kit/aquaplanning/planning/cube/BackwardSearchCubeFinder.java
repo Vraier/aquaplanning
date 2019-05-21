@@ -15,6 +15,7 @@ import edu.kit.aquaplanning.model.ground.AtomSet;
 import edu.kit.aquaplanning.model.ground.Goal;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
+import edu.kit.aquaplanning.util.Logger;
 
 // TODO: check if node satisfies the startingState. If so we are done and
 // already found a plan. This is pretty resource intensive though.
@@ -58,30 +59,29 @@ public class BackwardSearchCubeFinder extends CubeFinder {
 		}
 
 		if (queue.size() < numCubes) {
-			System.out.println("Something went terribly worng. Backwardsearch didnt find enough goals!");
-			return null;
-		} else {
-			List<Cube> cubes = new ArrayList<Cube>();
-			for (BackwardSearchNode n : queue) {
-				Goal newGoal;
-				Cube newCube;
-				List<Atom> atomList = new ArrayList<Atom>();
-
-				// Generate new Goals form the AtomSets
-				for (int i = 0; i < problem.getAtomNames().size(); i++) {
-					if (n.trueAtoms.get(i)) {
-						atomList.add(new Atom(i, problem.getAtomNames().get(i), true));
-					}
-					if (n.falseAtoms.get(i)) {
-						atomList.add(new Atom(i, problem.getAtomNames().get(i), false));
-					}
-				}
-				newGoal = new Goal(atomList);
-				newCube = new Cube(problem, newGoal, n.getPartialPlan());
-				cubes.add(newCube);
-			}
-			return cubes;
+			Logger.log(Logger.INFO, "Something went not so good. Backwardsearch didnt find enough goals!");
 		}
+		List<Cube> cubes = new ArrayList<Cube>();
+		for (BackwardSearchNode n : queue) {
+			Goal newGoal;
+			Cube newCube;
+			List<Atom> atomList = new ArrayList<Atom>();
+
+			// Generate new Goals form the AtomSets
+			for (int i = 0; i < problem.getAtomNames().size(); i++) {
+				if (n.trueAtoms.get(i)) {
+					atomList.add(new Atom(i, problem.getAtomNames().get(i), true));
+				}
+				if (n.falseAtoms.get(i)) {
+					atomList.add(new Atom(i, problem.getAtomNames().get(i), false));
+				}
+			}
+			newGoal = new Goal(atomList);
+			newCube = new Cube(problem, newGoal, n.getPartialPlan());
+			cubes.add(newCube);
+		}
+		return cubes;
+
 	}
 
 	@Override

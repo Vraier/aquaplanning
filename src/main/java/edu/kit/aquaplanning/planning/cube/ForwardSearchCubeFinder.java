@@ -24,9 +24,9 @@ public class ForwardSearchCubeFinder extends CubeFinder {
 		// update our configuration for easier usage while creating the forward search
 		// datastructures
 		Configuration newConfig = config.copy();
-		newConfig.searchStrategy = config.cubeFindeSearchStrategy;
+		newConfig.searchStrategy = config.cubeFindSearchStrategy;
 		newConfig.heuristic = config.cubeFindHeuristic;
-		newConfig.cubeFindHeuristicWeight = config.cubeFindHeuristicWeight;
+		newConfig.heuristicWeight = config.cubeFindHeuristicWeight;
 		this.config = newConfig;
 	}
 
