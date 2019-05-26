@@ -12,6 +12,7 @@ import edu.kit.aquaplanning.planning.datastructures.SearchNode;
 import edu.kit.aquaplanning.planning.datastructures.SearchQueue;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.planning.heuristic.Heuristic;
+import edu.kit.aquaplanning.util.Logger;
 
 public class ForwardSearchCubeSolver extends CubeSolver {
 
@@ -30,7 +31,7 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 		newConfig.heuristic = config.cubeSolveHeuristic;
 		newConfig.heuristicWeight = config.cubeSolveHeuristicWeight;
 		this.config = newConfig;
-		
+
 		problem = cube.getProblem();
 		state = new State(problem.getInitialState());
 		goal = problem.getGoal();
@@ -61,15 +62,14 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 
 				// Extract plan
 				Plan plan = new Plan();
-				int k = 0;
 				while (node != null && node.lastAction != null) {
-					k++;
 					plan.appendAtFront(node.lastAction);
 					node = node.parent;
 				}
 				totalIterations += i;
 				totalTime += System.currentTimeMillis() - searchStartMillis;
-				//System.out.printf("ForwardSearchPlanner found a plan after %d steps in %d millisecs.\n", totalIterations, totalTime);
+				Logger.log(Logger.INFO, "ForwardSearchPlanner found a plan after " + totalIterations + " steps in "
+						+ totalTime + " millisecs.");
 				cube.finalizePlan(plan);
 				return plan;
 			}
@@ -93,8 +93,6 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 
 		totalIterations += i;
 		totalTime += System.currentTimeMillis() - searchStartMillis;
-		// System.out.printf("ForwardSearchPlanner calculated %d steps in %d
-		// millisecs.\n", i, System.currentTimeMillis() - searchStartMillis);
 		return null;
 	}
 }

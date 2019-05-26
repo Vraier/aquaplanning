@@ -15,7 +15,6 @@ import edu.kit.aquaplanning.model.ground.Plan;
 import edu.kit.aquaplanning.model.lifted.PlanningProblem;
 import edu.kit.aquaplanning.parsing.ProblemParser;
 import edu.kit.aquaplanning.planning.Planner;
-import edu.kit.aquaplanning.planning.SimpleParallelPlanner;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.validation.Validator;
 import junit.framework.TestCase;
