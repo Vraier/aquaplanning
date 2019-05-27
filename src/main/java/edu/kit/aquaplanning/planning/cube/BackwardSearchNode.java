@@ -27,17 +27,17 @@ public class BackwardSearchNode {
 	}
 
 	public Plan getPartialPlan() {
-		
+
 		Plan plan = new Plan();
 		BackwardSearchNode node = this;
-		while(node != null && node.lastAction != null) {
+		while (node != null && node.lastAction != null) {
 			plan.appendAtBack(node.lastAction);
 			node = node.parent;
 		}
-		
+
 		return plan;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -15,11 +15,10 @@ import edu.kit.aquaplanning.model.ground.AtomSet;
 import edu.kit.aquaplanning.model.ground.Goal;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
+import edu.kit.aquaplanning.model.ground.State;
 import edu.kit.aquaplanning.util.Logger;
 
-// TODO: check if node satisfies the startingState. If so we are done and
-// already found a plan. This is pretty resource intensive though.
-// TODO: when do we stop the backwardSearch. What happens in the special cases?
+//TODO: update intersect/node methods of the AtomSet class
 public class BackwardSearchCubeFinder extends CubeFinder {
 
 	Queue<BackwardSearchNode> queue;
@@ -32,26 +31,30 @@ public class BackwardSearchCubeFinder extends CubeFinder {
 	@Override
 	public List<Cube> findCubes(GroundPlanningProblem problem, int numCubes) {
 
+		State startingState = problem.getInitialState();
+		BackwardSearchNode startNode = new BackwardSearchNode(problem.getGoal());
+		List<Action> actions = problem.getActions();
+
 		queue = new ArrayDeque<BackwardSearchNode>();
 		visitedGoals = new HashSet<BackwardSearchNode>();
-
-		// State startingState = problem.getInitialState();
-		BackwardSearchNode startNode = new BackwardSearchNode(problem.getGoal());
 		queue.add(startNode);
 		visitedGoals.add(startNode);
-		List<Action> actions = problem.getActions();
 
 		while (!queue.isEmpty() && queue.size() <= numCubes) {
 
 			BackwardSearchNode node = queue.poll();
-			// System.out.println("I poll a node " + node.trueAtoms + " " + node.falseAtoms
-			// + ".");
+
+			// Check if our current goal is already satisfied by the starting node
+			if (satisfiesGoal(startingState, node)) {
+				plan = node.getPartialPlan();
+				// no cubes to return because we already found a node
+				return null;
+			}
 
 			for (Action a : actions) {
 
 				// We found a new possible goal. Add it to the queue
 				if (canApplyTo(a, node)) {
-					// System.out.println("I found an action: " + a + ".");
 					BackwardSearchNode newNode = getPredecessor(a, node);
 					add(newNode);
 				}
@@ -86,8 +89,7 @@ public class BackwardSearchCubeFinder extends CubeFinder {
 
 	@Override
 	public Plan getPlan() {
-		// TODO at the moment this feature is not implemented.
-		return null;
+		return plan;
 	}
 
 	/**
@@ -98,7 +100,7 @@ public class BackwardSearchCubeFinder extends CubeFinder {
 	 * goal. This means that all true atoms in the effects of the action are set in
 	 * the goal and all negative atoms are not set.
 	 */
-	private boolean canApplyTo(Action action, BackwardSearchNode node) {
+	private static boolean canApplyTo(Action action, BackwardSearchNode node) {
 
 		AtomSet tSet = action.getEffectsPos();
 		AtomSet fSet = action.getEffectsNeg();
@@ -108,7 +110,19 @@ public class BackwardSearchCubeFinder extends CubeFinder {
 				&& !node.falseAtoms.intersects(tSet);
 	}
 
-	private BackwardSearchNode getPredecessor(Action a, BackwardSearchNode n) {
+	/**
+	 * Constructs the predecessor of a backward search node given the action that
+	 * leads to this node. Since a backward search node represents a goal (a set of
+	 * states) only one predecessor is enough to represent all possible states that
+	 * lead to this goal.
+	 * 
+	 * @param a
+	 *            the action that will fulfill the goal provided by the node
+	 * @param n
+	 *            the node that should be fulfilled by the action
+	 * @return a goal from which the action will fulfill the node
+	 */
+	private static BackwardSearchNode getPredecessor(Action a, BackwardSearchNode n) {
 
 		assert (canApplyTo(a, n));
 
@@ -128,10 +142,17 @@ public class BackwardSearchCubeFinder extends CubeFinder {
 	private void add(BackwardSearchNode node) {
 
 		if (!visitedGoals.contains(node)) {
-			// System.out.println("I add a node " + node.trueAtoms + " " + node.falseAtoms +
-			// ".");
 			queue.add(node);
 			visitedGoals.add(node);
 		}
+	}
+
+	/**
+	 * state trueAtoms = t, node trueAtoms = t', node falseAtoms = f'
+	 * 
+	 * @return (t' subset t and f' not intersects t)<=>(t' subset t and f' subset f)
+	 */
+	private static boolean satisfiesGoal(State state, BackwardSearchNode node) {
+		return state.getAtomSet().all(node.trueAtoms) && state.getAtomSet().none(node.falseAtoms);
 	}
 }
