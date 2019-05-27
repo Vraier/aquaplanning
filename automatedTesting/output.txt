@@ -1,0 +1,1799 @@
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.037] Running on DESKTOP-T7Q4IK4
+[0.038] Parsing ...
+[0.494] Parsing complete.
+
+[0.494] Grounding ...
+[0.743] Grounding complete. 299 actions resulted from the grounding.
+
+[0.744] Ground problem contains no conditional effects.
+[0.744] Ground problem contains no complex conditions.
+[0.744] Planning ...
+[0.751] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558968535446
+}
+[0.986] Visited 13 nodes in total. Search time: 212ms
+[0.986] Planner finished with a plan of length 10.
+[0.986] Validating ...
+[0.987] Plan has been found to be valid.
+[0.988] Found plan:
+0 : (grasp right shot2)
+1 : (fill-shot shot2 ingredient3 right left dispenser3)
+2 : (pour-shot-to-clean-shaker shot2 ingredient3 shaker1 right l0 l1)
+3 : (clean-shot shot2 ingredient3 right left)
+4 : (fill-shot shot2 ingredient1 right left dispenser1)
+5 : (pour-shot-to-used-shaker shot2 ingredient1 shaker1 right l1 l2)
+6 : (leave right shot2)
+7 : (grasp right shaker1)
+8 : (shake cocktail1 ingredient3 ingredient1 shaker1 right left)
+9 : (pour-shaker-to-shot cocktail1 shot1 right shaker1 l2 l1)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\p02.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.035] Running on DESKTOP-T7Q4IK4
+[0.036] Parsing ...
+[0.446] Parsing complete.
+
+[0.447] Grounding ...
+[0.734] Grounding complete. 467 actions resulted from the grounding.
+
+[0.735] Ground problem contains no conditional effects.
+[0.735] Ground problem contains no complex conditions.
+[0.736] Planning ...
+[0.742] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\p02.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558968537192
+}
+[1.200] Visited 16 nodes. (38 nodes/s)
+[1.531] Visited 32 nodes. (42 nodes/s)
+[1.910] Visited 64 nodes. (56 nodes/s)
+[2.396] Visited 128 nodes. (79 nodes/s)
+[2.939] Visited 239 nodes in total. Search time: 2159ms
+[2.940] Planner finished with a plan of length 42.
+[2.941] Validating ...
+[2.942] Plan has been found to be valid.
+[2.969] Found plan:
+0 : (grasp right shot3)
+1 : (fill-shot shot3 ingredient3 right left dispenser3)
+2 : (pour-shot-to-clean-shaker shot3 ingredient3 shaker1 right l0 l1)
+3 : (clean-shot shot3 ingredient3 right left)
+4 : (fill-shot shot3 ingredient1 right left dispenser1)
+5 : (grasp left shaker1)
+6 : (pour-shot-to-used-shaker shot3 ingredient1 shaker1 right l1 l2)
+7 : (leave left shaker1)
+8 : (clean-shot shot3 ingredient1 right left)
+9 : (fill-shot shot3 ingredient3 right left dispenser3)
+10 : (empty-shot right shot3 ingredient3)
+11 : (grasp left shaker1)
+12 : (leave right shot3)
+13 : (shake cocktail1 ingredient1 ingredient3 shaker1 left right)
+14 : (pour-shaker-to-shot cocktail1 shot2 left shaker1 l2 l1)
+15 : (grasp right shot2)
+16 : (empty-shaker left shaker1 cocktail1 l1 l0)
+17 : (leave left shaker1)
+18 : (leave right shot2)
+19 : (grasp right shot3)
+20 : (clean-shot shot3 ingredient3 right left)
+21 : (fill-shot shot3 ingredient1 right left dispenser1)
+22 : (empty-shot right shot3 ingredient1)
+23 : (leave right shot3)
+24 : (grasp right shot2)
+25 : (grasp left shaker1)
+26 : (leave right shot2)
+27 : (clean-shaker left right shaker1)
+28 : (leave left shaker1)
+29 : (grasp left shot1)
+30 : (fill-shot shot1 ingredient4 left right dispenser4)
+31 : (pour-shot-to-clean-shaker shot1 ingredient4 shaker1 left l0 l1)
+32 : (clean-shot shot1 ingredient4 left right)
+33 : (leave left shot1)
+34 : (grasp right shot1)
+35 : (fill-shot shot1 ingredient5 right left dispenser5)
+36 : (pour-shot-to-used-shaker shot1 ingredient5 shaker1 right l1 l2)
+37 : (clean-shot shot1 ingredient5 right left)
+38 : (leave right shot1)
+39 : (grasp right shaker1)
+40 : (shake cocktail2 ingredient5 ingredient4 shaker1 right left)
+41 : (pour-shaker-to-shot cocktail2 shot1 right shaker1 l2 l1)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\p03.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.037] Running on DESKTOP-T7Q4IK4
+[0.037] Parsing ...
+[0.479] Parsing complete.
+
+[0.480] Grounding ...
+[0.800] Grounding complete. 647 actions resulted from the grounding.
+
+[0.801] Ground problem contains no conditional effects.
+[0.801] Ground problem contains no complex conditions.
+[0.802] Planning ...
+[0.808] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\p03.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558968541128
+}
+[1.487] Visited 16 nodes. (25 nodes/s)
+[2.115] Visited 32 nodes. (25 nodes/s)
+[2.745] Visited 64 nodes. (33 nodes/s)
+[3.655] Visited 128 nodes. (45 nodes/s)
+[4.252] Visited 256 nodes. (75 nodes/s)
+[5.353] Visited 512 nodes. (113 nodes/s)
+[7.587] Visited 1024 nodes. (152 nodes/s)
+[11.706] Visited 2048 nodes. (188 nodes/s)
+[22.576] Visited 4096 nodes. (188 nodes/s)
+[39.340] Visited 8192 nodes. (212 nodes/s)
+[69.675] Visited 16384 nodes. (238 nodes/s)
+[107.459] Visited 32768 nodes. (307 nodes/s)
+[159.954] Visited 57097 nodes in total. Search time: 159101ms
+[159.954] Planner finished with a plan of length 78.
+[159.954] Validating ...
+[159.955] Plan has been found to be valid.
+[159.958] Found plan:
+0 : (grasp right shot4)
+1 : (fill-shot shot4 ingredient1 right left dispenser1)
+2 : (pour-shot-to-clean-shaker shot4 ingredient1 shaker1 right l0 l1)
+3 : (clean-shot shot4 ingredient1 right left)
+4 : (fill-shot shot4 ingredient2 right left dispenser2)
+5 : (pour-shot-to-used-shaker shot4 ingredient2 shaker1 right l1 l2)
+6 : (clean-shot shot4 ingredient2 right left)
+7 : (fill-shot shot4 ingredient2 right left dispenser2)
+8 : (leave right shot4)
+9 : (grasp right shot2)
+10 : (grasp left shaker1)
+11 : (leave right shot2)
+12 : (shake cocktail3 ingredient1 ingredient2 shaker1 left right)
+13 : (pour-shaker-to-shot cocktail3 shot3 left shaker1 l2 l1)
+14 : (leave left shaker1)
+15 : (grasp right shot4)
+16 : (empty-shot right shot4 ingredient2)
+17 : (leave right shot4)
+18 : (grasp right shot3)
+19 : (grasp left shaker1)
+20 : (empty-shaker left shaker1 cocktail3 l1 l0)
+21 : (leave left shaker1)
+22 : (leave right shot3)
+23 : (grasp right shot4)
+24 : (clean-shot shot4 ingredient2 right left)
+25 : (fill-shot shot4 ingredient1 right left dispenser1)
+26 : (empty-shot right shot4 ingredient1)
+27 : (leave right shot4)
+28 : (grasp right shot3)
+29 : (grasp left shaker1)
+30 : (leave right shot3)
+31 : (clean-shaker left right shaker1)
+32 : (leave left shaker1)
+33 : (grasp right shot2)
+34 : (fill-shot shot2 ingredient3 right left dispenser3)
+35 : (pour-shot-to-clean-shaker shot2 ingredient3 shaker1 right l0 l1)
+36 : (clean-shot shot2 ingredient3 right left)
+37 : (fill-shot shot2 ingredient4 right left dispenser4)
+38 : (pour-shot-to-used-shaker shot2 ingredient4 shaker1 right l1 l2)
+39 : (clean-shot shot2 ingredient4 right left)
+40 : (leave right shot2)
+41 : (grasp right shot4)
+42 : (clean-shot shot4 ingredient1 right left)
+43 : (fill-shot shot4 ingredient5 right left dispenser5)
+44 : (empty-shot right shot4 ingredient5)
+45 : (leave right shot4)
+46 : (grasp right shot3)
+47 : (grasp left shaker1)
+48 : (leave right shot3)
+49 : (shake cocktail1 ingredient3 ingredient4 shaker1 left right)
+50 : (pour-shaker-to-shot cocktail1 shot2 left shaker1 l2 l1)
+51 : (grasp right shot3)
+52 : (empty-shaker left shaker1 cocktail1 l1 l0)
+53 : (leave left shaker1)
+54 : (leave right shot3)
+55 : (grasp right shot4)
+56 : (clean-shot shot4 ingredient5 right left)
+57 : (fill-shot shot4 ingredient1 right left dispenser1)
+58 : (empty-shot right shot4 ingredient1)
+59 : (leave right shot4)
+60 : (grasp right shot2)
+61 : (grasp left shaker1)
+62 : (leave right shot2)
+63 : (clean-shaker left right shaker1)
+64 : (leave left shaker1)
+65 : (grasp left shot1)
+66 : (fill-shot shot1 ingredient3 left right dispenser3)
+67 : (pour-shot-to-clean-shaker shot1 ingredient3 shaker1 left l0 l1)
+68 : (clean-shot shot1 ingredient3 left right)
+69 : (leave left shot1)
+70 : (grasp right shot1)
+71 : (fill-shot shot1 ingredient5 right left dispenser5)
+72 : (pour-shot-to-used-shaker shot1 ingredient5 shaker1 right l1 l2)
+73 : (clean-shot shot1 ingredient5 right left)
+74 : (leave right shot1)
+75 : (grasp right shaker1)
+76 : (shake cocktail2 ingredient5 ingredient3 shaker1 right left)
+77 : (pour-shaker-to-shot cocktail2 shot1 right shaker1 l2 l1)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\p04.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.026] Running on DESKTOP-T7Q4IK4
+[0.027] Parsing ...
+[0.318] Parsing complete.
+
+[0.319] Grounding ...
+[0.565] Grounding complete. 839 actions resulted from the grounding.
+
+[0.566] Ground problem contains no conditional effects.
+[0.567] Ground problem contains no complex conditions.
+[0.567] Planning ...
+[0.572] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\p04.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558968701785
+}
+[1.329] Visited 16 nodes. (22 nodes/s)
+[1.547] Visited 32 nodes. (34 nodes/s)
+[1.981] Visited 64 nodes. (46 nodes/s)
+[2.683] Visited 128 nodes. (61 nodes/s)
+[3.533] Visited 256 nodes. (87 nodes/s)
+[4.604] Visited 512 nodes. (128 nodes/s)
+[6.162] Visited 1024 nodes. (184 nodes/s)
+[9.377] Visited 2048 nodes. (233 nodes/s)
+[17.331] Visited 4096 nodes. (244 nodes/s)
+[30.653] Visited 8192 nodes. (272 nodes/s)
+[55.870] Visited 16384 nodes. (296 nodes/s)
+^C#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../benchmarks\Barman\p05.pddl
+#############################################################################
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\barman\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\barman\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.027] Running on DESKTOP-T7Q4IK4
+[0.027] Parsing ...
+[0.288] Parsing complete.
+
+[0.288] Grounding ...
+[0.503] Grounding complete. 299 actions resulted from the grounding.
+
+[0.503] Ground problem contains no conditional effects.
+[0.504] Ground problem contains no complex conditions.
+[0.504] Planning ...
+[0.514] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\barman\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\barman\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969147913
+}
+[0.704] Visited 13 nodes in total. Search time: 162ms
+[0.704] Planner finished with a plan of length 10.
+[0.706] Validating ...
+[0.709] Plan has been found to be valid.
+[0.710] Found plan:
+0 : (grasp right shot2)
+1 : (fill-shot shot2 ingredient3 right left dispenser3)
+2 : (pour-shot-to-clean-shaker shot2 ingredient3 shaker1 right l0 l1)
+3 : (clean-shot shot2 ingredient3 right left)
+4 : (fill-shot shot2 ingredient1 right left dispenser1)
+5 : (pour-shot-to-used-shaker shot2 ingredient1 shaker1 right l1 l2)
+6 : (leave right shot2)
+7 : (grasp right shaker1)
+8 : (shake cocktail1 ingredient3 ingredient1 shaker1 right left)
+9 : (pour-shaker-to-shot cocktail1 shot1 right shaker1 l2 l1)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\basicrpg\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\basicrpg\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.034] Running on DESKTOP-T7Q4IK4
+[0.034] Parsing ...
+[0.283] Parsing complete.
+
+[0.283] Grounding ...
+[0.313] Grounding complete. 8 actions resulted from the grounding.
+
+[0.313] Ground problem contains no conditional effects.
+[0.313] Ground problem contains no complex conditions.
+[0.314] Planning ...
+[0.319] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\basicrpg\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\basicrpg\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969149183
+}
+[0.340] Visited 7 nodes in total. Search time: 3ms
+[0.340] Planner finished with a plan of length 6.
+[0.341] Validating ...
+[0.350] Plan has been found to be valid.
+[0.350] Found plan:
+0 : (fight-monster l1 l5)
+1 : (move l1 l2)
+2 : (fight-monster l2 l3)
+3 : (move l2 l3)
+4 : (move l3 l4)
+5 : (move l4 l5)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\childsnack\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\childsnack\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.025] Running on DESKTOP-T7Q4IK4
+[0.025] Parsing ...
+[0.293] Parsing complete.
+
+[0.293] Grounding ...
+[0.347] Grounding complete. 25 actions resulted from the grounding.
+
+[0.348] Ground problem contains no conditional effects.
+[0.348] Ground problem contains no complex conditions.
+[0.348] Planning ...
+[0.353] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\childsnack\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\childsnack\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969150009
+}
+[0.408] Visited 15 nodes in total. Search time: 22ms
+[0.408] Planner finished with a plan of length 10.
+[0.409] Validating ...
+[0.418] Plan has been found to be valid.
+[0.419] Found plan:
+0 : (make_sandwich_no_gluten sandw1 bread2 content2)
+1 : (put_on_tray sandw1 tray1)
+2 : (move_tray tray1 kitchen table1)
+3 : (make_sandwich sandw2 bread1 content1)
+4 : (move_tray tray1 table1 table2)
+5 : (serve_sandwich_no_gluten sandw1 child1 tray1 table2)
+6 : (move_tray tray1 table2 kitchen)
+7 : (put_on_tray sandw2 tray1)
+8 : (move_tray tray1 kitchen table1)
+9 : (serve_sandwich sandw2 child2 tray1 table1)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\floortile\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\floortile\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.025] Running on DESKTOP-T7Q4IK4
+[0.026] Parsing ...
+[0.300] Parsing complete.
+
+[0.301] Grounding ...
+[0.307] Clearing all action cost definitions from the problem.
+[0.503] Grounding complete. 192 actions resulted from the grounding.
+
+[0.503] Ground problem contains no conditional effects.
+[0.503] Ground problem contains no complex conditions.
+[0.504] Planning ...
+[0.519] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\floortile\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\floortile\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969150890
+}
+[0.604] Visited 6 nodes in total. Search time: 40ms
+[0.604] Planner finished with a plan of length 5.
+[0.605] Validating ...
+[0.605] Plan has been found to be valid.
+[0.606] Found plan:
+0 : (paint-down robot2 tile_1-2 tile_2-2 black)
+1 : (change-color robot2 black white)
+2 : (paint-up robot1 tile_1-1 tile_0-1 white)
+3 : (right robot2 tile_2-2 tile_2-3)
+4 : (paint-down robot2 tile_1-3 tile_2-3 white)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\GED\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\GED\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.025] Running on DESKTOP-T7Q4IK4
+[0.025] Parsing ...
+[0.340] Parsing complete.
+
+[0.341] Grounding ...
+[0.346] Clearing all action cost definitions from the problem.
+[0.430] Grounding complete. 138 actions resulted from the grounding.
+
+[0.430] Ground problem contains no conditional effects.
+[0.431] Ground problem contains no complex conditions.
+[0.431] Planning ...
+[0.444] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\GED\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\GED\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969151946
+}
+[0.494] Visited 2 nodes in total. Search time: 7ms
+[0.495] Planner finished with a plan of length 1.
+[0.495] Validating ...
+[0.496] Plan has been found to be valid.
+[0.497] Found plan:
+0 : (invert-single-gene-a sub3)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\gripper\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\gripper\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.025] Running on DESKTOP-T7Q4IK4
+[0.025] Parsing ...
+[0.266] Parsing complete.
+
+[0.266] Grounding ...
+[0.307] Grounding complete. 36 actions resulted from the grounding.
+
+[0.307] Ground problem contains no conditional effects.
+[0.307] Ground problem contains no complex conditions.
+[0.307] Planning ...
+[0.312] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\gripper\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\gripper\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969152892
+}
+[0.390] Visited 14 nodes in total. Search time: 57ms
+[0.390] Planner finished with a plan of length 11.
+[0.391] Validating ...
+[0.401] Plan has been found to be valid.
+[0.403] Found plan:
+0 : (pick ball3 rooma left)
+1 : (pick ball1 rooma right)
+2 : (move rooma roomb)
+3 : (drop ball3 roomb left)
+4 : (drop ball1 roomb right)
+5 : (move roomb rooma)
+6 : (pick ball4 rooma right)
+7 : (pick ball2 rooma left)
+8 : (move rooma roomb)
+9 : (drop ball2 roomb left)
+10 : (drop ball4 roomb right)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\htn\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\htn\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.025] Running on DESKTOP-T7Q4IK4
+[0.026] Parsing ...
+[0.284] Parsing complete.
+
+[0.284] Grounding ...
+[0.316] Grounding complete. 6 actions resulted from the grounding.
+
+[0.317] Ground problem contains no conditional effects.
+[0.317] Ground problem contains no complex conditions.
+[0.317] Initializing HTN grounding ...
+[0.320] Infering implicit types in methods ...
+[0.320] Calculating lifted support reductions per occurring atom ...
+[0.330] Creating initial layer ...
+7 tasks are known.
+[0.450] Generating depth 0
+0 : (do_move c p3 p1 p2) , 1 , 2 , 3 , 4 
+1 : 1 , 2 , 3 , 4 
+
+[0.450] Adding clauses ...
+[0.463] Solving ...
+[0.467] Generating depth 1
+7 tasks are known.
+0 : (move c p1 p2) , 1 , 2 , 3 , 4 
+1 : (do_move c p3 p1 p2) , (do_move c p3 p2) , _BLANK_ACTION , 1 , 3 
+2 : 1 , 2 , 3 , 4 
+
+[0.467] Adding clauses ...
+[0.471] Solving ...
+[0.471] Generating depth 2
+7 tasks are known.
+0 : (move c p1 p2) , 1 , 2 , 3 , 4 
+1 : _BLANK_ACTION , (move c p1 p2) , (move c p2 p3) , 1 , 3 
+2 : (do_move c p3 p1 p2) , (do_move c p3 p2) , _BLANK_ACTION , 1 , 2 , 3 
+3 : 1 , 2 , 3 , 4 
+
+[0.487] Adding clauses ...
+[0.494] Solving ...
+[0.500] Extracting plan ...
+[0.502] Planner finished with a plan of length 2.
+[0.502] Validating ...
+[0.503] Plan has been found to be valid.
+[0.503] Found plan:
+0 : (move c p1 p2)
+1 : (move c p2 p3)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\nurikabe\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\nurikabe\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.025] Running on DESKTOP-T7Q4IK4
+[0.025] Parsing ...
+[0.278] Parsing complete.
+
+[0.278] Grounding ...
+[0.402] Grounding complete. 101 actions resulted from the grounding.
+
+[0.403] Ground problem contains some conditional effects.
+[0.403] Ground problem contains no complex conditions.
+[0.403] Planning ...
+[0.417] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\nurikabe\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\nurikabe\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969154677
+}
+[0.484] Visited 8 nodes in total. Search time: 19ms
+[0.485] Planner finished with a plan of length 7.
+[0.485] Validating ...
+[0.486] Plan has been found to be valid.
+[0.486] Found plan:
+0 : (start-painting pos-0-0 g0 n2 n1)
+1 : (move-painting pos-0-0 pos-0-1 g0 n1 n0)
+2 : (end-painting g0)
+3 : (move pos-0-1 pos-1-1)
+4 : (move pos-1-1 pos-2-1)
+5 : (start-painting pos-2-1 g1 n1 n0)
+6 : (end-painting g1)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\openstacks\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\openstacks\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.026] Running on DESKTOP-T7Q4IK4
+[0.027] Parsing ...
+[0.291] Parsing complete.
+
+[0.291] Grounding ...
+[0.296] Clearing all action cost definitions from the problem.
+[0.492] Grounding complete. 414 actions resulted from the grounding.
+
+[0.492] Ground problem contains no conditional effects.
+[0.493] Ground problem contains no complex conditions.
+[0.493] Planning ...
+[0.506] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\openstacks\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\openstacks\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969155599
+}
+[0.761] Visited 16 nodes. (81 nodes/s)
+[0.795] Visited 20 nodes in total. Search time: 231ms
+[0.796] Planner finished with a plan of length 18.
+[0.796] Validating ...
+[0.796] Plan has been found to be valid.
+[0.798] Found plan:
+0 : (open-new-stack n0 n1)
+1 : (start-order o4 n1 n0)
+2 : (open-new-stack n0 n1)
+3 : (make-product p4)
+4 : (start-order o5 n1 n0)
+5 : (make-product p5)
+6 : (ship-order o5 n0 n1)
+7 : (start-order o1 n1 n0)
+8 : (open-new-stack n0 n1)
+9 : (start-order o2 n1 n0)
+10 : (make-product p2)
+11 : (make-product p1)
+12 : (ship-order o2 n0 n1)
+13 : (start-order o3 n1 n0)
+14 : (make-product p3)
+15 : (ship-order o3 n0 n1)
+16 : (ship-order o1 n1 n2)
+17 : (ship-order o4 n2 n3)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\petrinetalignment\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\petrinetalignment\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.025] Running on DESKTOP-T7Q4IK4
+[0.025] Parsing ...
+[0.609] Parsing complete.
+
+[0.610] Grounding ...
+[0.616] Clearing all action cost definitions from the problem.
+[0.755] Grounding complete. 513 actions resulted from the grounding.
+
+[0.755] Ground problem contains no conditional effects.
+[0.755] Ground problem contains no complex conditions.
+[0.756] Planning ...
+[0.761] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\petrinetalignment\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\petrinetalignment\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969156943
+}
+[3.042] Visited 16 nodes. (7 nodes/s)
+[4.525] Visited 32 nodes. (8 nodes/s)
+[5.657] Visited 64 nodes. (13 nodes/s)
+[7.359] Visited 128 nodes. (20 nodes/s)
+[7.806] Visited 206 nodes in total. Search time: 6837ms
+[7.806] Planner finished with a plan of length 202.
+[7.806] Validating ...
+[7.807] Plan has been found to be valid.
+[7.812] Found plan:
+0 : (movesync-activitya-ev1)
+1 : (moveinthelog-activityp-ev2-ev3)
+2 : (movesync-activityc-ev3)
+3 : (moveinthelog-activityr-ev4-ev5)
+4 : (moveinthelog-activityu-ev5-ev6)
+5 : (moveinthelog-activityq-ev6-ev7)
+6 : (moveinthelog-activityx-ev7-ev8)
+7 : (moveinthemodel-activityp)
+8 : (moveinthemodel-activitys)
+9 : (moveinthemodel-activityq)
+10 : (moveinthemodel-activityu)
+11 : (moveinthemodel-generatedinv24)
+12 : (moveinthemodel-activityy)
+13 : (moveinthemodel-activityx)
+14 : (movesync-activityw-ev8)
+15 : (moveinthelog-activityy-ev9-ev10)
+16 : (moveinthemodel-generatedinv2)
+17 : (movesync-activityv-ev10)
+18 : (movesync-activityd-ev11)
+19 : (movesync-activityb-ev12)
+20 : (movesync-activitybd-ev13)
+21 : (moveinthemodel-generatedinv13)
+22 : (movesync-activitybf-ev14)
+23 : (movesync-activitybr-ev15)
+24 : (moveinthemodel-activityby)
+25 : (moveinthemodel-activitybs)
+26 : (moveinthemodel-activitybt)
+27 : (moveinthemodel-activitybu)
+28 : (moveinthemodel-activitybw)
+29 : (moveinthemodel-activitybv)
+30 : (movesync-activitybh-ev16)
+31 : (moveinthemodel-activitybg)
+32 : (moveinthemodel-activitybj)
+33 : (moveinthemodel-activitybk)
+34 : (moveinthemodel-activitybl)
+35 : (moveinthemodel-activitybm)
+36 : (moveinthemodel-activitybn)
+37 : (moveinthemodel-generatedinv18)
+38 : (moveinthemodel-activitybq)
+39 : (moveinthemodel-activitybp)
+40 : (moveinthemodel-generatedinv38)
+41 : (moveinthemodel-activitybo)
+42 : (movesync-activitycx-ev17)
+43 : (moveinthelog-activityby-ev18-ev19)
+44 : (moveinthelog-activitybs-ev19-ev20)
+45 : (moveinthelog-activitybi-ev20-ev21)
+46 : (moveinthelog-activitydb-ev21-ev22)
+47 : (moveinthemodel-generatedinv12)
+48 : (movesync-activitycz-ev22)
+49 : (moveinthelog-activitybt-ev23-ev24)
+50 : (moveinthemodel-activitydb)
+51 : (movesync-activitydc-ev24)
+52 : (moveinthelog-activitybh-ev25-ev26)
+53 : (moveinthelog-activitybu-ev26-ev27)
+54 : (moveinthelog-activitybg-ev27-ev28)
+55 : (movesync-activityda-ev28)
+56 : (moveinthemodel-generatedinv31)
+57 : (movesync-activitycy-ev29)
+58 : (moveinthelog-activitybw-ev30-ev31)
+59 : (moveinthelog-activitybj-ev31-ev32)
+60 : (moveinthelog-activitybv-ev32-ev33)
+61 : (moveinthelog-activitybk-ev33-ev34)
+62 : (moveinthelog-activitybl-ev34-ev35)
+63 : (moveinthelog-activitybm-ev35-ev36)
+64 : (moveinthelog-activitybn-ev36-ev37)
+65 : (moveinthelog-activitybz-ev37-ev38)
+66 : (moveinthelog-activitybp-ev38-ev39)
+67 : (moveinthelog-activitybo-ev39-ev40)
+68 : (moveinthelog-activitybq-ev40-ev41)
+69 : (moveinthemodel-activitybz)
+70 : (moveinthemodel-generatedinv20)
+71 : (moveinthemodel-activitybe)
+72 : (movesync-activitydd-ev41)
+73 : (moveinthelog-activitybe-ev42-ev43)
+74 : (moveinthemodel-generatedinv34)
+75 : (movesync-activityey-ev43)
+76 : (movesync-activityeb-ev44)
+77 : (movesync-activityeo-ev45)
+78 : (movesync-activitydf-ev46)
+79 : (movesync-activityed-ev47)
+80 : (movesync-activityez-ev48)
+81 : (moveinthelog-activityeq-ev49-ev50)
+82 : (moveinthelog-activitydk-ev50-ev51)
+83 : (moveinthemodel-activityex)
+84 : (moveinthemodel-activityef)
+85 : (moveinthemodel-activityeg)
+86 : (moveinthemodel-activityee)
+87 : (moveinthemodel-generatedinv16)
+88 : (movesync-activitydw-ev51)
+89 : (movesync-activitydh-ev52)
+90 : (moveinthemodel-activitydi)
+91 : (moveinthemodel-activitydj)
+92 : (moveinthemodel-activitydy)
+93 : (moveinthemodel-activitydx)
+94 : (moveinthemodel-activityec)
+95 : (moveinthemodel-activityea)
+96 : (moveinthemodel-activityep)
+97 : (moveinthemodel-activitydk)
+98 : (movesync-activityfa-ev53)
+99 : (moveinthelog-activityes-ev54-ev55)
+100 : (moveinthelog-activitydn-ev55-ev56)
+101 : (moveinthelog-activityef-ev56-ev57)
+102 : (moveinthelog-activitydo-ev57-ev58)
+103 : (moveinthemodel-generatedinv7)
+104 : (movesync-activitydp-ev58)
+105 : (moveinthemodel-activitydn)
+106 : (movesync-activitydm-ev59)
+107 : (moveinthelog-activitydy-ev60-ev61)
+108 : (moveinthelog-activitydi-ev61-ev62)
+109 : (movesync-activityfc-ev62)
+110 : (moveinthelog-activityer-ev63-ev64)
+111 : (moveinthelog-activityeg-ev64-ev65)
+112 : (moveinthemodel-activityfb)
+113 : (moveinthemodel-activityfe)
+114 : (moveinthemodel-activityfl)
+115 : (moveinthemodel-activityfo)
+116 : (moveinthemodel-activityfm)
+117 : (moveinthemodel-activityff)
+118 : (moveinthemodel-activitydo)
+119 : (moveinthemodel-generatedinv33)
+120 : (movesync-activitydl-ev65)
+121 : (moveinthelog-activitydj-ev66-ev67)
+122 : (moveinthelog-activitydx-ev67-ev68)
+123 : (moveinthelog-activityfb-ev68-ev69)
+124 : (moveinthelog-activityee-ev69-ev70)
+125 : (movesync-activitydq-ev70)
+126 : (moveinthelog-activityev-ev71-ev72)
+127 : (moveinthelog-activityea-ev72-ev73)
+128 : (moveinthelog-activityec-ev73-ev74)
+129 : (moveinthelog-activityfe-ev74-ev75)
+130 : (moveinthelog-activityew-ev75-ev76)
+131 : (movesync-activitydt-ev76)
+132 : (moveinthelog-activityep-ev77-ev78)
+133 : (moveinthelog-activityfl-ev78-ev79)
+134 : (movesync-activitydr-ev79)
+135 : (moveinthelog-activityfn-ev80-ev81)
+136 : (moveinthemodel-generatedinv3)
+137 : (movesync-activitydg-ev81)
+138 : (moveinthelog-activityff-ev82-ev83)
+139 : (moveinthelog-activityfm-ev83-ev84)
+140 : (moveinthemodel-generatedinv43)
+141 : (movesync-activityde-ev84)
+142 : (moveinthelog-activityfp-ev85-ev86)
+143 : (moveinthemodel-activityfp)
+144 : (moveinthemodel-generatedinv6)
+145 : (movesync-activityhc-ev86)
+146 : (movesync-activityfr-ev87)
+147 : (moveinthelog-activityge-ev88-ev89)
+148 : (movesync-activityhd-ev89)
+149 : (moveinthemodel-generatedinv22)
+150 : (movesync-activitygj-ev90)
+151 : (movesync-activityft-ev91)
+152 : (moveinthemodel-activitygl)
+153 : (moveinthemodel-activitygq)
+154 : (moveinthemodel-activitygm)
+155 : (moveinthemodel-activitygk)
+156 : (moveinthemodel-activityfv)
+157 : (moveinthemodel-activityfw)
+158 : (moveinthemodel-activityfu)
+159 : (moveinthemodel-activityge)
+160 : (movesync-activityhf-ev92)
+161 : (moveinthemodel-generatedinv0)
+162 : (movesync-activitygg-ev93)
+163 : (movesync-activitygh-ev94)
+164 : (moveinthelog-activitygr-ev95-ev96)
+165 : (moveinthelog-activityfx-ev96-ev97)
+166 : (moveinthemodel-activitygi)
+167 : (moveinthemodel-generatedinv32)
+168 : (moveinthemodel-generatedinv44)
+169 : (movesync-activityhh-ev97)
+170 : (movesync-activityhi-ev98)
+171 : (moveinthelog-activitygi-ev99-ev100)
+172 : (moveinthelog-activitygv-ev100-ev101)
+173 : (moveinthelog-activitygu-ev101-ev102)
+174 : (moveinthelog-activitygt-ev102-ev103)
+175 : (moveinthelog-activityfz-ev103-ev104)
+176 : (moveinthelog-activitygw-ev104-ev105)
+177 : (moveinthemodel-generatedinv11)
+178 : (movesync-activityhg-ev105)
+179 : (moveinthelog-activitygs-ev106-ev107)
+180 : (movesync-activitygf-ev107)
+181 : (moveinthelog-activityfy-ev108-ev109)
+182 : (moveinthelog-activityhf-ev109-ev110)
+183 : (moveinthelog-activitygk-ev110-ev111)
+184 : (moveinthelog-activityhh-ev111-ev112)
+185 : (moveinthelog-activityfu-ev112-ev113)
+186 : (moveinthelog-activityhi-ev113-ev114)
+187 : (moveinthelog-activityhg-ev114-ev115)
+188 : (moveinthemodel-generatedinv19)
+189 : (movesync-activityfs-ev115)
+190 : (moveinthelog-activityhf-ev116-ev117)
+191 : (moveinthelog-activityhh-ev117-ev118)
+192 : (moveinthelog-activityhi-ev118-ev119)
+193 : (moveinthelog-activityhg-ev119-ev120)
+194 : (moveinthelog-activityhi-ev120-ev121)
+195 : (moveinthelog-activityhf-ev121-ev122)
+196 : (moveinthelog-activityhh-ev122-ev123)
+197 : (moveinthelog-activityhg-ev123-ev124)
+198 : (moveinthelog-activityfq-ev124-ev125)
+199 : (movesync-activityhe-ev125)
+200 : (moveinthemodel-generatedinv41)
+201 : (moveinthemodel-activityfq)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\quantifications\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\quantifications\p1.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.025] Running on DESKTOP-T7Q4IK4
+[0.025] Parsing ...
+[0.262] Parsing complete.
+
+[0.262] Grounding ...
+[0.299] Grounding complete. 5 actions resulted from the grounding.
+
+[0.299] Ground problem contains some conditional effects.
+[0.300] Ground problem contains no complex conditions.
+[0.300] Planning ...
+[0.313] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\quantifications\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\quantifications\p1.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969165279
+}
+[0.354] Visited 2 nodes in total. Search time: 1ms
+[0.354] Planner finished with a plan of length 1.
+[0.355] Validating ...
+[0.355] Plan has been found to be valid.
+[0.356] Found plan:
+0 : (mark o2)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\quantifications\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\quantifications\p2.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.025] Running on DESKTOP-T7Q4IK4
+[0.025] Parsing ...
+[0.266] Parsing complete.
+
+[0.266] Grounding ...
+[0.298] Grounding complete. 5 actions resulted from the grounding.
+
+[0.299] Ground problem contains some conditional effects.
+[0.299] Ground problem contains no complex conditions.
+[0.299] Planning ...
+[0.313] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\quantifications\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\quantifications\p2.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969166057
+}
+[0.356] Visited 5 nodes in total. Search time: 1ms
+[0.357] Planner finished with a plan of length 1.
+[0.357] Validating ...
+[0.358] Plan has been found to be valid.
+[0.358] Found plan:
+0 : (unset o1)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\rover\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\rover\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.025] Running on DESKTOP-T7Q4IK4
+[0.025] Parsing ...
+[0.298] Parsing complete.
+
+[0.298] Grounding ...
+[0.424] Grounding complete. 55 actions resulted from the grounding.
+
+[0.424] Ground problem contains no conditional effects.
+[0.425] Ground problem contains no complex conditions.
+[0.425] Planning ...
+[0.435] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\rover\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\rover\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969166875
+}
+[0.482] Visited 7 nodes in total. Search time: 27ms
+[0.483] Planner finished with a plan of length 6.
+[0.483] Validating ...
+[0.493] Plan has been found to be valid.
+[0.494] Found plan:
+0 : (navigate rover0 waypoint1 waypoint0)
+1 : (calibrate rover0 camera0 objective0 waypoint0)
+2 : (take_image rover0 waypoint0 objective1 camera0 low_res)
+3 : (communicate_image_data rover0 general objective1 low_res waypoint0 waypoint1)
+4 : (sample_soil rover0 rover0store waypoint0)
+5 : (communicate_soil_data2 rover0 general waypoint0 waypoint1)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\RPG\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\RPG\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.026] Running on DESKTOP-T7Q4IK4
+[0.027] Parsing ...
+[0.255] Parsing complete.
+
+[0.255] Grounding ...
+[0.364] Grounding complete. 49 actions resulted from the grounding.
+
+[0.364] Ground problem contains some conditional effects.
+[0.364] Ground problem contains no complex conditions.
+[0.364] Planning ...
+[0.376] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\RPG\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\RPG\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969167807
+}
+[0.435] Visited 16 nodes. (887 nodes/s)
+[0.439] Visited 32 nodes. (1416 nodes/s)
+[0.444] Visited 39 nodes in total. Search time: 27ms
+[0.444] Planner finished with a plan of length 7.
+[0.444] Validating ...
+[0.445] Plan has been found to be valid.
+[0.446] Found plan:
+0 : (move l1 l2)
+1 : (fight-monster l2 l3 hp3 hp4 hp1 hp2)
+2 : (fight-monster l2 l3 hp2 hp3 hp5 hp1)
+3 : (move l2 l3)
+4 : (move l3 l4)
+5 : (fight-monster l4 l5 hp1 hp2 hp2 hp1)
+6 : (move l4 l5)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\RPG-with-numeric-fluents\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\RPG-with-numeric-fluents\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.025] Running on DESKTOP-T7Q4IK4
+[0.025] Parsing ...
+[0.283] Parsing complete.
+
+[0.284] Grounding ...
+[0.330] Grounding complete. 8 actions resulted from the grounding.
+
+[0.330] Ground problem contains no conditional effects.
+[0.330] Ground problem contains some complex conditions.
+[0.331] Planning ...
+[0.336] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\RPG-with-numeric-fluents\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\RPG-with-numeric-fluents\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969168690
+}
+[0.362] Visited 16 nodes. (1132 nodes/s)
+[0.366] Visited 21 nodes in total. Search time: 18ms
+[0.366] Planner finished with a plan of length 9.
+[0.366] Validating ...
+[0.367] Plan has been found to be valid.
+[0.368] Found plan:
+0 : (pickup-potion l1 p1)
+1 : (move l1 l2)
+2 : (consume-potion p1)
+3 : (fight-monster l2 l3)
+4 : (fight-monster l2 l3)
+5 : (move l2 l3)
+6 : (move l3 l4)
+7 : (fight-monster l4 l5)
+8 : (move l4 l5)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\settlers\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\settlers\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.025] Running on DESKTOP-T7Q4IK4
+[0.025] Parsing ...
+[0.408] Parsing complete.
+
+[0.408] Grounding ...
+[0.413] Clearing all action cost definitions from the problem.
+[1.980] Grounding complete. 175 actions resulted from the grounding.
+
+[1.981] Ground problem contains some conditional effects.
+[1.981] Ground problem contains no complex conditions.
+[1.981] Planning ...
+[1.985] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\settlers\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\settlers\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969169504
+}
+[2.338] Visited 16 nodes. (52 nodes/s)
+[2.663] Visited 32 nodes. (50 nodes/s)
+[3.054] Visited 64 nodes. (62 nodes/s)
+[3.829] Visited 128 nodes. (71 nodes/s)
+[4.220] Visited 161 nodes in total. Search time: 2186ms
+[4.220] Planner finished with a plan of length 14.
+[4.220] Validating ...
+[4.221] Plan has been found to be valid.
+[4.222] Found plan:
+0 : (build-cart p0 v0)
+1 : (load-timber v0 p0)
+2 : (move-cart v0 p0 p1)
+3 : (build-cart p0 v2)
+4 : (build-coal-stack p0)
+5 : (load-ore v2 p0)
+6 : (move-cart v2 p0 p1)
+7 : (build-cart p0 v1)
+8 : (load-timber v1 p0)
+9 : (move-cart v1 p0 p1)
+10 : (burn-coal p0)
+11 : (unload-timber v0 p1)
+12 : (unload-timber v1 p1)
+13 : (build-sawmill p1)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\TM\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\TM\p_det.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.025] Running on DESKTOP-T7Q4IK4
+[0.025] Parsing ...
+[0.273] Parsing complete.
+
+[0.273] Grounding ...
+[0.457] Grounding complete. 46 actions resulted from the grounding.
+
+[0.457] Ground problem contains some conditional effects.
+[0.457] Ground problem contains no complex conditions.
+[0.457] Planning ...
+[0.470] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\TM\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\TM\p_det.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969174377
+}
+[0.521] Visited 9 nodes in total. Search time: 6ms
+[0.521] Planner finished with a plan of length 8.
+[0.522] Validating ...
+[0.522] Plan has been found to be valid.
+[0.523] Found plan:
+0 : (transition p1 p2 s0 s0 zero zero right)
+1 : (transition p2 p3 s0 s0 zero zero right)
+2 : (transition p3 p4 s0 s0 zero zero right)
+3 : (transition p4 p5 s0 s1 one one right)
+4 : (transition p5 p6 s1 s1 zero one right)
+5 : (transition p6 pb s1 s1 zero one right)
+6 : (transition pb p6 s1 s2 blank blank left)
+7 : (halt p6 s2 one)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\TM\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\TM\p_nondet.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.030] Running on DESKTOP-T7Q4IK4
+[0.030] Parsing ...
+[0.273] Parsing complete.
+
+[0.274] Grounding ...
+[0.422] Grounding complete. 49 actions resulted from the grounding.
+
+[0.423] Ground problem contains some conditional effects.
+[0.423] Ground problem contains no complex conditions.
+[0.423] Planning ...
+[0.436] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\TM\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\TM\p_nondet.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969175320
+}
+[0.491] Visited 9 nodes in total. Search time: 11ms
+[0.492] Planner finished with a plan of length 8.
+[0.492] Validating ...
+[0.493] Plan has been found to be valid.
+[0.493] Found plan:
+0 : (transition p1 p2 s0 s0 zero zero right)
+1 : (transition p2 p3 s0 s0 zero one right)
+2 : (transition p3 p4 s0 s0 zero one right)
+3 : (transition p4 p5 s0 s0 one zero right)
+4 : (transition p5 p6 s0 s0 zero one right)
+5 : (transition p6 pb s0 s0 zero one right)
+6 : (transition pb p6 s0 s1 blank blank left)
+7 : (halt p6 s1 one)
+
+#############################################################################
+java, -jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\zenotravel\domain.pddl, c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\zenotravel\p01.pddl
+#############################################################################
+[0.000] This is Aquaplanning - QUick Automated Planning.
+[0.025] Running on DESKTOP-T7Q4IK4
+[0.026] Parsing ...
+[0.277] Parsing complete.
+
+[0.278] Grounding ...
+[0.410] Grounding complete. 130 actions resulted from the grounding.
+
+[0.411] Ground problem contains no conditional effects.
+[0.411] Ground problem contains no complex conditions.
+[0.411] Planning ...
+[0.416] Starting forward search with Configuration {
+  domainFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\zenotravel\domain.pddl
+  problemFile : c:/Users/jpvdh/Documents/Bachelorarbeit/aquaplanning/automatedTesting\../testfiles\zenotravel\p01.pddl
+  planOutputFile : null
+  satFormulaFile : null
+  planFileToValidate : null
+  maxIterations : 0
+  maxTimeSeconds : 0
+  searchTimeSeconds : 0
+  numThreads : 1
+  verbosityLevel : 2
+  keepDisjunctions : false
+  keepRigidConditions : false
+  eliminateConditionalEffects : false
+  keepActionCosts : false
+  plannerType : forwardSSS
+  heuristic : ffTrautmann
+  heuristicWeight : 10
+  searchStrategy : bestFirst
+  revisitStates : false
+  seed : 1337
+  satSolverMode : sat4j
+  numCubes : 200
+  cubeFinderMode : forwardSearch
+  schedulerMode : exponential
+  schedulerIterations : 0
+  schedulerTime : 1000
+  schedulerGrowth : 1.5
+  cubeFindHeuristic : ffTrautmann
+  cubeFindHeuristicWeight : 10
+  cubeFindSearchStrategy : bestFirst
+  cubeSolveHeuristic : ffTrautmann
+  cubeSolveHeuristicWeight : 10
+  cubeSolveSearchStrategy : bestFirst
+  optimizePlan : false
+  startTimeMillis : 1558969176270
+}
+[0.438] Visited 2 nodes in total. Search time: 3ms
+[0.438] Planner finished with a plan of length 1.
+[0.438] Validating ...
+[0.439] Plan has been found to be valid.
+[0.439] Found plan:
+0 : (fly plane1 city0 city1 fl1 fl0)
+
