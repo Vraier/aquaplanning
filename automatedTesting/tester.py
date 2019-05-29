@@ -1,11 +1,26 @@
 import os
 import subprocess
+import testUtil as util
 
-breakSequenze = '#############################################################################\n'
+
+# Strings and Paths
+breakSequenze = '###############################################################\n'
 relativeJarPath = '../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar'
 relativeBenchmarkPath = '../testfiles'
 domainFile = 'domain.pddl'
 dirName = os.path.dirname(__file__)
+
+# Command Arguments
+plannerType = ['-p=cubePlanner']
+numThreads = ['-T=4']
+verbosityLevel = ['-v=2']
+numCubes = ['-c=200']
+cubeFinderMode = ['--cubeFinder=forwardSearch', '--cubeFinder=backwardSearch']
+schedulerMode = ['-sched=roundRobin']
+cubeFindSearchStrategy = ['-cfs=breadthFirst']
+
+
+commandLists = [plannerType, numThreads, verbosityLevel, numCubes, cubeFinderMode, schedulerMode, cubeFindSearchStrategy]
 
 outputPath = os.path.join(dirName, 'output.txt')
 jarPath = os.path.join(dirName, relativeJarPath)
@@ -14,7 +29,7 @@ benchmarkPath = os.path.join(dirName, relativeBenchmarkPath)
 commandList = []
 commandPrefix = ['java', '-jar', jarPath]
 commandProblems = []
-commandArguments = []
+commandArguments = util.listCombinations(commandLists)
 
 for folder in os.listdir(benchmarkPath):
 
@@ -35,7 +50,8 @@ for folder in os.listdir(benchmarkPath):
                 commandProblems.append(localCommandProblems)
 
 for problem in commandProblems:
-    commandList.append(commandPrefix + problem)
+    for argument in commandArguments:
+        commandList.append(commandPrefix + problem + argument)
 
 with open(outputPath, 'a') as outputFile:
     outputFile.flush()
