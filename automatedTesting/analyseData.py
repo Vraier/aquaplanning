@@ -3,7 +3,7 @@ import re
 import matplotlib.pyplot as plt
 
 dirName = os.path.dirname(__file__)
-filePath =  os.path.join(dirName, 'compareForwardBackward.txt')
+filePath =  os.path.join(dirName, 'output.txt')
 
 
 arguments = []
@@ -18,11 +18,9 @@ backward = [float(x[x.find("[")+1:x.find("]")]) for x in numbers[1::2]]
 
 forwardSorted = [y for x,y in sorted(zip(backward,forward))]
 backwardSorted = [x for x,y in sorted(zip(backward,forward))]
-print(forward)
-print(forwardSorted)
 
-plt.semilogy(forwardSorted, color = 'b', marker = '.', linestyle = 'None', label = 'C.1')
-plt.semilogy(backwardSorted, color = 'r', marker = '.', linestyle = 'None', label = 'C.2')
+plt.semilogy(forwardSorted, color = 'b', marker = '.', linestyle = 'None', label = 'ForwardSearch')
+plt.semilogy(backwardSorted, color = 'r', marker = '.', linestyle = 'None', label = 'BackwardSearch')
 plt.xlabel('Number of testcase')
 plt.ylabel('Time in seconds')
 plt.title('Comparing forward and backward search')

@@ -6,7 +6,7 @@ import testUtil as util
 # Strings and Paths
 breakSequenze = '###############################################################\n'
 relativeJarPath = '../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar'
-relativeBenchmarkPath = '../testfiles'
+relativeBenchmarkPath = '../benchmarks'
 domainFile = 'domain.pddl'
 dirName = os.path.dirname(__file__)
 
@@ -19,8 +19,8 @@ cubeFinderMode = ['--cubeFinder=forwardSearch', '--cubeFinder=backwardSearch']
 schedulerMode = ['-sched=roundRobin']
 cubeFindSearchStrategy = ['-cfs=breadthFirst']
 
-
 commandLists = [plannerType, numThreads, verbosityLevel, numCubes, cubeFinderMode, schedulerMode, cubeFindSearchStrategy]
+commandArguments = util.listCombinations(commandLists)
 
 outputPath = os.path.join(dirName, 'output.txt')
 jarPath = os.path.join(dirName, relativeJarPath)
@@ -29,26 +29,28 @@ benchmarkPath = os.path.join(dirName, relativeBenchmarkPath)
 commandList = []
 commandPrefix = ['java', '-jar', jarPath]
 commandProblems = []
-commandArguments = util.listCombinations(commandLists)
+
+print("We have ", len(commandArguments), " argument combinations.")
 
 for folder in os.listdir(benchmarkPath):
 
+    if(folder != 'Childsnack'):
+        continue
     currentBenchmarkPath = os.path.join(benchmarkPath, folder)
-    hasDomain = False
+    if(not util.hasDomain(currentBenchmarkPath)):
+        continue
+
     for filename in os.listdir(currentBenchmarkPath):
-        if (filename == domainFile):
-            hasDomain = True
+        if (filename != domainFile and filename.endswith('.pddl')):
+            localCommandProblems = []
+            domainPath = os.path.join(currentBenchmarkPath, domainFile)
+            problemPath = os.path.join(currentBenchmarkPath, filename)
+            localCommandProblems.append(domainPath)
+            localCommandProblems.append(problemPath)
+            commandProblems.append(localCommandProblems)
 
-    if hasDomain:
-        for filename in os.listdir(currentBenchmarkPath):
-            if (not filename == domainFile and filename.endswith('.pddl')):
-                localCommandProblems = []
-                domainPath = os.path.join(currentBenchmarkPath, domainFile)
-                problemPath = os.path.join(currentBenchmarkPath, filename)
-                localCommandProblems.append(domainPath)
-                localCommandProblems.append(problemPath)
-                commandProblems.append(localCommandProblems)
-
+# Returns a list with all combinations of problems and arguments
+# Starts with the first problem and appends all aguments then takes the seconde problem etc..
 for problem in commandProblems:
     for argument in commandArguments:
         commandList.append(commandPrefix + problem + argument)
