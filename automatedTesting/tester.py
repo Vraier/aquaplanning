@@ -16,10 +16,11 @@ numThreads = ['-T=48']
 verbosityLevel = ['-v=2']
 numCubes = ['-c=10000']
 cubeFinderMode = ['--cubeFinder=forwardSearch', '--cubeFinder=backwardSearch']
-schedulerMode = ['-sched=roundRobin']
+schedulerMode = ['-sched=exponential']
+exponentialGrowth = ['-schedExpG=1.5']
 cubeFindSearchStrategy = ['-cfs=breadthFirst']
 
-commandLists = [plannerType, numThreads, verbosityLevel, numCubes, cubeFinderMode, schedulerMode, cubeFindSearchStrategy]
+commandLists = [plannerType, numThreads, verbosityLevel, numCubes, cubeFinderMode, schedulerMode, exponentialGrowth, cubeFindSearchStrategy]
 commandArguments = util.listCombinations(commandLists)
 
 outputPath = os.path.join(dirName, 'output.txt')
@@ -34,7 +35,7 @@ print("We have ", len(commandArguments), " argument combinations.")
 
 for folder in os.listdir(benchmarkPath):
 
-    if(folder != 'Childsnack'):
+    if(folder != 'Rover'):
         continue
     currentBenchmarkPath = os.path.join(benchmarkPath, folder)
     if(not util.hasDomain(currentBenchmarkPath)):
@@ -65,5 +66,5 @@ with open(outputPath, 'a') as outputFile:
         outputFile.write(commandName)
         outputFile.write(breakSequenze)
         outputFile.flush()
-        subprocess.call(command, stdout=outputFile, stderr=outputFile, shell=True)
+        subprocess.call(command, stdout=outputFile, stderr=outputFile)
         outputFile.flush()
