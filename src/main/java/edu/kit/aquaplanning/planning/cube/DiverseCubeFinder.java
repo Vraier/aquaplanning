@@ -39,19 +39,21 @@ public class DiverseCubeFinder extends CubeFinder {
 
 		// Initialize forward search
 		List<Cube> cubes;
+		// anchors that each node is compared to
 		List<SearchNode> anchors = new ArrayList<SearchNode>();
+		// CutOff nodes. These will be given to the cube solver
 		List<SearchNode> cutOffs = new ArrayList<SearchNode>();
 		SearchQueue frontier;
 		SearchStrategy strategy = new SearchStrategy(config);
 		StateDistanceHeuristic cutOffHeuristic = new ManhattanDistanceHeuristic(13);
-		
+
 		if (strategy.isHeuristical()) {
 			Heuristic heuristic = Heuristic.getHeuristic(problem, config);
 			frontier = new SearchQueue(strategy, heuristic);
 		} else {
 			frontier = new SearchQueue(strategy);
 		}
-		
+
 		frontier.add(new SearchNode(null, initState));
 
 		while (!frontier.isEmpty() && cutOffs.size() < numCubes) {
@@ -71,23 +73,14 @@ public class DiverseCubeFinder extends CubeFinder {
 				return null;
 			}
 
-			// Check if we are too close to an already found node
-			boolean cutOff = false;
-			for (SearchNode a : anchors) {
-				if(cutOffHeuristic.cutOff(a.state, node.state)) {
-					cutOff = true;
-					break;
-				}
-			}
-			
 			// Node should be cut off because we are too close to an anchor
-			if(cutOff) {
+			if (cutOff(node, anchors, cutOffHeuristic)) {
 				cutOffs.add(node);
 				break;
 			}
-			
+
 			// Node is deep enough. We can cut it off and use it as an anchor
-			if(node.depth > 25) {
+			if (node.depth > 25) {
 				anchors.add(node);
 				cutOffs.add(node);
 				break;
@@ -107,7 +100,7 @@ public class DiverseCubeFinder extends CubeFinder {
 
 		// retrieve all cut off nodes
 		cubes = new ArrayList<Cube>();
-		for(SearchNode node: cutOffs) {
+		for (SearchNode node : cutOffs) {
 			cubes.add(new Cube(problem, node.state, node.getPartialPlan()));
 		}
 		return cubes;
@@ -116,5 +109,17 @@ public class DiverseCubeFinder extends CubeFinder {
 	@Override
 	public Plan getPlan() {
 		return plan;
+	}
+
+	/**
+	 * Checks if we are too close to an already found node
+	 */
+	private boolean cutOff(SearchNode node, List<SearchNode> anchors, StateDistanceHeuristic heuristic) {
+		for (SearchNode a : anchors) {
+			if (heuristic.cutOff(a.state, node.state)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

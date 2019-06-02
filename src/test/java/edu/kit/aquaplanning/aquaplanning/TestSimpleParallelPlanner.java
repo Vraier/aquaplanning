@@ -2,6 +2,7 @@ package edu.kit.aquaplanning.aquaplanning;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.Configuration.CubeFinderMode;
@@ -27,7 +28,7 @@ public class TestSimpleParallelPlanner extends TestCase {
 		config.numThreads = 4;
 		config.numCubes = 1000;
 		//config.cubeFinderMode = CubeFinderMode.backwardSearch;
-		config.cubeFinderMode = CubeFinderMode.forwardSearch;
+		config.cubeFinderMode = CubeFinderMode.diverseSearch;
 		config.cubeFindSearchStrategy = SearchStrategy.Mode.bestFirst;
 		config.cubeFindHeuristic = HeuristicType.ffTrautmann;
 		config.cubeFindHeuristicWeight = 10;
@@ -40,9 +41,14 @@ public class TestSimpleParallelPlanner extends TestCase {
 		
 		Planner spp = Planner.getPlanner(config);
 		
-		File benchdir = new File("benchmarks");
+		File benchdir = new File("testfiles");
+		//File benchdir = new File("benchmarks");
 		for (File domdir : benchdir.listFiles()) {
 			String domain = domdir.getCanonicalPath() + "/domain.pddl";
+			File testFile = new File(domain);
+			if(!testFile.exists()) {
+				continue;
+			}
 			for (File f : domdir.listFiles()) {
 				if (f.getName().startsWith("p") && f.getName().endsWith(".pddl")) {
 					String problem = f.getCanonicalPath();

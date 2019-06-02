@@ -50,6 +50,8 @@ public abstract class CubeFinder {
 			return new ForwardSearchCubeFinder(config);
 		case backwardSearch:
 			return new BackwardSearchCubeFinder(config);
+		case diverseSearch:
+			return new DiverseCubeFinder(config);
 		default:
 			break;
 		}

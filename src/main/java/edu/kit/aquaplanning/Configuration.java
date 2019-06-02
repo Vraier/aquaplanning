@@ -148,7 +148,7 @@ public class Configuration {
 			+ USAGE_DEFAULT, defaultValue = "200")
 	public int numCubes;
 	public enum CubeFinderMode {
-		forwardSearch, backwardSearch;
+		forwardSearch, diverseSearch, backwardSearch;
 	}
 	@Option(names = {"--cubeFinder"}, description = "The desired mode to find the Cubes: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "forwardSearch")
