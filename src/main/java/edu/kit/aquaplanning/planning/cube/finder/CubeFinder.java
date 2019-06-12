@@ -49,14 +49,11 @@ public abstract class CubeFinder {
 	 * @return the new cube finder
 	 */
 	public static CubeFinder getCubeFinder(Configuration config) {
-		// TODO
 		switch (config.cubeFinderMode) {
 		case forwardSearch:
-			return new FForwardSearchCubeFinder(config);
+			return new ForwardSearchCubeFinder(config);
 		case backwardSearch:
-			return new BBackwardSearchCubeFinder(config);
-		case diverseSearch:
-			return new DiverseCubeFinder(config);
+			return new BackwardSearchCubeFinder(config);
 		default:
 			break;
 		}
