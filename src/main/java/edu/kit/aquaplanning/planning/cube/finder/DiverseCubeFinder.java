@@ -1,4 +1,4 @@
-package edu.kit.aquaplanning.planning.cube;
+package edu.kit.aquaplanning.planning.cube.finder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +10,14 @@ import edu.kit.aquaplanning.model.ground.Goal;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
 import edu.kit.aquaplanning.model.ground.State;
+import edu.kit.aquaplanning.planning.cube.cutoffHeuristic.CutOffHeuristic;
+import edu.kit.aquaplanning.planning.cube.cutoffHeuristic.ManhattanDistanceHeuristic;
 import edu.kit.aquaplanning.planning.datastructures.ActionIndex;
 import edu.kit.aquaplanning.planning.datastructures.SearchNode;
 import edu.kit.aquaplanning.planning.datastructures.SearchQueue;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.planning.heuristic.Heuristic;
+import edu.kit.aquaplanning.util.Logger;
 
 public class DiverseCubeFinder extends CubeFinder {
 
@@ -45,7 +48,7 @@ public class DiverseCubeFinder extends CubeFinder {
 		List<SearchNode> cutOffs = new ArrayList<SearchNode>();
 		SearchQueue frontier;
 		SearchStrategy strategy = new SearchStrategy(config);
-		StateDistanceHeuristic cutOffHeuristic = new ManhattanDistanceHeuristic(13);
+		CutOffHeuristic cutOffHeuristic = new ManhattanDistanceHeuristic(13);
 
 		if (strategy.isHeuristical()) {
 			Heuristic heuristic = Heuristic.getHeuristic(problem, config);
@@ -99,6 +102,16 @@ public class DiverseCubeFinder extends CubeFinder {
 		}
 
 		// retrieve all cut off nodes
+		if(frontier.isEmpty()) {
+			Logger.log(Logger.INFO, "Diverse Cube Finder cleared his queue. The frontier is empty.");
+			System.out.println("Diverse Cube Finder cleared his queue. The frontier is empty.");
+		}
+		if(cutOffs.size() >= numCubes){
+			Logger.log(Logger.INFO, "Diverse Cube Finder found enough Cubes.");
+			System.out.println("Diverse Cube Finder found enough Cubes.");
+		}
+		Logger.log(Logger.INFO, "We found a total of " + anchors.size() + " anchors.");
+		System.out.println("We found a total of " + anchors.size() + " anchors.");
 		cubes = new ArrayList<Cube>();
 		for (SearchNode node : cutOffs) {
 			cubes.add(new Cube(problem, node.state, node.getPartialPlan()));
@@ -114,12 +127,12 @@ public class DiverseCubeFinder extends CubeFinder {
 	/**
 	 * Checks if we are too close to an already found node
 	 */
-	private boolean cutOff(SearchNode node, List<SearchNode> anchors, StateDistanceHeuristic heuristic) {
-		for (SearchNode a : anchors) {
+	private boolean cutOff(SearchNode node, List<SearchNode> anchors, CutOffHeuristic heuristic) {
+		/*for (SearchNode a : anchors) {
 			if (heuristic.cutOff(a.state, node.state)) {
 				return true;
 			}
-		}
+		}*/
 		return false;
 	}
 }

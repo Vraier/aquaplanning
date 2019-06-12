@@ -3,6 +3,7 @@ package edu.kit.aquaplanning;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import edu.kit.aquaplanning.planning.cube.cutoffHeuristic.CutOffHeuristic;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.util.Logger;
 import picocli.CommandLine.Command;
@@ -169,6 +170,13 @@ public class Configuration {
 	@Option(names = {"-schedExpG"}, description = "The growth value of the exponential scheduler: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1.5")
 	public double schedulerGrowth;
+	
+	public enum cutOffHeuristic {
+		none, manhattanDistance;
+	}
+	@Option(names = {"-cut", "--cutOff"}, description = "What heuristic to use when cutting of branches while searching for cubes: "
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "none")
+	public CutOffHeuristic cutOffHeuristic;
 	
 	// not available for backwards cube finding only for forward search cube finding
 	@Option(paramLabel = "cubeFindHeuristic", names = {"-cfh", "--cube-find-heuristic"}, 

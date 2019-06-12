@@ -1,4 +1,4 @@
-package edu.kit.aquaplanning.planning.cube;
+package edu.kit.aquaplanning.planning.cube.finder;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -16,6 +16,7 @@ import edu.kit.aquaplanning.model.ground.Goal;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
 import edu.kit.aquaplanning.model.ground.State;
+import edu.kit.aquaplanning.planning.cube.datastructure.BackwardSearchNode;
 import edu.kit.aquaplanning.util.Logger;
 
 //TODO: update intersect/node methods of the AtomSet class

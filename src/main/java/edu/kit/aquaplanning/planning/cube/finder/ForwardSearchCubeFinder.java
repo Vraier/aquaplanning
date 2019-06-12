@@ -1,4 +1,4 @@
-package edu.kit.aquaplanning.planning.cube;
+package edu.kit.aquaplanning.planning.cube.finder;
 
 import java.util.ArrayList;
 import java.util.List;

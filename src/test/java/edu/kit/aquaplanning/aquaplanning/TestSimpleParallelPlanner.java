@@ -2,8 +2,6 @@ package edu.kit.aquaplanning.aquaplanning;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.Configuration.CubeFinderMode;
 import edu.kit.aquaplanning.Configuration.HeuristicType;
@@ -24,26 +22,31 @@ public class TestSimpleParallelPlanner extends TestCase {
 
 	public void testSimpleParallelPlanner() throws IOException {
 		Configuration config = new Configuration();
+		config.verbosityLevel = 4;
+		
 		config.plannerType = PlannerType.cubePlanner;
-		config.numThreads = 4;
-		config.numCubes = 1000;
+		config.numThreads = 2;
+		config.numCubes = 100;
 		//config.cubeFinderMode = CubeFinderMode.backwardSearch;
-		config.cubeFinderMode = CubeFinderMode.diverseSearch;
+		config.cubeFinderMode = CubeFinderMode.backwardSearch;
 		config.cubeFindSearchStrategy = SearchStrategy.Mode.bestFirst;
-		config.cubeFindHeuristic = HeuristicType.ffTrautmann;
+		config.cubeFindHeuristic = HeuristicType.relaxedPathLength;
 		config.cubeFindHeuristicWeight = 10;
 		
 		config.schedulerMode = SchedulerMode.roundRobin;
-		config.schedulerTime = 10000;
+		config.schedulerTime = 1000;
 		config.cubeSolveSearchStrategy = SearchStrategy.Mode.bestFirst;
 		config.cubeSolveHeuristic = HeuristicType.ffTrautmann;
 		config.cubeSolveHeuristicWeight = 10;
 		
 		Planner spp = Planner.getPlanner(config);
 		
-		File benchdir = new File("testfiles");
-		//File benchdir = new File("benchmarks");
+		//File benchdir = new File("testfiles");
+		File benchdir = new File("benchmarks");
 		for (File domdir : benchdir.listFiles()) {
+			if(!domdir.getName().equals("Rover")) {
+				continue;
+			}
 			String domain = domdir.getCanonicalPath() + "/domain.pddl";
 			File testFile = new File(domain);
 			if(!testFile.exists()) {

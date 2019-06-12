@@ -12,10 +12,10 @@ dirName = os.path.dirname(__file__)
 
 # Command Arguments
 plannerType = ['-p=cubePlanner']
-numThreads = ['-T=48']
+numThreads = ['-T=8']
 verbosityLevel = ['-v=2']
-numCubes = ['-c=10000']
-cubeFinderMode = ['--cubeFinder=forwardSearch', '--cubeFinder=backwardSearch']
+numCubes = ['-c=1000']
+cubeFinderMode = ['--cubeFinder=forwardSearch', '--cubeFinder=diverseSearch'] #, '--cubeFinder=backwardSearch']
 schedulerMode = ['-sched=exponential']
 exponentialGrowth = ['-schedExpG=1.5']
 cubeFindSearchStrategy = ['-cfs=breadthFirst']

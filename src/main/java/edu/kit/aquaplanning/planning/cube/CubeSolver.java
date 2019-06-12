@@ -6,7 +6,7 @@ import edu.kit.aquaplanning.model.ground.Plan;
 
 public abstract class CubeSolver {
 
-	// Variables that hold the state of the Plannner
+	// Variables that hold the state of the planner
 	protected Cube cube;
 	protected Configuration config;
 	protected boolean isExhausted = false;
@@ -42,7 +42,7 @@ public abstract class CubeSolver {
 	public int getTotalIterations() {
 		return totalIterations;
 	}
-	
+
 	public long getTotalTime() {
 		return totalTime;
 	}
@@ -51,24 +51,50 @@ public abstract class CubeSolver {
 		searchStartMillis = System.currentTimeMillis();
 	}
 
+	/**
+	 * Sets a limit for the time the solver should try to solve a cube within one
+	 * call of calculateSteps()
+	 * 
+	 * @param milliSeconds
+	 *            the amount of time to solve a cube
+	 */
 	public void setTimeLimit(long milliSeconds) {
 		this.timeLimit = milliSeconds;
 	}
 
+	/**
+	 * Sets a limit of the amount of iterations this solver should try to solve a
+	 * cube within one call of calculateSteps()
+	 * 
+	 * @param iterations
+	 *            the amount of steps to solve a cube
+	 */
 	public void setIterationLimit(int iterations) {
 		this.iterationLimit = iterations;
 	}
 
 	/**
-	 * Checks the used amount of iterations and the elapsed time against
-	 * computational bounds specified by the setter methods. If false is returned,
-	 * the planner should stop.
+	 * Checks if we are in computational bounds. This means that our thread is not
+	 * interrupted and we didn't exceed our time limit. The time limit is given by
+	 * the configuration. There is no possibility to limit the cube finding by a
+	 * given amount of iterations.
 	 */
-	protected boolean withinComputationalBounds(int iterations) {
+	protected boolean withinTimeLimit() {
 
-		if (Thread.currentThread().isInterrupted()) {
+		if (Thread.currentThread().isInterrupted())
 			return false;
+
+		if (config.maxTimeSeconds > 0) {
+			long totalTime = System.currentTimeMillis() - config.startTimeMillis;
+			if (totalTime > config.maxTimeSeconds * 1000) {
+				return false;
+			}
 		}
+
+		return true;
+	}
+
+	protected boolean withinComputationalBounds(int iterations) {
 
 		if (iterationLimit > 0 && iterations >= iterationLimit) {
 			return false;

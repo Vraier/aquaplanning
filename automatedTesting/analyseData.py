@@ -20,8 +20,8 @@ backward = [float(x[x.find("[")+1:x.find("]")]) for x in numbers[1::2]]
 forwardSorted = [y for x,y in sorted(zip(testNumber,forward))]
 backwardSorted = [y for x,y in sorted(zip(testNumber,backward))]
 
-plt.semilogy(forwardSorted, color = 'b', marker = '.', linestyle = 'None', label = 'ForwardSearch')
-plt.semilogy(backwardSorted, color = 'r', marker = '.', linestyle = 'None', label = 'BackwardSearch')
+plt.semilogy(forward, color = 'b', marker = '.', linestyle = 'None', label = 'ForwardSearch')
+plt.semilogy(backward, color = 'r', marker = '.', linestyle = 'None', label = 'BackwardSearch')
 plt.xlabel('Number of testcase')
 plt.ylabel('Time in seconds')
 plt.title('Comparing forward and backward search')

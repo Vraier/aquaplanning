@@ -26,6 +26,8 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 	public ForwardSearchCubeSolver(Configuration config, Cube cube) {
 
 		super(config, cube);
+
+		// Create new Configuration to use it with the already existing Planner Classes
 		Configuration newConfig = config.copy();
 		newConfig.searchStrategy = config.cubeSolveSearchStrategy;
 		newConfig.heuristic = config.cubeSolveHeuristic;
@@ -50,10 +52,10 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 	@Override
 	public Plan calculateSteps() {
 
+		int iterations = 0;
 		startSearch();
-		int i = 0;
 
-		while (withinComputationalBounds(i) && !frontier.isEmpty()) {
+		while (withinTimeLimit() && withinComputationalBounds(iterations) && !frontier.isEmpty()) {
 
 			SearchNode node = frontier.get();
 
@@ -66,7 +68,7 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 					plan.appendAtFront(node.lastAction);
 					node = node.parent;
 				}
-				totalIterations += i;
+				totalIterations += iterations;
 				totalTime += System.currentTimeMillis() - searchStartMillis;
 				Logger.log(Logger.INFO, "ForwardSearchPlanner found a plan after " + totalIterations + " steps in "
 						+ totalTime + " millisecs.");
@@ -84,14 +86,14 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 				newNode.lastAction = action;
 				frontier.add(newNode);
 			}
-			i++;
+			iterations++;
 		}
 		// no plan exists
 		if (frontier.isEmpty()) {
 			isExhausted = true;
 		}
 
-		totalIterations += i;
+		totalIterations += iterations;
 		totalTime += System.currentTimeMillis() - searchStartMillis;
 		return null;
 	}

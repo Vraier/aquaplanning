@@ -1,4 +1,4 @@
-package edu.kit.aquaplanning.planning.cube;
+package edu.kit.aquaplanning.planning.cube.datastructure;
 
 import edu.kit.aquaplanning.model.ground.Action;
 import edu.kit.aquaplanning.model.ground.AtomSet;

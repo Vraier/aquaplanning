@@ -8,11 +8,11 @@ import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.cube.Cube;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
-import edu.kit.aquaplanning.planning.cube.CubeFinder;
 import edu.kit.aquaplanning.planning.cube.CubeSolver;
 import edu.kit.aquaplanning.planning.cube.ForwardSearchCubeSolver;
-import edu.kit.aquaplanning.planning.cube.Scheduler;
-import edu.kit.aquaplanning.planning.cube.Scheduler.ExitStatus;
+import edu.kit.aquaplanning.planning.cube.finder.CubeFinder;
+import edu.kit.aquaplanning.planning.cube.scheduler.Scheduler;
+import edu.kit.aquaplanning.planning.cube.scheduler.Scheduler.ExitStatus;
 import edu.kit.aquaplanning.util.Logger;
 
 //TODO: add computational bounds for finding the cubes and update time for cube finding phase
@@ -79,7 +79,8 @@ public class SimpleParallelPlanner extends Planner {
 
 			// Round up integer division to partition cubes evenly
 			int partitionSize = ((cubes.size() + numThreads - 1) / numThreads);
-			List<Cube> localCubes = cubes.subList(Math.min(partitionSize * i, cubes.size()), Math.min(partitionSize * (i + 1), cubes.size()));
+			List<Cube> localCubes = cubes.subList(Math.min(partitionSize * i, cubes.size()),
+					Math.min(partitionSize * (i + 1), cubes.size()));
 
 			Thread thread = new Thread(new MyThread(config, threadNum, localCubes));
 			threads.add(thread);

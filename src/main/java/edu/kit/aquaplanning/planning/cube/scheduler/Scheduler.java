@@ -1,9 +1,10 @@
-package edu.kit.aquaplanning.planning.cube;
+package edu.kit.aquaplanning.planning.cube.scheduler;
 
 import java.util.List;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.ground.Plan;
+import edu.kit.aquaplanning.planning.cube.CubeSolver;
 
 public abstract class Scheduler {
 
