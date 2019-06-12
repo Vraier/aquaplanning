@@ -83,7 +83,7 @@ public abstract class Planner {
 		case seqpfolio:
 			return new SequentialPortfolioPlanner(config);
 		case cubePlanner:
-			return new SimpleParallelPlanner(config);
+			return new CubeAndConquerPlanner(config);
 		default:
 			break;
 		}

@@ -15,10 +15,8 @@ import edu.kit.aquaplanning.planning.cube.scheduler.Scheduler;
 import edu.kit.aquaplanning.planning.cube.scheduler.Scheduler.ExitStatus;
 import edu.kit.aquaplanning.util.Logger;
 
-//TODO: add computational bounds for finding the cubes and update time for cube finding phase
 //TODO: check if synchronization works correctly
-//TODO: i need an explanation for serachTimeSeconds and maxTimeSeconds
-public class SimpleParallelPlanner extends Planner {
+public class CubeAndConquerPlanner extends Planner {
 
 	private int numThreads;
 	private List<Thread> threads;
@@ -31,7 +29,7 @@ public class SimpleParallelPlanner extends Planner {
 	 * @param config
 	 *            holds options to modify this planner
 	 */
-	public SimpleParallelPlanner(Configuration config) {
+	public CubeAndConquerPlanner(Configuration config) {
 		super(config);
 		numThreads = config.numThreads;
 	}

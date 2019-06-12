@@ -89,7 +89,8 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 			iterations++;
 		}
 		// no plan exists
-		if (frontier.isEmpty()) {
+		if (frontier.isEmpty() || !withinTimeLimit()) {
+			// in both cases we should stop searching for cubes
 			isExhausted = true;
 		}
 

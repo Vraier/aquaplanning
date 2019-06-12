@@ -23,6 +23,7 @@ public class TestSimpleParallelPlanner extends TestCase {
 	public void testSimpleParallelPlanner() throws IOException {
 		Configuration config = new Configuration();
 		config.verbosityLevel = 4;
+		//config.maxTimeSeconds = 10;
 		
 		config.plannerType = PlannerType.cubePlanner;
 		config.numThreads = 2;

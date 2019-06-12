@@ -1,5 +1,6 @@
 package edu.kit.aquaplanning.planning.cube.finder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.kit.aquaplanning.Configuration;
@@ -42,6 +43,11 @@ public abstract class GenericCubeFinder extends CubeFinder {
 
 		}
 		assert(frontier.size() > 0);
+		if(!withinTimeLimit()) {
+			Logger.log(Logger.INFO, "Generic Cube Finder exceeded his time limit");
+			// We return an empty list so signalize that we should stop searching for a solution
+			return new ArrayList<Cube>();
+		}
 		Logger.log(Logger.INFO, "Generic Cube Finder stopped search after " + totalIterations + " steps.");
 		Logger.log(Logger.INFO, "Generic Cube Finder found " + frontier.size() + " cubes.");
 
