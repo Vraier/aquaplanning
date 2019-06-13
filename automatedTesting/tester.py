@@ -1,4 +1,5 @@
 import os
+import time
 import subprocess
 import testUtil as util
 import constants as consts
@@ -17,11 +18,12 @@ maxSeconds = ['-t='+str(consts.timeLimit)]
 plannerType = ['-p=cubePlanner']
 numThreads = ['-T=48']
 verbosityLevel = ['-v=2']
-numCubes = ['-c=1', '-c=48', '-c=1000', '-c=100000']
-cubeFinderMode = ['--cubeFinder=forwardSearch'] #, '--cubeFinder=backwardSearch']
+#numCubes = ['-c=1', '-c=48', '-c=1000', '-c=100000']
+numCubes = ['-c=5000']
+cubeFinderMode = ['--cubeFinder=forwardSearch', '--cubeFinder=backwardSearch'] #, '--cubeFinder=backwardSearch']
 schedulerMode = ['-sched=exponential']
 exponentialGrowth = ['-schedExpG=2']
-# cubeFindSearchStrategy = ['-cfs=breadthFirst']
+cubeFindSearchStrategy = ['-cfs=breadthFirst', '-cfs=bestFirst']
 cutOffHeuristic = ['-cut=none']
 
 commandLists = [maxSeconds, plannerType, numThreads, verbosityLevel, numCubes, cubeFinderMode, schedulerMode, exponentialGrowth, cubeFindSearchStrategy, cutOffHeuristic]
@@ -60,14 +62,19 @@ for problem in commandProblems:
     for argument in commandArguments:
         commandList.append(commandPrefix + problem + argument)
 
+globalStart = time.time()
 with open(outputPath, 'a') as outputFile:
     outputFile.flush()
     for command in commandList:
         commandName = ', '.join(command)
         commandName += '\n'
         print('Working on Command: ' + commandName)
+        localStart = time.time()
         outputFile.write(breakSequenze)
         outputFile.write(commandName)
         outputFile.flush()
-        subprocess.call(command, stdout=outputFile, stderr=outputFile)
+        subprocess.run(command, stdout=outputFile, stderr=outputFile, timeout=consts.timeLimit+3)
         outputFile.flush()
+        print('Finished command in ' + str(time.time()-localStart) + " seconds.")
+
+print('Finished all commands in' + str(time.time()-globalStart) + " seconds.")
