@@ -171,8 +171,9 @@ public class CubeAndConquerPlanner extends Planner {
 				Logger.log(Logger.INFO, "Thread " + threadNum + " found a Plan. The total sum of the iterations is "
 						+ totalIterations + " and time is " + totalTime + " millisecs.");
 				onPlanFound(localPlan);
-			} else {
-
+			}
+			// We go interrupted
+			else {
 				Logger.log(Logger.INFO,
 						"Thread " + threadNum + " found no Plan. The total sum of the iterations is " + totalIterations
 								+ " and time is " + totalTime + " millisecs. The interruptFlag is: "

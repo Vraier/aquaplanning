@@ -1,0 +1,1 @@
+timeLimit = 10 # Time after we timeOut in seconds

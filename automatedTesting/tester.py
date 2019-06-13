@@ -1,6 +1,7 @@
 import os
 import subprocess
 import testUtil as util
+import constants as consts
 
 
 # Strings and Paths
@@ -8,22 +9,25 @@ breakSequenze = '###############################################################
 relativeJarPath = '../target/aquaplanning-0.0.1-SNAPSHOT-jar-with-dependencies.jar'
 relativeBenchmarkPath = '../benchmarks'
 domainFile = 'domain.pddl'
+outpuFile = 'output1.txt'
 dirName = os.path.dirname(__file__)
 
 # Command Arguments
+maxSeconds = ['-t='+consts.timeLimit]
 plannerType = ['-p=cubePlanner']
-numThreads = ['-T=8']
-verbosityLevel = ['-v=2']
-numCubes = ['-c=1000']
-cubeFinderMode = ['--cubeFinder=forwardSearch', '--cubeFinder=diverseSearch'] #, '--cubeFinder=backwardSearch']
+numThreads = ['-T=4']
+verbosityLevel = ['-v=4']
+numCubes = ['-c=1000', '-c=1']
+cubeFinderMode = ['--cubeFinder=forwardSearch'] #, '--cubeFinder=backwardSearch']
 schedulerMode = ['-sched=exponential']
-exponentialGrowth = ['-schedExpG=1.5']
+exponentialGrowth = ['-schedExpG=2']
 cubeFindSearchStrategy = ['-cfs=breadthFirst']
+cutOffHeuristic = ['-cut=none']
 
-commandLists = [plannerType, numThreads, verbosityLevel, numCubes, cubeFinderMode, schedulerMode, exponentialGrowth, cubeFindSearchStrategy]
+commandLists = [maxSeconds, plannerType, numThreads, verbosityLevel, numCubes, cubeFinderMode, schedulerMode, exponentialGrowth, cubeFindSearchStrategy, cutOffHeuristic]
 commandArguments = util.listCombinations(commandLists)
 
-outputPath = os.path.join(dirName, 'output.txt')
+outputPath = os.path.join(dirName, outpuFile)
 jarPath = os.path.join(dirName, relativeJarPath)
 benchmarkPath = os.path.join(dirName, relativeBenchmarkPath)
 
@@ -64,7 +68,6 @@ with open(outputPath, 'a') as outputFile:
         print('Working on Command: ' + commandName)
         outputFile.write(breakSequenze)
         outputFile.write(commandName)
-        outputFile.write(breakSequenze)
         outputFile.flush()
         subprocess.call(command, stdout=outputFile, stderr=outputFile)
         outputFile.flush()

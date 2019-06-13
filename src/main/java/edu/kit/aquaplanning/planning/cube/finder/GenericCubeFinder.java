@@ -51,6 +51,7 @@ public abstract class GenericCubeFinder extends CubeFinder {
 		Logger.log(Logger.INFO, "Generic Cube Finder stopped search after " + totalIterations + " steps.");
 		Logger.log(Logger.INFO, "Generic Cube Finder found " + frontier.size() + " cubes.");
 
+		System.out.println("Generic Cube Finder found " + frontier.size() + " cubes.");
 		return frontier.getCubes();
 	}
 

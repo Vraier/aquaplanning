@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.Configuration.CubeFinderMode;
+import edu.kit.aquaplanning.Configuration.CutOffHeuristic;
 import edu.kit.aquaplanning.Configuration.HeuristicType;
 import edu.kit.aquaplanning.Configuration.PlannerType;
 import edu.kit.aquaplanning.Configuration.SchedulerMode;
@@ -27,12 +28,13 @@ public class TestSimpleParallelPlanner extends TestCase {
 		
 		config.plannerType = PlannerType.cubePlanner;
 		config.numThreads = 2;
-		config.numCubes = 100;
+		config.numCubes = 1;
 		//config.cubeFinderMode = CubeFinderMode.backwardSearch;
 		config.cubeFinderMode = CubeFinderMode.backwardSearch;
 		config.cubeFindSearchStrategy = SearchStrategy.Mode.bestFirst;
 		config.cubeFindHeuristic = HeuristicType.relaxedPathLength;
 		config.cubeFindHeuristicWeight = 10;
+		config.cutOffHeuristic = CutOffHeuristic.none;
 		
 		config.schedulerMode = SchedulerMode.roundRobin;
 		config.schedulerTime = 1000;

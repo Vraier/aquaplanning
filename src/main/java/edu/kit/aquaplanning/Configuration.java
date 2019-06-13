@@ -171,7 +171,7 @@ public class Configuration {
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1.5")
 	public double schedulerGrowth;
 	
-	public enum cutOffHeuristic {
+	public enum CutOffHeuristic {
 		none, manhattanDistance;
 	}
 	@Option(names = {"-cut", "--cutOff"}, description = "What heuristic to use when cutting of branches while searching for cubes: "

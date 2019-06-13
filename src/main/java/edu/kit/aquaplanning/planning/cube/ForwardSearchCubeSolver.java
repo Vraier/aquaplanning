@@ -88,9 +88,18 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 			}
 			iterations++;
 		}
+
 		// no plan exists
-		if (frontier.isEmpty() || !withinTimeLimit()) {
-			// in both cases we should stop searching for cubes
+		if (frontier.isEmpty()) {
+			Logger.log(Logger.INFO, "ForwardSearchPlanner found no plan after " + totalIterations + " steps in "
+					+ totalTime + " millisecs.");
+			isExhausted = true;
+		}
+
+		// We should stop searching for cubes in this case
+		if (!withinTimeLimit()) {
+			Logger.log(Logger.INFO,
+					"ForwardSearchPlanner found no plan after exceeded his time limit or got interrupted");
 			isExhausted = true;
 		}
 
