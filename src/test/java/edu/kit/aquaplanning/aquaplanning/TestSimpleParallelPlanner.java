@@ -24,16 +24,19 @@ public class TestSimpleParallelPlanner extends TestCase {
 	public void testSimpleParallelPlanner() throws IOException {
 		Configuration config = new Configuration();
 		config.verbosityLevel = 2;
-		config.maxTimeSeconds = 10;
+		//config.maxTimeSeconds = 10;
 		
 		config.plannerType = PlannerType.cubePlanner;
 		config.numThreads = 4;
 		config.numCubes = 100000;
-		//config.cubeFinderMode = CubeFinderMode.backwardSearch;
-		config.cubeFinderMode = CubeFinderMode.backwardSearch;
+		config.cubeFinderMode = CubeFinderMode.forwardSearch;
 		config.cubeFindSearchStrategy = SearchStrategy.Mode.bestFirst;
-		config.cubeFindHeuristic = HeuristicType.relaxedPathLength;
-		config.cubeFindHeuristicWeight = 10;
+		config.cubeFindHeuristic = HeuristicType.ffTrautmann;
+		config.cubeSolveHeuristicWeight = 10;
+		//config.cubeFinderMode = CubeFinderMode.backwardSearch;
+		//config.cubeFindSearchStrategy = SearchStrategy.Mode.bestFirst;
+		//config.cubeFindHeuristic = HeuristicType.relaxedPathLength;
+		//config.cubeFindHeuristicWeight = 10;
 		config.cutOffHeuristic = CutOffHeuristic.none;
 		
 		config.schedulerMode = SchedulerMode.roundRobin;

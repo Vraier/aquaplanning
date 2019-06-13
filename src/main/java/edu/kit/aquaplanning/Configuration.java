@@ -178,7 +178,6 @@ public class Configuration {
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "none")
 	public CutOffHeuristic cutOffHeuristic;
 	
-	// not available for backwards cube finding only for forward search cube finding
 	@Option(paramLabel = "cubeFindHeuristic", names = {"-cfh", "--cube-find-heuristic"}, 
 			description = "Heuristic for forward search while searching for cubes: " + USAGE_OPTIONS_AND_DEFAULT, 
 			defaultValue = "ffTrautmann")
