@@ -13,11 +13,11 @@ outpuFile = 'output1.txt'
 dirName = os.path.dirname(__file__)
 
 # Command Arguments
-maxSeconds = ['-t='+consts.timeLimit]
+maxSeconds = ['-t='+str(consts.timeLimit)]
 plannerType = ['-p=cubePlanner']
-numThreads = ['-T=4']
-verbosityLevel = ['-v=4']
-numCubes = ['-c=1000', '-c=1']
+numThreads = ['-T=48']
+verbosityLevel = ['-v=2']
+numCubes = ['-c=1', '-c=100', 'c=10000', '-c=1000000']
 cubeFinderMode = ['--cubeFinder=forwardSearch'] #, '--cubeFinder=backwardSearch']
 schedulerMode = ['-sched=exponential']
 exponentialGrowth = ['-schedExpG=2']
@@ -39,8 +39,8 @@ print("We have ", len(commandArguments), " argument combinations.")
 
 for folder in os.listdir(benchmarkPath):
 
-    if(folder != 'Rover'):
-        continue
+    #if(folder != 'Rover'):
+    #    continue
     currentBenchmarkPath = os.path.join(benchmarkPath, folder)
     if(not util.hasDomain(currentBenchmarkPath)):
         continue

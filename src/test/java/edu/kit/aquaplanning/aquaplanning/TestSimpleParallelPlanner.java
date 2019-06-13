@@ -23,12 +23,12 @@ public class TestSimpleParallelPlanner extends TestCase {
 
 	public void testSimpleParallelPlanner() throws IOException {
 		Configuration config = new Configuration();
-		config.verbosityLevel = 4;
-		//config.maxTimeSeconds = 10;
+		config.verbosityLevel = 2;
+		config.maxTimeSeconds = 10;
 		
 		config.plannerType = PlannerType.cubePlanner;
-		config.numThreads = 2;
-		config.numCubes = 1;
+		config.numThreads = 4;
+		config.numCubes = 100000;
 		//config.cubeFinderMode = CubeFinderMode.backwardSearch;
 		config.cubeFinderMode = CubeFinderMode.backwardSearch;
 		config.cubeFindSearchStrategy = SearchStrategy.Mode.bestFirst;
@@ -47,7 +47,7 @@ public class TestSimpleParallelPlanner extends TestCase {
 		//File benchdir = new File("testfiles");
 		File benchdir = new File("benchmarks");
 		for (File domdir : benchdir.listFiles()) {
-			if(!domdir.getName().equals("Rover")) {
+			if(!domdir.getName().equals("Barman")) {
 				continue;
 			}
 			String domain = domdir.getCanonicalPath() + "/domain.pddl";

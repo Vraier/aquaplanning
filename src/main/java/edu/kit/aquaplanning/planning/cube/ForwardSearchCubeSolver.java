@@ -102,7 +102,7 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 					"ForwardSearchPlanner found no plan after exceeded his time limit or got interrupted");
 			isExhausted = true;
 		}
-
+		
 		totalIterations += iterations;
 		totalTime += System.currentTimeMillis() - searchStartMillis;
 		return null;

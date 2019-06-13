@@ -59,7 +59,7 @@ public class CubeAndConquerPlanner extends Planner {
 			return null;
 		}
 
-		Logger.log(Logger.INFO, "Found " + cubes.size() + " cubes.");
+		Logger.log(Logger.INFO, "Solver got " + cubes.size() + " cubes from the cube finder.");
 
 		// Shuffle Cubes
 		Logger.log(Logger.INFO, "Shuffleing the cubes.");
@@ -69,6 +69,7 @@ public class CubeAndConquerPlanner extends Planner {
 		// Split cubes evenly
 		threads = new ArrayList<Thread>();
 		for (int i = 0; i < numThreads; i++) {
+	
 
 			// Default configuration with random seed
 			Configuration config = this.config.copy();
@@ -79,6 +80,8 @@ public class CubeAndConquerPlanner extends Planner {
 			int partitionSize = ((cubes.size() + numThreads - 1) / numThreads);
 			List<Cube> localCubes = cubes.subList(Math.min(partitionSize * i, cubes.size()),
 					Math.min(partitionSize * (i + 1), cubes.size()));
+			
+			Logger.log(Logger.INFO, "Initializing Thread " + threadNum + ".");
 
 			Thread thread = new Thread(new MyThread(config, threadNum, localCubes));
 			threads.add(thread);
@@ -150,9 +153,9 @@ public class CubeAndConquerPlanner extends Planner {
 			Scheduler scheduler = Scheduler.getScheduler(config, planners);
 
 			// Search for a plan
+			Logger.log(Logger.INFO, "Thread " + threadNum + " starting to work for the first time.");
 			ExitStatus status = ExitStatus.foundNoPlan;
-			while (!Thread.currentThread().isInterrupted() && status != ExitStatus.exhausted
-					&& status != ExitStatus.foundPlan) {
+			while (withinTimeLimit() && status != ExitStatus.exhausted && status != ExitStatus.foundPlan) {
 				status = scheduler.scheduleNext();
 				assert (status != ExitStatus.error);
 			}
@@ -172,7 +175,7 @@ public class CubeAndConquerPlanner extends Planner {
 						+ totalIterations + " and time is " + totalTime + " millisecs.");
 				onPlanFound(localPlan);
 			}
-			// We go interrupted
+			// We go interrupted or couldn't find a plan
 			else {
 				Logger.log(Logger.INFO,
 						"Thread " + threadNum + " found no Plan. The total sum of the iterations is " + totalIterations
@@ -180,6 +183,27 @@ public class CubeAndConquerPlanner extends Planner {
 								+ Thread.currentThread().isInterrupted() + ", and the exit status of the scheduler is: "
 								+ status + ".");
 			}
+		}
+
+		/**
+		 * Checks if we are in computational bounds. This means that our thread is not
+		 * interrupted and we didn't exceed our time limit. The time limit is given by
+		 * the configuration. There is no possibility to limit the cube solving by
+		 * iterations.
+		 */
+		protected boolean withinTimeLimit() {
+
+			if (Thread.currentThread().isInterrupted())
+				return false;
+
+			if (config.maxTimeSeconds > 0) {
+				long totalTime = System.currentTimeMillis() - config.startTimeMillis;
+				if (totalTime > config.maxTimeSeconds * 1000) {
+					return false;
+				}
+			}
+
+			return true;
 		}
 	}
 }
