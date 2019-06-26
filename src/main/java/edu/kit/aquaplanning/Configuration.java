@@ -3,7 +3,6 @@ package edu.kit.aquaplanning;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import edu.kit.aquaplanning.planning.cube.cutoffHeuristic.CutOffHeuristic;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.util.Logger;
 import picocli.CommandLine.Command;
@@ -146,26 +145,26 @@ public class Configuration {
 	/* Cube an Conquer planning */
 	
 	@Option(names = {"-c", "--cubes"}, description = "The number of cubes to search for before trying to solve them: "
-			+ USAGE_DEFAULT, defaultValue = "200")
+			+ USAGE_DEFAULT, defaultValue = "10000")
 	public int numCubes;
 	public enum CubeFinderMode {
-		forwardSearch, diverseSearch, backwardSearch;
+		forwardSearch, backwardSearch;
 	}
 	@Option(names = {"--cubeFinder"}, description = "The desired mode to find the Cubes: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "forwardSearch")
 	public CubeFinderMode cubeFinderMode;
 	
 	public enum SchedulerMode {
-		roundRobin, exponential;
+		roundRobin, exponential, bandit;
 	}
 	@Option(names = {"-sched", "--scheduler"}, description = "Which scheduler to use to split up computation time between cubes: "
-			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "exponential")
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "bandit")
 	public SchedulerMode schedulerMode;
 	@Option(names = {"-schedI"}, description = "Amount of iterations each cube gets while beeing scheduled: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "0")
 	public int schedulerIterations;
 	@Option(names = {"-schedT"}, description = "Amount of time each cube gets while beeing scheduled (in milliseconds): "
-			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1000")
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "4000")
 	public long schedulerTime;
 	@Option(names = {"-schedExpG"}, description = "The growth value of the exponential scheduler: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1.5")
@@ -177,10 +176,16 @@ public class Configuration {
 	@Option(names = {"-cut", "--cutOff"}, description = "What heuristic to use when cutting of branches while searching for cubes: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "none")
 	public CutOffHeuristic cutOffHeuristic;
+	@Option(names = {"-cutDepth"}, description = "The depth at wich a node should be used as an anchor for a cut off heuristic." 
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "90")
+	public int cutDepth;
+	@Option(names = {"-cutDistance"}, description = "The percentage a node has to differ from each anchor to not get cut off. " 
+			+ "Should be between 0 and 1" + USAGE_OPTIONS_AND_DEFAULT, defaultValue = "0.05")
+	public double cutDistance;
 	
 	@Option(paramLabel = "cubeFindHeuristic", names = {"-cfh", "--cube-find-heuristic"}, 
 			description = "Heuristic for forward search while searching for cubes: " + USAGE_OPTIONS_AND_DEFAULT, 
-			defaultValue = "ffTrautmann")
+			defaultValue = "ffWilliams")
 	public HeuristicType cubeFindHeuristic;
 	@Option(paramLabel = "cubeFindheuristicWeight", names = {"-cfw", "--cube-find-heuristic-weight"},
 			description = "Weight of heuristic when using a weighted search strategy while searching for cubes: " + USAGE_DEFAULT, 
@@ -193,7 +198,7 @@ public class Configuration {
 	
 	@Option(paramLabel = "cubeSolveHeuristic", names = {"-csh", "--cube-solve-heuristic"}, 
 			description = "Heuristic for forward search while solving cubes: " + USAGE_OPTIONS_AND_DEFAULT, 
-			defaultValue = "ffTrautmann")
+			defaultValue = "ffWilliams")
 	public HeuristicType cubeSolveHeuristic;
 	@Option(paramLabel = "cubeSolveHeuristicWeight", names = {"-csw", "--cube-solve-heuristic-weight"},
 			description = "Weight of heuristic when using a weighted search strategy while solving cubes: " + USAGE_DEFAULT, 

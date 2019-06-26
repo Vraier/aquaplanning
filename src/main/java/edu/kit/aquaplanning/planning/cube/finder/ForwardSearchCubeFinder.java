@@ -12,18 +12,19 @@ public class ForwardSearchCubeFinder extends GenericCubeFinder {
 
 	public ForwardSearchCubeFinder(Configuration config) {
 		super(config);
-
 	}
 
 	@Override
-	protected void initializeFrontier(GroundPlanningProblem problem) {
+	protected void initializeFrontierWithNode(GroundPlanningProblem problem) {
+
 		Configuration tempConfig = config.copy();
 		tempConfig.searchStrategy = config.cubeFindSearchStrategy;
 		SearchStrategy strategy = new SearchStrategy(tempConfig);
-		
+
 		GenericHeuristic heuristic = GenericHeuristic.getHeuristic(config);
-		CutOffHeuristic cutOffHeuristic = CutOffHeuristic.getCutOffHeuristic(config);
+		CutOffHeuristic cutOffHeuristic = CutOffHeuristic.getCutOffHeuristic(config, problem);
 		frontier = new GenericSearchQueue(strategy, heuristic, cutOffHeuristic);
-		frontier.add(new ForwardSearchNode(problem));
+		ForwardSearchNode initalNode = new ForwardSearchNode(problem);
+		frontier.add(initalNode);
 	}
 }

@@ -159,6 +159,24 @@ public class SearchQueue {
 	}
 	
 	/**
+	 * Returns the top of the queue without removing it from the queue.
+	 */
+	public SearchNode top() {
+		
+		SearchNode node;
+		if (strategy.getMode() == Mode.depthFirst) {
+			node = stack.peek();
+		} else if (strategy.getMode() == Mode.randomChoice) {
+			int r = random.nextInt(list.size());
+			node = list.get(r);
+		} else {
+			node = queue.peek();
+		}
+		
+		return node;
+	}
+	
+	/**
 	 * Returns true iff there are no nodes left to visit.
 	 */
 	public boolean isEmpty() {

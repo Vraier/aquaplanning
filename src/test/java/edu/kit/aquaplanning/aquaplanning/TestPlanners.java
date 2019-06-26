@@ -19,6 +19,7 @@ import edu.kit.aquaplanning.parsing.PlanParser;
 import edu.kit.aquaplanning.parsing.ProblemParser;
 import edu.kit.aquaplanning.planning.ForwardSearchPlanner;
 import edu.kit.aquaplanning.planning.Planner;
+import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy.Mode;
 import edu.kit.aquaplanning.planning.sat.HegemannsSatPlanner;
 import edu.kit.aquaplanning.planning.sat.SimpleSatPlanner;
@@ -105,6 +106,17 @@ public class TestPlanners extends TestCase {
 		
 		Configuration config = new Configuration();
 		config.plannerType = PlannerType.greedy;
+		for (String domain : DEFAULT_TEST_DOMAINS) {
+			fullTest("testfiles/" + domain + "/domain.pddl", "testfiles/" + domain + "/p01.pddl", config);
+		}
+	}
+	
+	public void testWilliamsOnDefaultDomains() throws FileNotFoundException, IOException {
+		
+		Configuration config = new Configuration();
+		config.plannerType = PlannerType.forwardSSS;
+		config.heuristic = HeuristicType.ffWilliams;
+		config.searchStrategy = SearchStrategy.Mode.bestFirst;
 		for (String domain : DEFAULT_TEST_DOMAINS) {
 			fullTest("testfiles/" + domain + "/domain.pddl", "testfiles/" + domain + "/p01.pddl", config);
 		}

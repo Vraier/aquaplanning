@@ -3,8 +3,8 @@ package edu.kit.aquaplanning.planning.cube.scheduler;
 import java.util.List;
 
 import edu.kit.aquaplanning.Configuration;
-import edu.kit.aquaplanning.model.ground.Plan;
 import edu.kit.aquaplanning.planning.cube.CubeSolver;
+import edu.kit.aquaplanning.util.Logger;
 
 public class RoundRobinScheduler extends Scheduler {
 
@@ -19,7 +19,8 @@ public class RoundRobinScheduler extends Scheduler {
 	 * after its computational bounds variable have been set by the according
 	 * methods
 	 * 
-	 * @param planners The planners to schedule
+	 * @param planners
+	 *            The planners to schedule
 	 */
 	public RoundRobinScheduler(Configuration config, List<CubeSolver> planners) {
 		super(config, planners);
@@ -27,28 +28,10 @@ public class RoundRobinScheduler extends Scheduler {
 		this.time = config.schedulerTime;
 	}
 
-	/**
-	 * Sets the amount of iterations each planner gets in one slice. If time is set
-	 * too the planner will be bounded by both parameters.
-	 * 
-	 * @param iterations the number of iterations for each slice
-	 */
-	public void setIterations(int iterations) {
-		this.iterations = iterations;
-	}
-
-	/**
-	 * Sets the amount of time each planner gets in one slice. If iterations are set
-	 * too the planner will be bounded by both parameters.
-	 * 
-	 * @param time time for each slice
-	 */
-	public void setTime(long time) {
-		this.time = time;
-	}
-
 	@Override
 	public ExitStatus scheduleNext() {
+
+		totalScheduled++;
 
 		if (iterations == 0 && time == 0) {
 			return ExitStatus.error;
@@ -88,7 +71,17 @@ public class RoundRobinScheduler extends Scheduler {
 	}
 
 	@Override
-	public Plan getPlan() {
-		return plan;
+	public void logInformation() {
+		long totalIterations = 0;
+		long totalTime = 0;
+
+		for (CubeSolver p : planners) {
+			totalIterations += p.getTotalIterations();
+			totalTime += p.getTotalTime();
+		}
+		Logger.log(Logger.INFO,
+				"Round Robin Scheduler scheduled a total of " + totalScheduled
+						+ " cubes. The total sum of the iterations is " + totalIterations + " and time is " + totalTime
+						+ " millisecs.");
 	}
 }

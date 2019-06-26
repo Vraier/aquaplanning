@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.kit.aquaplanning.model.cube.Cube;
 import edu.kit.aquaplanning.model.ground.Action;
+import edu.kit.aquaplanning.model.ground.AtomSet;
 import edu.kit.aquaplanning.model.ground.Goal;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
@@ -26,11 +27,11 @@ public class ForwardSearchNode extends GenericSearchNode {
 		this.heuristicValue = 0;
 	}
 	
-	private ForwardSearchNode(ForwardSearchNode node, Action action, State state) {
+	private ForwardSearchNode(ForwardSearchNode node, Action action) {
 		this.depth = node.depth + 1;
 		this.parent = node;
 		this.problem = node.problem;
-		this.state = state;
+		this.state = action.apply(node.state);
 		this.aIndex = node.aIndex;
 		this.lastAction = action;
 		this.heuristicValue = 0;
@@ -62,11 +63,9 @@ public class ForwardSearchNode extends GenericSearchNode {
 		
 		ArrayList<GenericSearchNode> list = new ArrayList<GenericSearchNode>();
 		for (Action action : aIndex.getApplicableActions(this.state)) {
-			// Create new node by applying the operator
-			State newState = action.apply(this.state);
 			
 			// Add new node to frontier
-			ForwardSearchNode newNode = new ForwardSearchNode(this, action, newState);
+			ForwardSearchNode newNode = new ForwardSearchNode(this, action);
 			list.add(newNode);
 		}
 		return list;
@@ -105,5 +104,10 @@ public class ForwardSearchNode extends GenericSearchNode {
 		} else if (!state.equals(other.state))
 			return false;
 		return true;
+	}
+
+	@Override
+	public AtomSet getAtomSet() {
+		return this.state.getAtomSet();
 	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.kit.aquaplanning.model.cube.Cube;
 import edu.kit.aquaplanning.model.ground.Action;
+import edu.kit.aquaplanning.model.ground.AtomSet;
 import edu.kit.aquaplanning.model.ground.Goal;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
@@ -24,13 +25,14 @@ public abstract class GenericSearchNode {
 	public abstract boolean satisfiesProblem();
 
 	public abstract Cube getCube();
-
-	public abstract int hashCode();
-
-	public abstract boolean equals(Object obj);
-
+	
 	public abstract Goal getGoal();
 
 	public abstract State getState();
 	
+	public abstract AtomSet getAtomSet();
+
+	public abstract int hashCode();
+
+	public abstract boolean equals(Object obj);	
 }

@@ -19,12 +19,15 @@ plannerType = ['-p=cubePlanner']
 numThreads = ['-T=48']
 verbosityLevel = ['-v=2']
 #numCubes = ['-c=1', '-c=48', '-c=1000', '-c=100000']
-numCubes = ['-c=5000']
-cubeFinderMode = ['--cubeFinder=forwardSearch', '--cubeFinder=backwardSearch'] #, '--cubeFinder=backwardSearch']
-schedulerMode = ['-sched=exponential']
+numCubes = ['-c=10000']
+cubeFinderMode = ['--cubeFinder=forwardSearch'] # '--cubeFinder=backwardSearch'
+schedulerMode = ['-sched=exponential', '-sched=bandit']
+schedulerTime = ['-schedT=4000']
 exponentialGrowth = ['-schedExpG=2']
-cubeFindSearchStrategy = ['-cfs=breadthFirst', '-cfs=bestFirst']
-cutOffHeuristic = ['-cut=none']
+cubeFindSearchStrategy = ['-cfs=bestFirst'] # '-cfs=breadthFirst' 
+cutOffHeuristic = ['-cut=none', '-cut=manhattanDistance']
+cutDepth = ['-cutDepth=90']
+cutDistance = ['-cutDistance=0.05']
 
 commandLists = [maxSeconds, plannerType, numThreads, verbosityLevel, numCubes, cubeFinderMode, schedulerMode, exponentialGrowth, cubeFindSearchStrategy, cutOffHeuristic]
 commandArguments = util.listCombinations(commandLists)
@@ -34,7 +37,7 @@ jarPath = os.path.join(dirName, relativeJarPath)
 benchmarkPath = os.path.join(dirName, relativeBenchmarkPath)
 
 commandList = []
-commandPrefix = ['java', '-jar', jarPath]
+commandPrefix = ['timeout 5m', 'java', '-jar', jarPath]
 commandProblems = []
 
 print("We have ", len(commandArguments), " argument combinations.")

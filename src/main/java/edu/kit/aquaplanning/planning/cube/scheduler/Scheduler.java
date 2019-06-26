@@ -11,6 +11,8 @@ public abstract class Scheduler {
 	protected Configuration config;
 	protected List<CubeSolver> planners;
 	protected Plan plan = null;
+	protected int totalScheduled = 0;
+
 
 	public Scheduler(Configuration config, List<CubeSolver> planners) {
 		this.config = config;
@@ -33,7 +35,9 @@ public abstract class Scheduler {
 
 	public abstract ExitStatus scheduleNext();
 
-	public abstract Plan getPlan();
+	public Plan getPlan() {
+		return plan;
+	}
 
 	public static Scheduler getScheduler(Configuration config, List<CubeSolver> planners) {
 		switch (config.schedulerMode) {
@@ -41,9 +45,13 @@ public abstract class Scheduler {
 			return new ExponentialScheduler(config, planners);
 		case roundRobin:
 			return new RoundRobinScheduler(config, planners);
+		case bandit:
+			return new BanditScheduler(config, planners);
 		default:
 			break;
 		}
 		return null;
 	}
+	
+	public abstract void logInformation();
 }

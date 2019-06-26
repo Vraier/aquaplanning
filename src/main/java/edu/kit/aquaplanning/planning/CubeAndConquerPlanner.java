@@ -69,7 +69,6 @@ public class CubeAndConquerPlanner extends Planner {
 		// Split cubes evenly
 		threads = new ArrayList<Thread>();
 		for (int i = 0; i < numThreads; i++) {
-	
 
 			// Default configuration with random seed
 			Configuration config = this.config.copy();
@@ -80,7 +79,7 @@ public class CubeAndConquerPlanner extends Planner {
 			int partitionSize = ((cubes.size() + numThreads - 1) / numThreads);
 			List<Cube> localCubes = cubes.subList(Math.min(partitionSize * i, cubes.size()),
 					Math.min(partitionSize * (i + 1), cubes.size()));
-			
+
 			Logger.log(Logger.INFO, "Initializing Thread " + threadNum + ".");
 
 			Thread thread = new Thread(new MyThread(config, threadNum, localCubes));
@@ -160,29 +159,20 @@ public class CubeAndConquerPlanner extends Planner {
 				assert (status != ExitStatus.error);
 			}
 
-			// Calculate information about the computation time of our planners
-			int totalIterations = 0;
-			long totalTime = 0;
-			for (CubeSolver p : planners) {
-				totalIterations += p.getTotalIterations();
-				totalTime += p.getTotalTime();
-			}
-
 			// Our Thread found a plan
 			if (status == ExitStatus.foundPlan) {
 				localPlan = scheduler.getPlan();
-				Logger.log(Logger.INFO, "Thread " + threadNum + " found a Plan. The total sum of the iterations is "
-						+ totalIterations + " and time is " + totalTime + " millisecs.");
+				Logger.log(Logger.INFO, "Thread " + threadNum + " found a Plan.");
 				onPlanFound(localPlan);
 			}
 			// We go interrupted or couldn't find a plan
 			else {
 				Logger.log(Logger.INFO,
-						"Thread " + threadNum + " found no Plan. The total sum of the iterations is " + totalIterations
-								+ " and time is " + totalTime + " millisecs. The interruptFlag is: "
-								+ Thread.currentThread().isInterrupted() + ", and the exit status of the scheduler is: "
+						"Thread " + threadNum + " found no Plan. The interruptFlag is: "
+								+ Thread.currentThread().isInterrupted() + " and the exit status of the scheduler is "
 								+ status + ".");
 			}
+			scheduler.logInformation();
 		}
 
 		/**

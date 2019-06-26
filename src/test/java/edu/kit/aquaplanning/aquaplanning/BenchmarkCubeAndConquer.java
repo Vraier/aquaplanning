@@ -19,7 +19,7 @@ import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.validation.Validator;
 import junit.framework.TestCase;
 
-public class TestSimpleParallelPlanner extends TestCase {
+public class BenchmarkCubeAndConquer extends TestCase {
 
 	public void testSimpleParallelPlanner() throws IOException {
 		Configuration config = new Configuration();

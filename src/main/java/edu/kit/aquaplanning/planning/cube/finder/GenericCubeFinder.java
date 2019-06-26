@@ -12,6 +12,7 @@ import edu.kit.aquaplanning.util.Logger;
 
 public abstract class GenericCubeFinder extends CubeFinder {
 
+	// Frontier gets initialized by the call of initializeFrontierWithNode()
 	protected GenericSearchQueue frontier;
 	protected int totalIterations = 0;
 
@@ -22,8 +23,8 @@ public abstract class GenericCubeFinder extends CubeFinder {
 	@Override
 	public List<Cube> findCubes(GroundPlanningProblem problem, int numCubes) {
 
-		initializeFrontier(problem);
-
+		initializeFrontierWithNode(problem);
+		
 		while (!frontier.isEmpty() && frontier.size() < numCubes && withinTimeLimit()) {
 
 			GenericSearchNode node = frontier.get();
@@ -42,16 +43,25 @@ public abstract class GenericCubeFinder extends CubeFinder {
 			totalIterations++;
 
 		}
-		assert(frontier.size() > 0);
-		if(!withinTimeLimit()) {
+		if (!withinTimeLimit()) {
 			Logger.log(Logger.INFO, "Generic Cube Finder exceeded his time limit");
-			// We return an empty list so signalize that we should stop searching for a solution
+			// We return an empty list so signalize that we should stop searching for a
+			// solution
 			return new ArrayList<Cube>();
 		}
-		Logger.log(Logger.INFO, "Generic Cube Finder stopped search after " + totalIterations + " steps.");
-		Logger.log(Logger.INFO, "Generic Cube Finder found " + frontier.size() + " cubes.");
+		if (frontier.isEmpty()) {
+			Logger.log(Logger.INFO,
+					"Generic Cube Finder emptyed his search queue and found no plan. The Problem has no solution.");
+			System.out.println(
+					"Generic Cube Finder emptyed his search queue and found no plan. The Problem has no solution.");
+		}
 
-		System.out.println("Generic Cube Finder found " + frontier.size() + " cubes.");
+		Logger.log(Logger.INFO, "Generic Cube Finder stopped search after " + totalIterations + " steps.");
+		Logger.log(Logger.INFO, "Generic Cube Finder found " + frontier.size() + " cubes from which "
+				+ frontier.cutOffSize() + " were cut off and " + frontier.anchorSize() + " were anchors.");
+
+		//System.out.println("Generic Cube Finder found " + frontier.size() + " cubes from which " + frontier.cutOffSize()
+		//		+ " were cut off and " + frontier.anchorSize() + " were anchors.");
 		return frontier.getCubes();
 	}
 
@@ -63,6 +73,6 @@ public abstract class GenericCubeFinder extends CubeFinder {
 	 * @param problem
 	 *            the problem to search for cubes
 	 */
-	protected abstract void initializeFrontier(GroundPlanningProblem problem);
+	protected abstract void initializeFrontierWithNode(GroundPlanningProblem problem);
 
 }

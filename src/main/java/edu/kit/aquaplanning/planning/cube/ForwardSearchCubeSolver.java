@@ -107,4 +107,9 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 		totalTime += System.currentTimeMillis() - searchStartMillis;
 		return null;
 	}
+
+	@Override
+	public int getBestDistance() {
+		return frontier.top().heuristicValue;
+	}
 }

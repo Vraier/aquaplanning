@@ -39,6 +39,15 @@ public abstract class CubeSolver {
 		return isExhausted;
 	}
 
+	/**
+	 * Returns an approximation of the distance this Solver is away from its current
+	 * goal. The solver should be provided with a heuristic to be able to calculate
+	 * such an approximation.
+	 * 
+	 * @return an approximation of the distance to its goal.
+	 */
+	public abstract int getBestDistance();
+
 	public int getTotalIterations() {
 		return totalIterations;
 	}

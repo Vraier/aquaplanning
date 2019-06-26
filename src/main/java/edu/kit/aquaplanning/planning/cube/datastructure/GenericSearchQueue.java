@@ -96,6 +96,14 @@ public class GenericSearchQueue {
 		return size + cutOffs.size();
 	}
 
+	public int anchorSize() {
+		return anchors.size();
+	}
+
+	public int cutOffSize() {
+		return cutOffs.size();
+	}
+
 	public GenericSearchNode get() {
 
 		GenericSearchNode node;
@@ -108,28 +116,37 @@ public class GenericSearchQueue {
 			node = queue.poll();
 		}
 
-		//TODO what if we call ourself recursively many times?
-		assert(node != null);
-		
-		visitedStates.add(node);
-		if (cutOffHeuristic != null && cutOffHeuristic.isAnchor(node)) {
-			anchors.add(node);
-		}
-		if (cutOffHeuristic != null && cutOffHeuristic.cutOff(anchors, node)) {
-			cutOffs.add(node);
+		// TODO what if we call ourself recursively many times?
+		assert (node != null);
+
+		// If the node was already visited we pull a new one
+		if(visitedStates.contains(node)) {
 			return this.get();
 		}
-
+		// Else we add it to the visited nodes
+		visitedStates.add(node);
+		
+		// If the node should become an anchor
+		if (cutOffHeuristic != null && cutOffHeuristic.isAnchor(node)) {
+			anchors.add(node);
+			return node;
+		}
+		// If the node should be cut Off
+		if (cutOffHeuristic != null && cutOffHeuristic.cutOff(anchors, node)) {
+			cutOffs.add(node);
+			// cut off this node and try to search for a new one
+			return this.get();
+		}
 		return node;
 	}
 
 	public void add(GenericSearchNode child) {
-		assert(child != null);
-		
+		assert (child != null);
+
 		if (visitedStates.contains(child)) {
 			return;
 		}
-		
+
 		if (strategy.isHeuristical()) {
 			// Compute heuristic value for the node
 			child.heuristicValue = heuristic.value(child);
@@ -147,12 +164,12 @@ public class GenericSearchQueue {
 	}
 
 	public List<Cube> getCubes() {
-		
+
 		List<Cube> cubes = new ArrayList<Cube>();
-		for(GenericSearchNode node: cutOffs) {
+		for (GenericSearchNode node : cutOffs) {
 			cubes.add(node.getCube());
 		}
-		while(!this.isEmpty()) {
+		while (!this.isEmpty()) {
 			cubes.add(this.get().getCube());
 		}
 		return cubes;

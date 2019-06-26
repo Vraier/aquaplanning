@@ -25,7 +25,7 @@ public class BackwardSearchNode extends GenericSearchNode {
 		this.heuristicValue = 0;
 		this.trueAtoms = new AtomSet(problem.getGoal().getAtoms(), true);
 		this.falseAtoms = new AtomSet(problem.getGoal().getAtoms(), false);
-		assert(!this.trueAtoms.intersects(this.falseAtoms));
+		assert (!this.trueAtoms.intersects(this.falseAtoms));
 	}
 
 	/**
@@ -34,29 +34,29 @@ public class BackwardSearchNode extends GenericSearchNode {
 	 * states) only one predecessor is enough to represent all possible states that
 	 * lead to this goal.
 	 * 
-	 * @param a
-	 *            the action that will fulfill the goal provided by the node
-	 * @param n
+	 * @param action
+	 *            the action that will fulfill the goal provided by the child
+	 * @param predecessor
 	 *            the node that should be fulfilled by the action
 	 * @return a goal from which the action will fulfill the node
 	 */
-	private BackwardSearchNode(BackwardSearchNode parent, Action action) {
+	private BackwardSearchNode(BackwardSearchNode predecessor, Action action) {
 
-		assert (parent.canApplyTo(action));
+		assert (predecessor.canResultByApplying(action));
 
-		this.trueAtoms = (AtomSet) parent.trueAtoms.clone();
+		this.trueAtoms = (AtomSet) predecessor.trueAtoms.clone();
 		this.trueAtoms.applyTrueAtomsAsFalse(action.getEffectsPos());
 		this.trueAtoms.applyTrueAtoms(action.getPreconditionsPos());
 
-		this.falseAtoms = (AtomSet) parent.falseAtoms.clone();
+		this.falseAtoms = (AtomSet) predecessor.falseAtoms.clone();
 		this.falseAtoms.applyTrueAtomsAsFalse(action.getEffectsNeg());
 		this.falseAtoms.applyTrueAtoms(action.getPreconditionsNeg());
 
 		assert (!this.falseAtoms.intersects(this.trueAtoms));
 
-		this.depth = parent.depth + 1;
-		this.parent = parent;
-		this.problem = parent.problem;
+		this.depth = predecessor.depth + 1;
+		this.parent = predecessor;
+		this.problem = predecessor.problem;
 		this.lastAction = action;
 		this.heuristicValue = 0;
 	}
@@ -64,7 +64,7 @@ public class BackwardSearchNode extends GenericSearchNode {
 	@Override
 	public Goal getGoal() {
 		List<Atom> atomList = new ArrayList<Atom>();
-		
+
 		for (int i = 0; i < problem.getAtomNames().size(); i++) {
 			if (this.trueAtoms.get(i)) {
 				atomList.add(new Atom(i, problem.getAtomNames().get(i), true));
@@ -80,7 +80,7 @@ public class BackwardSearchNode extends GenericSearchNode {
 	public State getState() {
 		return this.problem.getInitialState();
 	}
-	
+
 	@Override
 	public Plan getPartialPlan() {
 		Plan plan = new Plan();
@@ -97,7 +97,7 @@ public class BackwardSearchNode extends GenericSearchNode {
 	public List<GenericSearchNode> getPredecessors() {
 		List<GenericSearchNode> list = new ArrayList<GenericSearchNode>();
 		for (Action a : problem.getActions()) {
-			if (canApplyTo(a)) {
+			if (canResultByApplying(a)) {
 				list.add(new BackwardSearchNode(this, a));
 			}
 		}
@@ -121,13 +121,13 @@ public class BackwardSearchNode extends GenericSearchNode {
 	}
 
 	/**
-	 * Checks if applying the given action to a state can result in the given goal.
+	 * Checks if applying the given action can result in this goal.
 	 * 
-	 * Returns true iff the effects of the given action are a subset of the given
-	 * goal. This means that all true atoms in the effects of the action are set in
-	 * the goal and all negative atoms are not set.
+	 * Returns true iff the effects of the given action are a subset of this goal.
+	 * This means that all true atoms in the effects of the action are set in the
+	 * goal and all negative atoms are not set.
 	 */
-	private boolean canApplyTo(Action action) {
+	private boolean canResultByApplying(Action action) {
 
 		AtomSet tSet = action.getEffectsPos();
 		AtomSet fSet = action.getEffectsNeg();
@@ -165,5 +165,11 @@ public class BackwardSearchNode extends GenericSearchNode {
 		} else if (!trueAtoms.equals(other.trueAtoms))
 			return false;
 		return true;
+	}
+
+	@Override
+	public AtomSet getAtomSet() {
+		throw new UnsupportedOperationException("Backward Cube finding does no support cut off heuristics yet.");
+		// return this.trueAtoms;
 	}
 }

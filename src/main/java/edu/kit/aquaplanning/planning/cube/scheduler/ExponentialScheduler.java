@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.kit.aquaplanning.Configuration;
-import edu.kit.aquaplanning.model.ground.Plan;
 import edu.kit.aquaplanning.planning.cube.CubeSolver;
+import edu.kit.aquaplanning.util.Logger;
 
 public class ExponentialScheduler extends Scheduler {
 
@@ -19,7 +19,7 @@ public class ExponentialScheduler extends Scheduler {
 	private int queueIndex = 0;
 	private int queueCycles = -1;
 	private int addedPlanners = 0;
-
+	
 	public ExponentialScheduler(Configuration config, List<CubeSolver> planners) {
 		super(config, planners);
 		this.initialIterations = config.schedulerIterations;
@@ -28,19 +28,11 @@ public class ExponentialScheduler extends Scheduler {
 		this.runningPlanners = new ArrayList<CubeSolver>();
 	}
 
-	public void setIterations(int initialIterations, double exponentialGrowth) {
-		this.initialIterations = initialIterations;
-		this.exponentialGrowth = exponentialGrowth;
-	}
-
-	public void setTime(long initialTime, double exponentialGrowth) {
-		this.initialTime = initialTime;
-		this.exponentialGrowth = exponentialGrowth;
-	}
-
 	@Override
 	public ExitStatus scheduleNext() {
 
+		totalScheduled++;
+		
 		if (initialIterations == 0 && initialTime == 0) {
 			return ExitStatus.error;
 		}
@@ -48,7 +40,7 @@ public class ExponentialScheduler extends Scheduler {
 		// All Planners for the Queue ran one time. Add a new Planner to the
 		// runningQueue if possible
 		if (queueIndex >= runningPlanners.size()) {
-			
+
 			// Check if we already added all cubes from the readyQueue
 			if (addedPlanners < planners.size()) {
 				runningPlanners.add(planners.get(addedPlanners));
@@ -68,8 +60,6 @@ public class ExponentialScheduler extends Scheduler {
 			return scheduleNext();
 
 		} else {
-			// TODO: maybe watch out for integer overflow. But the runtime probably kills us
-			// anyways if we get near an overflow.
 
 			CubeSolver currentPlanner = runningPlanners.get(queueIndex);
 
@@ -93,7 +83,18 @@ public class ExponentialScheduler extends Scheduler {
 	}
 
 	@Override
-	public Plan getPlan() {
-		return plan;
+	public void logInformation() {
+		long totalIterations = 0;
+		long totalTime = 0;
+
+		for (CubeSolver p : planners) {
+			totalIterations += p.getTotalIterations();
+			totalTime += p.getTotalTime();
+		}
+		Logger.log(Logger.INFO,
+				"Exponential Scheduler scheduled a total of " + totalScheduled
+						+ " cubes. The total sum of the iterations is " + totalIterations + " and time is " + totalTime
+						+ " millisecs.");
+
 	}
 }
