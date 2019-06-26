@@ -29,7 +29,7 @@ cutOffHeuristic = ['-cut=none', '-cut=manhattanDistance']
 cutDepth = ['-cutDepth=90']
 cutDistance = ['-cutDistance=0.05']
 
-commandLists = [maxSeconds, plannerType, numThreads, verbosityLevel, numCubes, cubeFinderMode, schedulerMode, exponentialGrowth, cubeFindSearchStrategy, cutOffHeuristic]
+commandLists = [maxSeconds, plannerType, numThreads, verbosityLevel, numCubes, cubeFinderMode, schedulerMode, schedulerTime, exponentialGrowth, cubeFindSearchStrategy, cutOffHeuristic, cutDepth, cutDistance]
 commandArguments = util.listCombinations(commandLists)
 
 outputPath = os.path.join(dirName, outpuFile)
@@ -37,7 +37,7 @@ jarPath = os.path.join(dirName, relativeJarPath)
 benchmarkPath = os.path.join(dirName, relativeBenchmarkPath)
 
 commandList = []
-commandPrefix = ['timeout 5m', 'java', '-jar', jarPath]
+commandPrefix = ['timeout 310s', 'java', '-jar', jarPath]
 commandProblems = []
 
 print("We have ", len(commandArguments), " argument combinations.")
