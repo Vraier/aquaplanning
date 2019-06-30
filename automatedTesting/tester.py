@@ -14,9 +14,10 @@ outpuFile = 'output1.txt'
 dirName = os.path.dirname(__file__)
 
 # Command Arguments
-maxSeconds = ['-t='+str(consts.timeLimit)]
+#maxSeconds = ['-t='+str(consts.timeLimit)]
+maxSeconds = ['-t=100']
 plannerType = ['-p=cubePlanner']
-numThreads = ['-T=48']
+numThreads = ['-T=2']
 verbosityLevel = ['-v=2']
 #numCubes = ['-c=1', '-c=48', '-c=1000', '-c=100000']
 numCubes = ['-c=10000']
@@ -37,7 +38,8 @@ jarPath = os.path.join(dirName, relativeJarPath)
 benchmarkPath = os.path.join(dirName, relativeBenchmarkPath)
 
 commandList = []
-commandPrefix = ['timeout 310s', 'java', '-jar', jarPath]
+#commandPrefix = ['timeout 310s', 'java', '-jar', jarPath]
+commandPrefix = ['java', '-jar', jarPath]
 commandProblems = []
 
 print("We have ", len(commandArguments), " argument combinations.")
@@ -76,7 +78,7 @@ with open(outputPath, 'a') as outputFile:
         outputFile.write(breakSequenze)
         outputFile.write(commandName)
         outputFile.flush()
-        subprocess.run(command, stdout=outputFile, stderr=outputFile, timeout=consts.timeLimit+3)
+        subprocess.call(command, stdout=outputFile, stderr=outputFile)
         outputFile.flush()
         print('Finished command in ' + str(time.time()-localStart) + " seconds.")
 

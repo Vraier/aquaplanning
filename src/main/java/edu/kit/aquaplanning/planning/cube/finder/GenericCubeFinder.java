@@ -24,8 +24,10 @@ public abstract class GenericCubeFinder extends CubeFinder {
 	public List<Cube> findCubes(GroundPlanningProblem problem, int numCubes) {
 
 		initializeFrontierWithNode(problem);
-		
+
 		while (!frontier.isEmpty() && frontier.size() < numCubes && withinTimeLimit()) {
+
+			totalIterations++;
 
 			GenericSearchNode node = frontier.get();
 
@@ -39,30 +41,29 @@ public abstract class GenericCubeFinder extends CubeFinder {
 			for (GenericSearchNode child : node.getPredecessors()) {
 				frontier.add(child);
 			}
-
-			totalIterations++;
-
 		}
 		if (!withinTimeLimit()) {
-			Logger.log(Logger.INFO, "Generic Cube Finder exceeded his time limit");
 			// We return an empty list so signalize that we should stop searching for a
 			// solution
 			return new ArrayList<Cube>();
 		}
+
+		return frontier.getCubes();
+	}
+
+	@Override
+	public void logInformation() {
+		if (!withinTimeLimit()) {
+			Logger.log(Logger.INFO, "Generic Cube Finder exceeded his time limit or got interrupted.");
+		}
 		if (frontier.isEmpty()) {
 			Logger.log(Logger.INFO,
-					"Generic Cube Finder emptyed his search queue and found no plan. The Problem has no solution.");
-			System.out.println(
 					"Generic Cube Finder emptyed his search queue and found no plan. The Problem has no solution.");
 		}
 
 		Logger.log(Logger.INFO, "Generic Cube Finder stopped search after " + totalIterations + " steps.");
 		Logger.log(Logger.INFO, "Generic Cube Finder found " + frontier.size() + " cubes from which "
 				+ frontier.cutOffSize() + " were cut off and " + frontier.anchorSize() + " were anchors.");
-
-		//System.out.println("Generic Cube Finder found " + frontier.size() + " cubes from which " + frontier.cutOffSize()
-		//		+ " were cut off and " + frontier.anchorSize() + " were anchors.");
-		return frontier.getCubes();
 	}
 
 	/**
@@ -74,5 +75,4 @@ public abstract class GenericCubeFinder extends CubeFinder {
 	 *            the problem to search for cubes
 	 */
 	protected abstract void initializeFrontierWithNode(GroundPlanningProblem problem);
-
 }

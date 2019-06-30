@@ -20,6 +20,7 @@ public class BanditScheduler extends Scheduler {
 		super(config, planners);
 		this.iterations = config.schedulerIterations;
 		this.time = config.schedulerTime;
+		bandits = new ArrayList<Bandit>();
 
 		// initialize bandit and get the worst distance of all planners
 		for (CubeSolver c : planners) {
@@ -28,15 +29,20 @@ public class BanditScheduler extends Scheduler {
 				startingDistance = c.getBestDistance();
 			}
 		}
+		
+		// Add first distance to bandits
+		for (Bandit b: bandits) {
+			b.addReward(startingDistance, b.planner.getBestDistance());
+		}
 	}
 
 	@Override
 	public ExitStatus scheduleNext() {
 
 		timesPlayed++;
+		CubeSolver bestSolver = null;
 		Bandit bestBandit = null;
 		double bestReward = 0;
-		CubeSolver bestSolver = null;
 
 		// Find the best Bandit in the list and remove exhausted ones.
 		for (Bandit b : bandits) {
@@ -99,7 +105,6 @@ public class BanditScheduler extends Scheduler {
 		private List<Double> rewards = new ArrayList<Double>();
 
 		Bandit(CubeSolver planner) {
-			addReward(startingDistance, planner.getBestDistance());
 			this.planner = planner;
 		}
 

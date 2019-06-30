@@ -43,11 +43,11 @@ public class CubeAndConquerPlanner extends Planner {
 		CubeFinder cFinder;
 
 		// Search for cubes
-		Logger.log(Logger.INFO, "Starting to search for " + config.numCubes + " cubes.");
-		Logger.log(Logger.INFO,
-				"Constructing a new cube finder with the configuration: " + config.cubeFinderMode + ".");
+		Logger.log(Logger.INFO, "Starting to search for " + config.numCubes + " cubes. Using the configuration: "
+				+ config.cubeFinderMode + ".");
 		cFinder = CubeFinder.getCubeFinder(config);
 		cubes = cFinder.findCubes(problem, config.numCubes);
+		cFinder.logInformation();
 
 		// check if we already found a Plan
 		plan = cFinder.getPlan();
@@ -58,8 +58,6 @@ public class CubeAndConquerPlanner extends Planner {
 			Logger.log(Logger.INFO, "Unable to find any cubes. Problem has no solution.");
 			return null;
 		}
-
-		Logger.log(Logger.INFO, "Solver got " + cubes.size() + " cubes from the cube finder.");
 
 		// Shuffle Cubes
 		Logger.log(Logger.INFO, "Shuffleing the cubes.");
