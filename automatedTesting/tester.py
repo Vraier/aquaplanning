@@ -22,11 +22,11 @@ verbosityLevel = ['-v=2']
 #numCubes = ['-c=1', '-c=48', '-c=1000', '-c=100000']
 numCubes = ['-c=10000']
 cubeFinderMode = ['--cubeFinder=forwardSearch'] # '--cubeFinder=backwardSearch'
-schedulerMode = ['-sched=exponential', '-sched=bandit']
+schedulerMode = ['-sched=exponential', '-sched=bandit', '-sched=roundRobin']
 schedulerTime = ['-schedT=4000']
 exponentialGrowth = ['-schedExpG=2']
 cubeFindSearchStrategy = ['-cfs=bestFirst'] # '-cfs=breadthFirst' 
-cutOffHeuristic = ['-cut=none', '-cut=manhattanDistance']
+cutOffHeuristic = ['-cut=none']
 cutDepth = ['-cutDepth=90']
 cutDistance = ['-cutDistance=0.05']
 

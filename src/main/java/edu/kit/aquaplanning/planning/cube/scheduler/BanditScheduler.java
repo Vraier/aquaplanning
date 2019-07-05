@@ -2,6 +2,7 @@ package edu.kit.aquaplanning.planning.cube.scheduler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.planning.cube.CubeSolver;
@@ -29,17 +30,19 @@ public class BanditScheduler extends Scheduler {
 				startingDistance = c.getBestDistance();
 			}
 		}
-		
+
 		// Add first distance to bandits
-		for (Bandit b: bandits) {
+		for (Bandit b : bandits) {
+			assert (!b.planner.isExhausted());
 			b.addReward(startingDistance, b.planner.getBestDistance());
 		}
+		
+		timesPlayed = bandits.size();
 	}
 
 	@Override
 	public ExitStatus scheduleNext() {
 
-		timesPlayed++;
 		CubeSolver bestSolver = null;
 		Bandit bestBandit = null;
 		double bestReward = 0;
@@ -47,11 +50,12 @@ public class BanditScheduler extends Scheduler {
 		// Find the best Bandit in the list and remove exhausted ones.
 		for (Bandit b : bandits) {
 			CubeSolver currPlanner = b.getSolver();
-			double currReward = b.calcConfidenceBound(timesPlayed);
 			if (currPlanner.isExhausted()) {
 				bandits.remove(b);
+				continue;
 			}
 
+			double currReward = b.calcConfidenceBound(timesPlayed);
 			if (currReward > bestReward) {
 				bestReward = currReward;
 				bestBandit = b;
@@ -74,6 +78,7 @@ public class BanditScheduler extends Scheduler {
 		// start solving and update rewards
 		plan = bestSolver.calculateSteps();
 		bestBandit.addReward(startingDistance, bestSolver.getBestDistance());
+		timesPlayed++;
 
 		if (plan != null) {
 			return ExitStatus.foundPlan;
@@ -94,8 +99,12 @@ public class BanditScheduler extends Scheduler {
 				"Bandit Scheduler scheduled a total of " + timesPlayed + " cubes. The total sum of the iterations is "
 						+ totalIterations + " and time is " + totalTime + " millisecs.");
 		bandits.sort((b1, b2) -> b2.rewards.size() - b1.rewards.size());
-		Logger.log(Logger.INFO, "The the 10 most played Bandits got played "
-				+ bandits.subList(0, Math.min(10, bandits.size())) + " times.");
+		Logger.log(Logger.INFO,
+				"The the 10 most played Bandits got played " + bandits.subList(0, Math.min(10, bandits.size())).stream()
+						.map(b -> b.rewards.size()).collect(Collectors.toList()) + " times.");
+		System.out
+				.println("The the 10 most played Bandits got played " + bandits.subList(0, Math.min(10, bandits.size()))
+						.stream().map(b -> b.rewards.size()).collect(Collectors.toList()) + " times.");
 	}
 
 	private class Bandit {
@@ -137,6 +146,7 @@ public class BanditScheduler extends Scheduler {
 
 		private double calcAverageReward() {
 			double sum = 0;
+			assert (rewards.size() > 0);
 			for (Double d : rewards) {
 				sum += d;
 			}

@@ -3,6 +3,7 @@ package edu.kit.aquaplanning.aquaplanning;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.Configuration.CubeFinderMode;
@@ -12,11 +13,14 @@ import edu.kit.aquaplanning.Configuration.PlannerType;
 import edu.kit.aquaplanning.Configuration.SchedulerMode;
 import edu.kit.aquaplanning.grounding.Grounder;
 import edu.kit.aquaplanning.grounding.PlanningGraphGrounder;
+import edu.kit.aquaplanning.model.cube.Cube;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
 import edu.kit.aquaplanning.model.lifted.PlanningProblem;
 import edu.kit.aquaplanning.parsing.ProblemParser;
 import edu.kit.aquaplanning.planning.Planner;
+import edu.kit.aquaplanning.planning.cube.finder.ForwardSearchCubeFinder;
+import edu.kit.aquaplanning.planning.cube.finder.GenericCubeFinder;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.validation.Validator;
 import junit.framework.TestCase;
@@ -31,8 +35,8 @@ public class TestCubeAndConquer extends TestCase {
 	private GroundPlanningProblem gpp;
 
 	public void testDefaultCubeAndCounquer() throws FileNotFoundException, IOException {
-		
-		//assertTrue("Ignore this.", false);
+
+		assertTrue("Ignore this.", false);
 		Configuration config = getDefaultConfig();
 
 		for (String domain : DEFAULT_TEST_DOMAINS) {
@@ -53,16 +57,56 @@ public class TestCubeAndConquer extends TestCase {
 			}
 		}
 	}
-	
+
 	public void testCutOffHeuristic() throws FileNotFoundException, IOException {
-		
+
+		// assertTrue("Ignore this.", false);
 		Configuration config = getDefaultConfig();
 		config.cutOffHeuristic = CutOffHeuristic.manhattanDistance;
-		config.cutDepth = 90;
-		config.cutDistance = 0.05;
-		
-		for (String domain : DEFAULT_TEST_DOMAINS) {
-			fullTest("testfiles/" + domain + "/domain.pddl", "testfiles/" + domain + "/p01.pddl", config);
+		config.numCubes = 5000;
+		config.cutDepth = 20;
+		config.cutDistance = 0.1;
+
+		File benchdir = new File("benchmarks");
+		for (File domdir : benchdir.listFiles()) {
+
+			String domain = domdir.getCanonicalPath() + "/domain.pddl";
+			File testFile = new File(domain);
+			if (!testFile.exists()) {
+				continue;
+			}
+
+			for (File f : domdir.listFiles()) {
+				if (f.getName().startsWith("p") && f.getName().endsWith(".pddl")) {
+					String problem = f.getCanonicalPath();
+
+					System.out.println("Parsing ...");
+					pp = new ProblemParser().parse(domain, problem);
+					String out = pp.toString();
+					assertTrue("String representation of problem is null", out != null);
+
+					System.out.println("Grounding ...");
+					Grounder grounder = new PlanningGraphGrounder(config);
+					gpp = grounder.ground(pp);
+					out = gpp.toString();
+
+					System.out.println("Finding Cubes for Problem " + problem);
+					GenericCubeFinder cFinder = new ForwardSearchCubeFinder(config);
+					List<Cube> cubes = cFinder.findCubes(gpp, config.numCubes);
+					System.out.println("Generic Cube Finder found " + cFinder.totalFrontierSize + " cubes from which "
+							+ cFinder.totalCutOffSize + " were cut off and " + cFinder.totalAnchorSize
+							+ " were anchors.");
+
+					Plan plan = cFinder.getPlan();
+					if (plan != null) {
+						System.out.println("Found a plan while searching for cubes.");
+					} else {
+						System.out.println("We have " + cubes.size() + " cubes.");
+					}
+
+					System.out.println("");
+				}
+			}
 		}
 	}
 
@@ -73,13 +117,13 @@ public class TestCubeAndConquer extends TestCase {
 
 			Configuration config = getDefaultConfig();
 			config.schedulerMode = mode;
+			config.numCubes = 8;
 
 			for (String domain : DEFAULT_TEST_DOMAINS) {
 				fullTest("testfiles/" + domain + "/domain.pddl", "testfiles/" + domain + "/p01.pddl", config);
 			}
 		}
 	}
-	
 
 	private void fullTest(String domainFile, String problemFile, Configuration config)
 			throws FileNotFoundException, IOException {
@@ -106,7 +150,8 @@ public class TestCubeAndConquer extends TestCase {
 		assertTrue("No actions have been produced during grounding.", gpp.getActions().size() > 0);
 
 		System.out.println("Planning ...");
-		System.out.println("Cube finding mode is: " + config.cubeFinderMode + ", Scheduler mode is: " + config.schedulerMode + ".");
+		System.out.println("Cube finding mode is: " + config.cubeFinderMode + ", Scheduler mode is: "
+				+ config.schedulerMode + ".");
 		Planner planner = Planner.getPlanner(config);
 		Plan plan = planner.findPlan(gpp);
 

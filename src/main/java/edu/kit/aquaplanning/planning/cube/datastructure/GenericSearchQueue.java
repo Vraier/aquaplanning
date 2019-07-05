@@ -116,26 +116,29 @@ public class GenericSearchQueue {
 			node = queue.poll();
 		}
 
-		// TODO what if we call ourself recursively many times?
-		assert (node != null);
-
-		// If the node was already visited we pull a new one
-		if(visitedStates.contains(node)) {
-			return this.get();
+		// Or queue is empty now
+		if (node == null) {
+			return null;
 		}
+
+		// TODO: If the node was already visited we pull a new one?
+		// if(visitedStates.contains(node)) {
+		// return this.get();
+		// }
+
 		// Else we add it to the visited nodes
 		visitedStates.add(node);
-		
-		// If the node should become an anchor
-		if (cutOffHeuristic != null && cutOffHeuristic.isAnchor(node)) {
-			anchors.add(node);
-			return node;
-		}
-		// If the node should be cut Off
+
+		// If the node should be cut Off. We should check this before making our node an anchor
 		if (cutOffHeuristic != null && cutOffHeuristic.cutOff(anchors, node)) {
 			cutOffs.add(node);
 			// cut off this node and try to search for a new one
 			return this.get();
+		}
+
+		// If the node should become an anchor
+		if (cutOffHeuristic != null && cutOffHeuristic.isAnchor(node)) {
+			anchors.add(node);
 		}
 		return node;
 	}

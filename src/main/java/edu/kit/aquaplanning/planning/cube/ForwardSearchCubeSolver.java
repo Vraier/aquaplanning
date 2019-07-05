@@ -20,9 +20,10 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 	private State state;
 	private Goal goal;
 	private ActionIndex aindex;
+	private Heuristic heuristic;
 	private SearchStrategy strategy;
 	private SearchQueue frontier;
-
+	
 	public ForwardSearchCubeSolver(Configuration config, Cube cube) {
 
 		super(config, cube);
@@ -41,7 +42,7 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 
 		strategy = new SearchStrategy(this.config);
 		if (strategy.isHeuristical()) {
-			Heuristic heuristic = Heuristic.getHeuristic(problem, this.config);
+			heuristic = Heuristic.getHeuristic(problem, this.config);
 			frontier = new SearchQueue(strategy, heuristic);
 		} else {
 			frontier = new SearchQueue(strategy);
@@ -102,7 +103,7 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 					"ForwardSearchPlanner found no plan after exceeded his time limit or got interrupted");
 			isExhausted = true;
 		}
-		
+
 		totalIterations += iterations;
 		totalTime += System.currentTimeMillis() - searchStartMillis;
 		return null;
@@ -110,6 +111,12 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 
 	@Override
 	public int getBestDistance() {
+		if(heuristic == null) {
+			throw new UnsupportedOperationException("Need a heuristic to provide distances");
+		}
+		if (isExhausted || frontier.isEmpty()) {
+			return Integer.MIN_VALUE;
+		}
 		return frontier.top().heuristicValue;
 	}
 }
