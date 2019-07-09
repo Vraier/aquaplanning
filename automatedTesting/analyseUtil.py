@@ -1,7 +1,7 @@
 import os
 import re
 
-INF = 150.0
+INF = 310.0
 
 def splitResults(fileContent):
     lines = fileContent.readlines()

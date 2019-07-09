@@ -5,7 +5,7 @@ import constants as const
 import matplotlib.pyplot as plt
 
 numTester = 4
-testFile = 'compareForwardBackwardHeuristic.txt' #'compareForwardBackwardGripper.txt'
+testFile = 'banditInterval.txt' #'compareForwardBackwardGripper.txt'
 dirName = os.path.dirname(__file__)
 filePath =  os.path.join(dirName, testFile)
 
