@@ -2,20 +2,14 @@ package edu.kit.aquaplanning.planning.cube.finder;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.cube.Cube;
-import edu.kit.aquaplanning.model.ground.Action;
-import edu.kit.aquaplanning.model.ground.AtomSet;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
-import edu.kit.aquaplanning.model.ground.State;
 import edu.kit.aquaplanning.planning.cube.datastructure.ForwardSearchNode;
 import edu.kit.aquaplanning.planning.cube.datastructure.GenericSearchNode;
 import edu.kit.aquaplanning.planning.cube.heuristic.GenericHeuristic;
-import edu.kit.aquaplanning.planning.datastructures.FullActionIndex;
 import edu.kit.aquaplanning.util.Logger;
 
 public class GreedyCutOffCubeFinder extends CubeFinder {
@@ -46,9 +40,6 @@ public class GreedyCutOffCubeFinder extends CubeFinder {
 		int anchorInterval = numCubes / numAnchors;
 
 		GenericSearchNode node = new ForwardSearchNode(problem);
-		FullActionIndex aindex = new FullActionIndex(problem);
-
-		Collection<Action> applicableActions = aindex.getApplicableActions(node.getState());
 
 		while (!node.satisfiesProblem() && currentCubesSize() < numCubes && withinTimeLimit()) {
 			totalIterations++;
@@ -94,18 +85,16 @@ public class GreedyCutOffCubeFinder extends CubeFinder {
 				if (history.size() == 0) {
 					assert (openNodes.size() == 0);
 					ArrayList<Cube> result = new ArrayList<>();
-					for(GenericSearchNode n: cutOffNodes) {
+					for (GenericSearchNode n : cutOffNodes) {
 						result.add(n.getCube());
 					}
 				}
 				// backtracking
 				GenericSearchNode newNode = history.pollLast();
-				updateApplicableActionsChanges(applicableActions, node.getState(), newNode.getState(), aindex);
 				node = newNode;
 			} else {
 				// select the best action
 				history.addLast(node);
-				updateApplicableActionsChanges(applicableActions, node.getState(), best.getState(), aindex);
 				node = best;
 			}
 		}
@@ -113,6 +102,7 @@ public class GreedyCutOffCubeFinder extends CubeFinder {
 		totalFrontierSize = currentCubesSize();
 		totalAnchorSize = anchors.size();
 		totalCutOffSize = cutOffNodes.size();
+		// TODO: retriev correct nodes
 		return null;
 	}
 
@@ -139,40 +129,5 @@ public class GreedyCutOffCubeFinder extends CubeFinder {
 
 	private int currentCubesSize() {
 		return openNodes.size() + cutOffNodes.size();
-	}
-
-	private void updateApplicableActionsChanges(Collection<Action> actions, State oldState, State newState,
-			FullActionIndex aindex) {
-		// first remove actions that are no more applicable
-		Iterator<Action> iter = actions.iterator();
-		while (iter.hasNext()) {
-			Action a = iter.next();
-			if (!a.isApplicable(newState)) {
-				iter.remove();
-			}
-		}
-		// add new applicable actions for changed state variables
-		if (aindex.getNoPrecondActions() != null) {
-			for (Action a : aindex.getNoPrecondActions()) {
-				if (a.isApplicable(newState)) {
-					actions.add(a);
-				}
-			}
-		}
-		// Check and debug
-		AtomSet changes = oldState.getAtomSet().xor(newState.getAtomSet());
-		int changeId = changes.getFirstTrueAtom();
-		while (changeId != -1) {
-			int precondIndex = newState.getAtomSet().get(changeId) ? changeId + 1 : -changeId - 1;
-			List<Action> cands = aindex.getActionsWithPrecondition(precondIndex);
-			if (cands != null) {
-				for (Action a : cands) {
-					if (a.isApplicable(newState)) {
-						actions.add(a);
-					}
-				}
-			}
-			changeId = changes.getNextTrueAtom(changeId + 1);
-		}
 	}
 }
