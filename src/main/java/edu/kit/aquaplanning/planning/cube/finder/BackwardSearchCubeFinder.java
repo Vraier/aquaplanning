@@ -2,7 +2,6 @@ package edu.kit.aquaplanning.planning.cube.finder;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
-import edu.kit.aquaplanning.planning.cube.cutoffHeuristic.CutOffHeuristic;
 import edu.kit.aquaplanning.planning.cube.datastructure.BackwardSearchNode;
 import edu.kit.aquaplanning.planning.cube.datastructure.GenericSearchQueue;
 import edu.kit.aquaplanning.planning.cube.heuristic.GenericHeuristic;
@@ -21,8 +20,7 @@ public class BackwardSearchCubeFinder extends GenericCubeFinder {
 		SearchStrategy strategy = new SearchStrategy(tempConfig);
 		
 		GenericHeuristic heuristic = GenericHeuristic.getHeuristic(config);
-		CutOffHeuristic cutOffHeuristic = CutOffHeuristic.getCutOffHeuristic(config, problem);
-		frontier = new GenericSearchQueue(strategy, heuristic, cutOffHeuristic);
+		frontier = new GenericSearchQueue(strategy, heuristic);
 		frontier.add(new BackwardSearchNode(problem));
 	}
 }

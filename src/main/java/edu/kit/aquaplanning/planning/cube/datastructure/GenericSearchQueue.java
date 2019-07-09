@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.Stack;
 
 import edu.kit.aquaplanning.model.cube.Cube;
-import edu.kit.aquaplanning.planning.cube.cutoffHeuristic.CutOffHeuristic;
 import edu.kit.aquaplanning.planning.cube.heuristic.GenericHeuristic;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy.Mode;
@@ -20,10 +19,6 @@ public class GenericSearchQueue {
 
 	private SearchStrategy strategy;
 	private GenericHeuristic heuristic;
-	private CutOffHeuristic cutOffHeuristic;
-
-	private List<GenericSearchNode> anchors;
-	private List<GenericSearchNode> cutOffs;
 
 	// Different data structures used depending on the employed strategy
 	private Queue<GenericSearchNode> queue;
@@ -32,10 +27,9 @@ public class GenericSearchQueue {
 	private Random random;
 	private Set<GenericSearchNode> visitedStates;
 
-	public GenericSearchQueue(SearchStrategy strategy, GenericHeuristic heuristic, CutOffHeuristic cutOffHeuristic) {
+	public GenericSearchQueue(SearchStrategy strategy, GenericHeuristic heuristic) {
 		this.strategy = strategy;
 		this.heuristic = heuristic;
-		this.cutOffHeuristic = cutOffHeuristic;
 		initFrontier();
 	}
 
@@ -69,8 +63,6 @@ public class GenericSearchQueue {
 			random = new Random(strategy.getSeed());
 			break;
 		}
-		anchors = new ArrayList<GenericSearchNode>();
-		cutOffs = new ArrayList<GenericSearchNode>();
 		visitedStates = new HashSet<>();
 	}
 
@@ -93,15 +85,7 @@ public class GenericSearchQueue {
 		} else {
 			size = queue.size();
 		}
-		return size + cutOffs.size();
-	}
-
-	public int anchorSize() {
-		return anchors.size();
-	}
-
-	public int cutOffSize() {
-		return cutOffs.size();
+		return size;
 	}
 
 	public GenericSearchNode get() {
@@ -129,17 +113,6 @@ public class GenericSearchQueue {
 		// Else we add it to the visited nodes
 		visitedStates.add(node);
 
-		// If the node should be cut Off. We should check this before making our node an anchor
-		if (cutOffHeuristic != null && cutOffHeuristic.cutOff(anchors, node)) {
-			cutOffs.add(node);
-			// cut off this node and try to search for a new one
-			return this.get();
-		}
-
-		// If the node should become an anchor
-		if (cutOffHeuristic != null && cutOffHeuristic.isAnchor(node)) {
-			anchors.add(node);
-		}
 		return node;
 	}
 
@@ -169,9 +142,6 @@ public class GenericSearchQueue {
 	public List<Cube> getCubes() {
 
 		List<Cube> cubes = new ArrayList<Cube>();
-		for (GenericSearchNode node : cutOffs) {
-			cubes.add(node.getCube());
-		}
 		while (!this.isEmpty()) {
 			cubes.add(this.get().getCube());
 		}

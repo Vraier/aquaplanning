@@ -17,8 +17,6 @@ public abstract class GenericCubeFinder extends CubeFinder {
 	protected int totalIterations = 0;
 
 	public int totalFrontierSize = 0;
-	public int totalAnchorSize = 0;
-	public int totalCutOffSize = 0;
 
 	public GenericCubeFinder(Configuration config) {
 		super(config);
@@ -46,8 +44,6 @@ public abstract class GenericCubeFinder extends CubeFinder {
 				plan = node.getPartialPlan();
 				
 				totalFrontierSize = frontier.size();
-				totalAnchorSize = frontier.anchorSize();
-				totalCutOffSize = frontier.cutOffSize();
 				return null;
 			}
 
@@ -62,8 +58,6 @@ public abstract class GenericCubeFinder extends CubeFinder {
 		}
 
 		totalFrontierSize = frontier.size();
-		totalAnchorSize = frontier.anchorSize();
-		totalCutOffSize = frontier.cutOffSize();
 
 		return frontier.getCubes();
 	}
@@ -79,8 +73,7 @@ public abstract class GenericCubeFinder extends CubeFinder {
 		}
 
 		Logger.log(Logger.INFO, "Generic Cube Finder stopped search after " + totalIterations + " steps.");
-		Logger.log(Logger.INFO, "Generic Cube Finder found " + totalFrontierSize + " cubes from which "
-				+ totalCutOffSize + " were cut off and " + totalAnchorSize + " were anchors.");
+		Logger.log(Logger.INFO, "Generic Cube Finder found " + totalFrontierSize + " cubes.");
 	}
 
 	/**

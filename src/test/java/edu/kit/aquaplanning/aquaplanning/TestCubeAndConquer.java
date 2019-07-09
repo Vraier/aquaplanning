@@ -93,9 +93,9 @@ public class TestCubeAndConquer extends TestCase {
 					System.out.println("Finding Cubes for Problem " + problem);
 					GenericCubeFinder cFinder = new ForwardSearchCubeFinder(config);
 					List<Cube> cubes = cFinder.findCubes(gpp, config.numCubes);
-					System.out.println("Generic Cube Finder found " + cFinder.totalFrontierSize + " cubes from which "
-							+ cFinder.totalCutOffSize + " were cut off and " + cFinder.totalAnchorSize
-							+ " were anchors.");
+					//System.out.println("Generic Cube Finder found " + cFinder.totalFrontierSize + " cubes from which "
+					//		+ cFinder.totalCutOffSize + " were cut off and " + cFinder.totalAnchorSize
+					//		+ " were anchors.");
 
 					Plan plan = cFinder.getPlan();
 					if (plan != null) {
