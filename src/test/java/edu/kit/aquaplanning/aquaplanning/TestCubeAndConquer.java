@@ -59,7 +59,7 @@ public class TestCubeAndConquer extends TestCase {
 
 	public void testCutOffHeuristic() throws FileNotFoundException, IOException {
 
-		// assertTrue("Ignore this.", false);
+		assertTrue("Ignore this.", false);
 		Configuration config = getDefaultConfig();
 		config.numCubes = 5000;
 
@@ -109,11 +109,15 @@ public class TestCubeAndConquer extends TestCase {
 
 	public void testSchedulerModes() throws FileNotFoundException, IOException {
 
-		assertTrue("Ignore this.", false);
+		//assertTrue("Ignore this.", false);
 		for (SchedulerMode mode : SchedulerMode.values()) {
 
+			if (mode != SchedulerMode.hillClimbing) continue;
 			Configuration config = getDefaultConfig();
 			config.schedulerMode = mode;
+			
+			config.numThreads = 2;
+			config.schedulerTime = 200;
 			config.numCubes = 8;
 
 			for (String domain : DEFAULT_TEST_DOMAINS) {
@@ -190,6 +194,7 @@ public class TestCubeAndConquer extends TestCase {
 		config.schedulerMode = SchedulerMode.bandit;
 		config.schedulerTime = 4000;
 		config.schedulerGrowth = 1.5;
+		config.schedulerHillClimb = 0.5;
 
 		config.cubeSolveSearchStrategy = SearchStrategy.Mode.bestFirst;
 		config.cubeSolveHeuristic = HeuristicType.ffTrautmann;

@@ -169,6 +169,9 @@ public class Configuration {
 	@Option(names = {"-schedExpG"}, description = "The growth value of the exponential scheduler: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1.5")
 	public double schedulerGrowth;
+	@Option(names = {"-schedHill"}, description = "The percent a solver has to fall under in order to get queued to the end of the scheduling list: "
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "0.5")
+	public double schedulerHillClimb;
 	
 	@Option(paramLabel = "cubeFindHeuristic", names = {"-cfh", "--cube-find-heuristic"}, 
 			description = "Heuristic for forward search while searching for cubes: " + USAGE_OPTIONS_AND_DEFAULT, 

@@ -3,7 +3,6 @@ package edu.kit.aquaplanning.planning.cube.scheduler;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.planning.cube.CubeSolver;
@@ -11,7 +10,8 @@ import edu.kit.aquaplanning.util.Logger;
 
 public class HillClimbingScheduler extends Scheduler {
 
-	private Queue<MySolver> solvers = new LinkedList<>();
+	private LinkedList<MySolver> solvers = new LinkedList<>();
+	private ArrayList<MySolver> originalSolvers = new ArrayList<>();
 	private double percent;
 
 	private int iterations = 0;
@@ -21,10 +21,13 @@ public class HillClimbingScheduler extends Scheduler {
 		super(config, planners);
 		this.iterations = config.schedulerIterations;
 		this.time = config.schedulerTime;
+		this.percent = config.schedulerHillClimb;
 
 		for (CubeSolver c : planners) {
-			solvers.add(new MySolver(c));
+			MySolver s = new MySolver(c);
+			solvers.add(s);
 		}
+		originalSolvers = new ArrayList<MySolver>(solvers);
 	}
 
 	@Override
@@ -42,11 +45,6 @@ public class HillClimbingScheduler extends Scheduler {
 		// current candidate
 		MySolver candidate = solvers.peek();
 
-		// delete solver from list
-		if (candidate.solver.isExhausted()) {
-			solvers.poll();
-			return scheduleNext();
-		}
 		// we reached a local maximum and put the solver at the end of our queue
 		if (candidate.getAverageDifference() < getTotalAverage() * percent) {
 			solvers.poll();
@@ -64,17 +62,26 @@ public class HillClimbingScheduler extends Scheduler {
 			// calculate steps and add the new difference to the average
 			int currentDistance = candidate.solver.getBestDistance();
 			plan = candidate.solver.calculateSteps();
-			candidate.addDifference(currentDistance - candidate.solver.getBestDistance());
+			if (plan != null) {
+				return ExitStatus.foundPlan;
+			} else if (candidate.solver.isExhausted()) {
+				// delete from list
+				solvers.poll();
+			} else {
+				candidate.addDifference(currentDistance - candidate.solver.getBestDistance());
+			}
+			return ExitStatus.foundNoPlan;
 		}
-		return null;
 	}
 
 	@Override
 	public void logInformation() {
-		ArrayList<MySolver> res = new ArrayList<>(solvers);
-		res.sort((s1, s2) -> Integer.compare(s2.differences.size(), s1.differences.size()));
-		Logger.log(Logger.INFO,
-				"The 10 most scheduled solvers have a difference list of " + res.subList(0, Math.min(10, res.size())));
+		originalSolvers.sort((s1, s2) -> Integer.compare(s2.differences.size(), s1.differences.size()));
+		StringBuilder out = new StringBuilder();
+		for (MySolver s : originalSolvers.subList(0, Math.min(10, originalSolvers.size()))) {
+			out.append(s.differences.toString() + "\n");
+		}
+		Logger.log(Logger.INFO, "The 10 most scheduled solvers have a difference list of\n" + out.toString());
 	}
 
 	/**
