@@ -148,14 +148,14 @@ public class Configuration {
 			+ USAGE_DEFAULT, defaultValue = "10000")
 	public int numCubes;
 	public enum CubeFinderMode {
-		forwardSearch, backwardSearch;
+		forwardSearch, backwardSearch, cutOff, portfolio;
 	}
 	@Option(names = {"--cubeFinder"}, description = "The desired mode to find the Cubes: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "forwardSearch")
 	public CubeFinderMode cubeFinderMode;
 	
 	public enum SchedulerMode {
-		roundRobin, exponential, bandit;
+		roundRobin, exponential, bandit, hillClimbing;
 	}
 	@Option(names = {"-sched", "--scheduler"}, description = "Which scheduler to use to split up computation time between cubes: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "bandit")
@@ -169,19 +169,6 @@ public class Configuration {
 	@Option(names = {"-schedExpG"}, description = "The growth value of the exponential scheduler: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1.5")
 	public double schedulerGrowth;
-	
-	public enum CutOffHeuristic {
-		none, manhattanDistance;
-	}
-	@Option(names = {"-cut", "--cutOff"}, description = "What heuristic to use when cutting of branches while searching for cubes: "
-			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "none")
-	public CutOffHeuristic cutOffHeuristic;
-	@Option(names = {"-cutDepth"}, description = "The depth at wich a node should be used as an anchor for a cut off heuristic." 
-			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "90")
-	public int cutDepth;
-	@Option(names = {"-cutDistance"}, description = "The percentage a node has to differ from each anchor to not get cut off. " 
-			+ "Should be between 0 and 1" + USAGE_OPTIONS_AND_DEFAULT, defaultValue = "0.05")
-	public double cutDistance;
 	
 	@Option(paramLabel = "cubeFindHeuristic", names = {"-cfh", "--cube-find-heuristic"}, 
 			description = "Heuristic for forward search while searching for cubes: " + USAGE_OPTIONS_AND_DEFAULT, 

@@ -7,7 +7,6 @@ import java.util.List;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.Configuration.CubeFinderMode;
-import edu.kit.aquaplanning.Configuration.CutOffHeuristic;
 import edu.kit.aquaplanning.Configuration.HeuristicType;
 import edu.kit.aquaplanning.Configuration.PlannerType;
 import edu.kit.aquaplanning.Configuration.SchedulerMode;
@@ -62,10 +61,8 @@ public class TestCubeAndConquer extends TestCase {
 
 		// assertTrue("Ignore this.", false);
 		Configuration config = getDefaultConfig();
-		config.cutOffHeuristic = CutOffHeuristic.manhattanDistance;
 		config.numCubes = 5000;
-		config.cutDepth = 20;
-		config.cutDistance = 0.1;
+
 
 		File benchdir = new File("benchmarks");
 		for (File domdir : benchdir.listFiles()) {
@@ -189,7 +186,6 @@ public class TestCubeAndConquer extends TestCase {
 		config.cubeFindSearchStrategy = SearchStrategy.Mode.bestFirst;
 		config.cubeFindHeuristic = HeuristicType.ffTrautmann;
 		config.cubeSolveHeuristicWeight = 10;
-		config.cutOffHeuristic = CutOffHeuristic.none;
 
 		config.schedulerMode = SchedulerMode.bandit;
 		config.schedulerTime = 4000;

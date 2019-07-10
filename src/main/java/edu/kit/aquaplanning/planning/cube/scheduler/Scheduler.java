@@ -13,7 +13,6 @@ public abstract class Scheduler {
 	protected Plan plan = null;
 	protected int totalScheduled = 0;
 
-
 	public Scheduler(Configuration config, List<CubeSolver> planners) {
 		this.config = config;
 		this.planners = planners;
@@ -47,11 +46,12 @@ public abstract class Scheduler {
 			return new RoundRobinScheduler(config, planners);
 		case bandit:
 			return new BanditScheduler(config, planners);
+		case hillClimbing:
+			return new HillClimbingScheduler(config, planners);
 		default:
-			break;
+			throw new UnsupportedOperationException("Scheduler " + config.schedulerMode + " is not available");
 		}
-		return null;
 	}
-	
+
 	public abstract void logInformation();
 }

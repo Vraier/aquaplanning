@@ -30,7 +30,7 @@ public abstract class CubeFinder {
 	 *         solution to the given problem while searching for cubes.
 	 */
 	public abstract List<Cube> findCubes(GroundPlanningProblem problem, int numCubes);
-	
+
 	public abstract void logInformation();
 
 	/**
@@ -56,10 +56,13 @@ public abstract class CubeFinder {
 			return new ForwardSearchCubeFinder(config);
 		case backwardSearch:
 			return new BackwardSearchCubeFinder(config);
+		case cutOff:
+			return new GreedyCutOffCubeFinder(config);
+		case portfolio:
+			return new PortfolioCubeFinder(config);
 		default:
-			break;
+			throw new UnsupportedOperationException("Cube Finder " + config.cubeFinderMode + " is not available.");
 		}
-		return null;
 	}
 
 	/**
