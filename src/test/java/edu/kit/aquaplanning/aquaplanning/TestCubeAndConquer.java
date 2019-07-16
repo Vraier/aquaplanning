@@ -112,7 +112,7 @@ public class TestCubeAndConquer extends TestCase {
 		//assertTrue("Ignore this.", false);
 		for (SchedulerMode mode : SchedulerMode.values()) {
 
-			if (mode != SchedulerMode.hillClimbing) continue;
+			if (mode != SchedulerMode.bandit) continue;
 			Configuration config = getDefaultConfig();
 			config.schedulerMode = mode;
 			
@@ -184,6 +184,7 @@ public class TestCubeAndConquer extends TestCase {
 		config.seed = 1337;
 		config.plannerType = PlannerType.cubePlanner;
 		config.numThreads = 4;
+		config.maxTimeSeconds = 300;
 
 		config.numCubes = 10000;
 		config.cubeFinderMode = CubeFinderMode.forwardSearch;

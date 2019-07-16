@@ -10,52 +10,82 @@ import edu.kit.aquaplanning.util.Logger;
 
 public class BanditScheduler extends Scheduler {
 
+	// computation time for solvers
 	private int iterations;
 	private long time;
+	private long maxTime;
 
 	private List<Bandit> bandits;
-	private int timesPlayed = 0;
-	private double startingDistance = 0;
 
 	public BanditScheduler(Configuration config, List<CubeSolver> planners) {
 		super(config, planners);
 		this.iterations = config.schedulerIterations;
 		this.time = config.schedulerTime;
+		this.maxTime = config.maxTimeSeconds;
+
+		if (this.iterations > 0) {
+			throw new IllegalArgumentException("Bandit Scheduling after iterations not implemented yet.");
+		}
+
+		// initialize bandits
 		bandits = new ArrayList<Bandit>();
-
-		// initialize bandit and get the worst distance of all planners
 		for (CubeSolver c : planners) {
-			bandits.add(new Bandit(c));
-			if (c.getBestDistance() > startingDistance) {
-				startingDistance = c.getBestDistance();
-			}
+			Bandit newBandit = new Bandit(c);
+			newBandit.addReward(newBandit.getSolver().getBestDistance());
+			bandits.add(newBandit);
 		}
-
-		// Add first distance to bandits
-		for (Bandit b : bandits) {
-			assert (!b.planner.isExhausted());
-			b.addReward(startingDistance, b.planner.getBestDistance());
-		}
-		
-		timesPlayed = bandits.size();
 	}
 
 	@Override
 	public ExitStatus scheduleNext() {
+		if (totalScheduled < bandits.size()) {
+			return initialSchedule();
+		} else {
+			return informedSchedule();
+		}
+	}
 
+	private ExitStatus initialSchedule() {
+
+		// System.out.println(
+		// "We have " + bandits.size() + " bandits and do the " + (totalScheduled + 1) +
+		// " initial schedule.");
+		Bandit bandit = bandits.get(totalScheduled);
+		CubeSolver solver = bandit.getSolver();
+		assert (!solver.isExhausted());
+
+		// Set up computational bounds
+		if (iterations > 0) {
+			solver.setIterationLimit(iterations);
+		}
+		if (time > 0) {
+			solver.setTimeLimit(time);
+		}
+
+		// initialize rewards for bandits
+		plan = solver.calculateSteps();
+		bandit.addReward(solver.getBestDistance());
+		totalScheduled++;
+
+		if (plan != null) {
+			return ExitStatus.foundPlan;
+		}
+		return ExitStatus.foundNoPlan;
+	}
+
+	private ExitStatus informedSchedule() {
 		CubeSolver bestSolver = null;
 		Bandit bestBandit = null;
-		double bestReward = 0;
+		double bestReward = -1;
 
-		// Find the best Bandit in the list and remove exhausted ones.
+		// Find the best Bandit in the list.
 		for (Bandit b : bandits) {
 			CubeSolver currPlanner = b.getSolver();
 			if (currPlanner.isExhausted()) {
-				bandits.remove(b);
 				continue;
 			}
 
-			double currReward = b.calcConfidenceBound(timesPlayed);
+			double currReward = b.calcConfidenceBound(totalScheduled);
 			if (currReward > bestReward) {
 				bestReward = currReward;
 				bestBandit = b;
@@ -63,6 +93,7 @@ public class BanditScheduler extends Scheduler {
 		}
 
 		if (bestBandit == null) {
+			System.out.println("Bad things happened.");
 			return ExitStatus.exhausted;
 		}
 		bestSolver = bestBandit.getSolver();
@@ -77,8 +108,8 @@ public class BanditScheduler extends Scheduler {
 
 		// start solving and update rewards
 		plan = bestSolver.calculateSteps();
-		bestBandit.addReward(startingDistance, bestSolver.getBestDistance());
-		timesPlayed++;
+		bestBandit.addReward(bestSolver.getBestDistance());
+		totalScheduled++;
 
 		if (plan != null) {
 			return ExitStatus.foundPlan;
@@ -96,8 +127,9 @@ public class BanditScheduler extends Scheduler {
 			totalTime += p.getTotalTime();
 		}
 		Logger.log(Logger.INFO,
-				"Bandit Scheduler scheduled a total of " + timesPlayed + " cubes. The total sum of the iterations is "
-						+ totalIterations + " and time is " + totalTime + " millisecs.");
+				"Bandit Scheduler scheduled a total of " + totalScheduled
+						+ " cubes. The total sum of the iterations is " + totalIterations + " and time is " + totalTime
+						+ " millisecs.");
 		bandits.sort((b1, b2) -> b2.rewards.size() - b1.rewards.size());
 		Logger.log(Logger.INFO,
 				"The the 10 most played Bandits got played " + bandits.subList(0, Math.min(10, bandits.size())).stream()
@@ -122,39 +154,57 @@ public class BanditScheduler extends Scheduler {
 		}
 
 		public double calcConfidenceBound(int totalPlayed) {
-			return calcAverageReward() + calcBias(totalPlayed);
+			return calcEstimatedReward() + calcBias(totalPlayed);
+		}
+
+		public void addReward(double currentDistance) {
+			rewards.add(currentDistance);
 		}
 
 		/**
-		 * Adds a new reward to this bandit. A reward should be between 1 and 0. It take
-		 * the current estimate of the bandit and the original worst distance and adds a
-		 * normalize value to this bandit.
+		 * Calculate the estimated finishing time by calculating the regression line for
+		 * all prior points and scale the result between 0 and 1.
 		 * 
-		 * @param startingDistance
-		 *            the original worst estimated distance to the goal
-		 * @param currentDistance
-		 *            the current estimated distance to the goal
+		 * @return a normalized estimated for the finishing time t (0 t > upperBound and
+		 *         1 if t = 0)
 		 */
-		public void addReward(double startingDistance, double currentDistance) {
-			if (startingDistance == 0) {
-				rewards.add(0.0);
-			} else {
-				double reward = (startingDistance - currentDistance) / startingDistance;
-				rewards.add(reward);
-			}
-		}
-
-		private double calcAverageReward() {
-			double sum = 0;
-			assert (rewards.size() > 0);
+		private double calcEstimatedReward() {
+			assert (rewards.size() >= 2) : "Reward list only hods " + rewards.size()
+					+ " item but should hold at least 2.";
+			assert (maxTime > 0) : "MaxTime must be greater than 0 to allow for upperBound of calculation time.";
+			double upperBound = maxTime * 100;
+			double xHat = (rewards.size() - 1) * time / 2.0;
+			double yHat = 0;
 			for (Double d : rewards) {
-				sum += d;
+				yHat += d;
 			}
-			return sum / rewards.size();
+			yHat /= rewards.size();
+
+			double divident = 0;
+			double divisor = 0;
+			for (int i = 0; i < rewards.size(); i++) {
+				divident += (i * time - xHat) * (rewards.get(i) - yHat);
+				divisor += (i * time - xHat) * (i * time - xHat);
+			}
+			// y = a + x * b
+			double b = divident / divisor;
+			double a = yHat - b * xHat;
+			assert (a > 0);
+
+			double estimatedFinishingTime;
+			if (b >= 0) {
+				// our estimated finishing time would be infinite (or negative)
+				estimatedFinishingTime = upperBound;
+			} else {
+				// solve for 0 = a + x * b.
+				estimatedFinishingTime = -a / b > upperBound ? upperBound : -a / b;
+			}
+			// normalize result
+			return (upperBound - estimatedFinishingTime) / upperBound;
 		}
 
 		private double calcBias(int totalPlayed) {
-			return Math.sqrt((2 * Math.log((double) totalPlayed)) / rewards.size());
+			return Math.sqrt((2 * Math.log((double) totalPlayed)) / (rewards.size() - 1));
 		}
 	}
 }
