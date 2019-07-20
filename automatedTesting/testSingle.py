@@ -20,6 +20,7 @@ commandList = []
 for command in consts.arguments:
     commandList.append(commandPrefix + [testDomain] + [testFile] + command)
 
+print('We have ' + str(len(commandList))+ ' argument Combinations')
 for command in commandList:
     if not os.path.exists(os.path.dirname(outputFilePath)):
         try:

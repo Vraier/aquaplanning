@@ -24,8 +24,8 @@ verbosityLevel = ['-v=2']
 numCubes = ['-c=16000']
 cubeFinderMode = ['--cubeFinder=forwardSearch'] # '--cubeFinder=backwardSearch'
 cubeFindSearchStrategy = ['-cfs=bestFirst'] # '-cfs=breadthFirst' 
-schedulerMode = ['-sched=bandit'] #['-sched=exponential', '-sched=hillClimbing', '-sched=roundRobin']
-schedulerTime = ['-schedT=4000', '-schedT=1600', '-schedT=400', '-schedT=100']
+schedulerMode = ['-sched=bandit', '-sched=banditGreedy'] #['-sched=exponential', '-sched=hillClimbing', '-sched=roundRobin']
+schedulerTime = ['-schedT=2000','-schedT=200']
 exponentialGrowth = ['-schedExpG=2']
 #hillClimbPercent = ['-schedHill=0.8', '-schedHill=0.5' , '-schedHill=0.25', '-schedHill=0.1']
 

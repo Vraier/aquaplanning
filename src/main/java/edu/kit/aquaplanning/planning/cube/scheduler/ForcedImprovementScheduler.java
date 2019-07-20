@@ -1,29 +1,30 @@
 package edu.kit.aquaplanning.planning.cube.scheduler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.planning.cube.CubeSolver;
 import edu.kit.aquaplanning.util.Logger;
 
-public class RoundRobinScheduler extends Scheduler {
+public class ForcedImprovementScheduler extends Scheduler {
 
-	private int numExhausted = 0;
-	private int nextRunning = 0;
+	List<CubeSolver> solvers;
+	List<Integer> scheduleCount;
 
 	private int iterations = 0;
 	private long time = 0;
+	private int numExhausted = 0;
+	private int nextRunning = 0;
 
-	/**
-	 * Creates a new round robin scheduler. The scheduler will only start working
-	 * after its computational bounds variable have been set by the according
-	 * methods
-	 * 
-	 * @param planners
-	 *            The planners to schedule
-	 */
-	public RoundRobinScheduler(Configuration config, List<CubeSolver> planners) {
+	public ForcedImprovementScheduler(Configuration config, List<CubeSolver> planners) {
 		super(config, planners);
+
+		this.solvers = planners;
+		this.scheduleCount = new ArrayList<Integer>();
+		for (int i = 0; i < planners.size(); i++) {
+			scheduleCount.add(0);
+		}
 		this.iterations = config.schedulerIterations;
 		this.time = config.schedulerTime;
 	}
@@ -31,11 +32,12 @@ public class RoundRobinScheduler extends Scheduler {
 	@Override
 	public ExitStatus scheduleNext() {
 
+		if (nextRunning == 0) {
+			solvers.sort((s1, s2) -> Integer.compare(s1.getBestDistance(), s2.getBestDistance()));
+		}
+
 		if (iterations == 0 && time == 0) {
 			return ExitStatus.error;
-
-		} else if (plan != null) {
-			return ExitStatus.foundPlan;
 
 		} else if (numExhausted >= planners.size()) {
 			// no Planner found a Plan
@@ -58,12 +60,17 @@ public class RoundRobinScheduler extends Scheduler {
 				currentPlanner.setTimeLimit(time);
 			}
 
+			int initialHeuristic = currentPlanner.getBestDistance();
 			plan = currentPlanner.calculateSteps();
+			scheduleCount.set(nextRunning, scheduleCount.get(nextRunning) + 1);
 			totalScheduled++;
 
-			nextRunning = (nextRunning + 1) % planners.size();
 			if (plan != null) {
 				return ExitStatus.foundPlan;
+
+			} else if (initialHeuristic - currentPlanner.getBestDistance() <= 0) {
+				// we reached a local plateau and try the next solver
+				nextRunning = (nextRunning + 1) % planners.size();
 			}
 			return ExitStatus.foundNoPlan;
 		}
@@ -79,8 +86,10 @@ public class RoundRobinScheduler extends Scheduler {
 			totalTime += p.getTotalTime();
 		}
 		Logger.log(Logger.INFO,
-				"Round Robin Scheduler scheduled a total of " + totalScheduled
+				"Forced Improvment Scheduler scheduled a total of " + totalScheduled
 						+ " cubes. The total sum of the iterations is " + totalIterations + " and time is " + totalTime
 						+ " millisecs.");
+		Logger.log(Logger.INFO,
+				"The following list represents the count of schedulings for each solver: " + scheduleCount.toString());
 	}
 }

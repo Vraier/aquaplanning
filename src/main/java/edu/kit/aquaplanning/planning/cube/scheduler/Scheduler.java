@@ -46,6 +46,10 @@ public abstract class Scheduler {
 			return new RoundRobinScheduler(config, planners);
 		case bandit:
 			return new BanditScheduler(config, planners);
+		case greedyBandit:
+			return new GreedyBanditScheduler(config, planners);
+		case forcedImprovement:
+			return new ForcedImprovementScheduler(config, planners);
 		case hillClimbing:
 			return new HillClimbingScheduler(config, planners);
 		default:

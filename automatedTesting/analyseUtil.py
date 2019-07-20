@@ -1,14 +1,15 @@
 import os
 import re
+import constants as consts
 
-INF = 310.0
+INF = consts.maxSeconds
 
 def splitResults(fileContent):
     lines = fileContent.readlines()
     results = []
     block = []
     for line in lines[1:]:
-        if line.startswith('#######################'):
+        if line.startswith('####################'):
             results.append(block)
             block = []
         else:
@@ -30,7 +31,7 @@ def getTestNumber(block):
     return testNumber
 
 def getCalcTime(block):
-    result = INF
+    result = consts.timeLimit * 1.2
     for line in block:
         if re.match(r"^.*Planner finished with a plan of length.*$", line):
             result = float(line[line.find("[")+1:line.find("]")])

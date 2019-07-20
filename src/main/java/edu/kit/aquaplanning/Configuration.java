@@ -155,7 +155,7 @@ public class Configuration {
 	public CubeFinderMode cubeFinderMode;
 	
 	public enum SchedulerMode {
-		roundRobin, exponential, bandit, hillClimbing;
+		roundRobin, exponential, bandit, greedyBandit, forcedImprovement, hillClimbing;
 	}
 	@Option(names = {"-sched", "--scheduler"}, description = "Which scheduler to use to split up computation time between cubes: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "bandit")

@@ -115,7 +115,7 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 			throw new UnsupportedOperationException("Need a heuristic to provide distances");
 		}
 		if (isExhausted || frontier.isEmpty()) {
-			return Integer.MIN_VALUE;
+			return Integer.MAX_VALUE;
 		}
 		return frontier.top().heuristicValue;
 	}

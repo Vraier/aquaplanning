@@ -30,6 +30,7 @@ public class BanditScheduler extends Scheduler {
 		// initialize bandits
 		bandits = new ArrayList<Bandit>();
 		for (CubeSolver c : planners) {
+			assert (!c.isExhausted());
 			Bandit newBandit = new Bandit(c);
 			newBandit.addReward(newBandit.getSolver().getBestDistance());
 			bandits.add(newBandit);
@@ -93,7 +94,6 @@ public class BanditScheduler extends Scheduler {
 		}
 
 		if (bestBandit == null) {
-			System.out.println("Bad things happened.");
 			return ExitStatus.exhausted;
 		}
 		bestSolver = bestBandit.getSolver();
@@ -108,9 +108,9 @@ public class BanditScheduler extends Scheduler {
 
 		// start solving and update rewards
 		plan = bestSolver.calculateSteps();
-		bestBandit.addReward(bestSolver.getBestDistance());
 		totalScheduled++;
-
+		bestBandit.addReward(bestSolver.getBestDistance());
+		
 		if (plan != null) {
 			return ExitStatus.foundPlan;
 		}
@@ -130,13 +130,25 @@ public class BanditScheduler extends Scheduler {
 				"Bandit Scheduler scheduled a total of " + totalScheduled
 						+ " cubes. The total sum of the iterations is " + totalIterations + " and time is " + totalTime
 						+ " millisecs.");
+
 		bandits.sort((b1, b2) -> b2.rewards.size() - b1.rewards.size());
 		Logger.log(Logger.INFO,
 				"The the 10 most played Bandits got played " + bandits.subList(0, Math.min(10, bandits.size())).stream()
-						.map(b -> b.rewards.size()).collect(Collectors.toList()) + " times.");
+						.map(b -> b.rewards.size() - 1).collect(Collectors.toList()) + " times.");
 		System.out
 				.println("The the 10 most played Bandits got played " + bandits.subList(0, Math.min(10, bandits.size()))
-						.stream().map(b -> b.rewards.size()).collect(Collectors.toList()) + " times.");
+						.stream().map(b -> b.rewards.size() - 1).collect(Collectors.toList()) + " times.");
+
+		if (totalScheduled >= bandits.size()) {
+			Logger.log(Logger.INFO, "They have a reward value of " + bandits.subList(0, Math.min(10, bandits.size()))
+					.stream().map(b -> b.calcConfidenceBound(totalScheduled)).collect(Collectors.toList()));
+			Logger.log(Logger.INFO, "They have a heuristic List of" + bandits.subList(0, Math.min(10, bandits.size()))
+					.stream().map(b -> b.rewards.toString()).collect(Collectors.toList()));
+			System.out.println("They have a reward value of " + bandits.subList(0, Math.min(10, bandits.size()))
+					.stream().map(b -> b.calcConfidenceBound(totalScheduled)).collect(Collectors.toList()));
+			System.out.println("They have a heuristic List of" + bandits.subList(0, Math.min(10, bandits.size()))
+					.stream().map(b -> b.rewards.toString()).collect(Collectors.toList()));
+		}
 	}
 
 	private class Bandit {
@@ -154,10 +166,12 @@ public class BanditScheduler extends Scheduler {
 		}
 
 		public double calcConfidenceBound(int totalPlayed) {
-			return calcEstimatedReward() + calcBias(totalPlayed);
+			// TODO play with some factors?
+			return 2.0 * calcEstimatedReward() + 0.5 * calcBias(totalPlayed);
 		}
 
 		public void addReward(double currentDistance) {
+			assert (currentDistance >= 0) : "The added distance must be >= 0 but is " + currentDistance;
 			rewards.add(currentDistance);
 		}
 
@@ -172,7 +186,7 @@ public class BanditScheduler extends Scheduler {
 			assert (rewards.size() >= 2) : "Reward list only hods " + rewards.size()
 					+ " item but should hold at least 2.";
 			assert (maxTime > 0) : "MaxTime must be greater than 0 to allow for upperBound of calculation time.";
-			double upperBound = maxTime * 100;
+			double upperBound = maxTime * 1000;
 			double xHat = (rewards.size() - 1) * time / 2.0;
 			double yHat = 0;
 			for (Double d : rewards) {
@@ -189,7 +203,6 @@ public class BanditScheduler extends Scheduler {
 			// y = a + x * b
 			double b = divident / divisor;
 			double a = yHat - b * xHat;
-			assert (a > 0);
 
 			double estimatedFinishingTime;
 			if (b >= 0) {
@@ -200,6 +213,7 @@ public class BanditScheduler extends Scheduler {
 				estimatedFinishingTime = -a / b > upperBound ? upperBound : -a / b;
 			}
 			// normalize result
+			assert (estimatedFinishingTime >= 0);
 			return (upperBound - estimatedFinishingTime) / upperBound;
 		}
 
