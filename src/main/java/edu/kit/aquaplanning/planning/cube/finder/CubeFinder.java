@@ -29,7 +29,7 @@ public abstract class CubeFinder {
 	 * @return a list containing all the cubes. Or null if we already found a
 	 *         solution to the given problem while searching for cubes.
 	 */
-	public abstract List<Cube> findCubes(GroundPlanningProblem problem, int numCubes);
+	public abstract List<Cube> findCubes(GroundPlanningProblem problem);
 
 	public abstract void logInformation();
 

@@ -35,13 +35,13 @@ public class GreedyCutOffCubeFinder extends CubeFinder {
 	}
 
 	@Override
-	public List<Cube> findCubes(GroundPlanningProblem problem, int numCubes) {
+	public List<Cube> findCubes(GroundPlanningProblem problem) {
 
-		int anchorInterval = numCubes / numAnchors;
+		int anchorInterval = config.numCubes / numAnchors;
 
 		GenericSearchNode node = new ForwardSearchNode(problem);
 
-		while (!node.satisfiesProblem() && currentCubesSize() < numCubes && withinTimeLimit()) {
+		while (!node.satisfiesProblem() && currentCubesSize() < config.numCubes && withinTimeLimit()) {
 			totalIterations++;
 
 			// make the current node an anchors. If it wasn't finished before and we visit
@@ -49,7 +49,7 @@ public class GreedyCutOffCubeFinder extends CubeFinder {
 			if (!finishedNodes.contains(node) && currentCubesSize() >= anchorInterval) {
 				anchors.add(node);
 				anchorValues.add(heuristic.stateDistance(problem.getInitialState(), node.getState(), problem));
-				anchorInterval += numCubes / numAnchors;
+				anchorInterval += config.numCubes / numAnchors;
 			}
 
 			finishedNodes.add(node);

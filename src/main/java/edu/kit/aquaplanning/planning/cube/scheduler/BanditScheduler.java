@@ -17,8 +17,8 @@ public class BanditScheduler extends Scheduler {
 
 	private List<Bandit> bandits;
 
-	public BanditScheduler(Configuration config, List<CubeSolver> planners) {
-		super(config, planners);
+	public BanditScheduler(Configuration config, List<CubeSolver> planners, int id) {
+		super(config, planners, id);
 		this.iterations = config.schedulerIterations;
 		this.time = config.schedulerTime;
 		this.maxTime = config.maxTimeSeconds;

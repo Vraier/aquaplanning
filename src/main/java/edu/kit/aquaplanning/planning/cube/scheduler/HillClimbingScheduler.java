@@ -17,8 +17,8 @@ public class HillClimbingScheduler extends Scheduler {
 	private int iterations = 0;
 	private long time = 0;
 
-	public HillClimbingScheduler(Configuration config, List<CubeSolver> planners) {
-		super(config, planners);
+	public HillClimbingScheduler(Configuration config, List<CubeSolver> planners, int id) {
+		super(config, planners, id);
 		this.iterations = config.schedulerIterations;
 		this.time = config.schedulerTime;
 		this.percent = config.schedulerHillClimb;

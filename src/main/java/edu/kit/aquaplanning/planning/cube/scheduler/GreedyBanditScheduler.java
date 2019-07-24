@@ -1,12 +1,14 @@
 package edu.kit.aquaplanning.planning.cube.scheduler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.planning.cube.CubeSolver;
+import edu.kit.aquaplanning.util.CSVWriter;
 import edu.kit.aquaplanning.util.Logger;
 
 public class GreedyBanditScheduler extends Scheduler {
@@ -19,8 +21,8 @@ public class GreedyBanditScheduler extends Scheduler {
 	private List<Bandit> originalBandits;
 	private PriorityQueue<Bandit> bandits;
 
-	public GreedyBanditScheduler(Configuration config, List<CubeSolver> planners) {
-		super(config, planners);
+	public GreedyBanditScheduler(Configuration config, List<CubeSolver> planners, int id) {
+		super(config, planners, id);
 		this.iterations = config.schedulerIterations;
 		this.time = config.schedulerTime;
 		this.maxTime = config.maxTimeSeconds;
@@ -128,41 +130,19 @@ public class GreedyBanditScheduler extends Scheduler {
 						+ " millisecs.");
 
 		originalBandits.sort((b1, b2) -> b2.heuristicValues.size() - b1.heuristicValues.size());
-		Logger.log(Logger.INFO,
-				"The the 10 most played Bandits got played "
-						+ originalBandits.subList(0, Math.min(10, originalBandits.size())).stream()
-								.map(b -> b.heuristicValues.size() - 1).collect(Collectors.toList())
-						+ " times.");
-		System.out
-				.println(
-						"The the 10 most played Bandits got played "
-								+ originalBandits.subList(0, Math.min(10, originalBandits.size())).stream()
-										.map(b -> b.heuristicValues.size() - 1).collect(Collectors.toList())
-								+ " times.");
 
-		if (totalScheduled >= originalBandits.size()) {
-			Logger.log(Logger.INFO,
-					"They have a estimated compuation time of "
-							+ originalBandits.subList(0, Math.min(10, originalBandits.size())).stream()
-									.map(b -> b.getEstimatedComputationTime()).collect(Collectors.toList()));
-			Logger.log(Logger.INFO,
-					"They have a heuristic List of" + originalBandits.subList(0, Math.min(10, originalBandits.size()))
-							.stream().map(b -> b.heuristicValues.toString()).collect(Collectors.toList()));
-			Logger.log(Logger.INFO,
-					"They have a remaining time List of"
-							+ originalBandits.subList(0, Math.min(10, originalBandits.size())).stream()
-									.map(b -> b.remainingTime.toString()).collect(Collectors.toList()));
-			
-			System.out.println("They have a estimated compuation time of "
-					+ originalBandits.subList(0, Math.min(10, originalBandits.size())).stream()
-							.map(b -> b.getEstimatedComputationTime()).collect(Collectors.toList()));
-			System.out.println(
-					"They have a heuristic List of" + originalBandits.subList(0, Math.min(10, originalBandits.size()))
-							.stream().map(b -> b.heuristicValues.toString()).collect(Collectors.toList()));
-			System.out.println("They have a remaining time List of"
-					+ originalBandits.subList(0, Math.min(10, originalBandits.size())).stream()
-							.map(b -> b.remainingTime.toString()).collect(Collectors.toList()));
+		List<List<String>> entries = new ArrayList<>();
+		entries.add(Arrays.asList("numPlayed", "heuristicList", "remainingTime"));
+
+		for (Bandit b : originalBandits) {
+			List<String> entrie = new ArrayList<>();
+			entrie.add(Integer.toString((b.heuristicValues.size() - 1)));
+			entrie.add(b.heuristicValues.stream().map(e -> e.toString()).collect(Collectors.joining(";")));
+			entrie.add(b.remainingTime.stream().map(e -> e.toString()).collect(Collectors.joining(";")));
+			entries.add(entrie);
 		}
+
+		CSVWriter.writeFile("GBScheduler_" + id + ".csv", entries);
 	}
 
 	private class Bandit {

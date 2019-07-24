@@ -22,8 +22,8 @@ public class RoundRobinScheduler extends Scheduler {
 	 * @param planners
 	 *            The planners to schedule
 	 */
-	public RoundRobinScheduler(Configuration config, List<CubeSolver> planners) {
-		super(config, planners);
+	public RoundRobinScheduler(Configuration config, List<CubeSolver> planners, int id) {
+		super(config, planners,id);
 		this.iterations = config.schedulerIterations;
 		this.time = config.schedulerTime;
 	}

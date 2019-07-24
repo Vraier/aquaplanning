@@ -32,7 +32,7 @@ for x in range(numTester):
 #unevenSorted = [y for x,y in sorted(zip(testNumber,unevenTime))]
 
 for x in range(numTester):
-    plt.semilogy(groupedTime[x], marker = '.', linestyle = 'None', label = x)
+    plt.semilogy(sorted(groupedTime[x]), marker = '.', linestyle = 'None', label = x)
 
 #plt.semilogy(evenTime, color = 'b', marker = '.', linestyle = 'None', label = 'Parallel')
 #plt.semilogy(unevenTime, color = 'r', marker = '.', linestyle = 'None', label = 'Sequential')

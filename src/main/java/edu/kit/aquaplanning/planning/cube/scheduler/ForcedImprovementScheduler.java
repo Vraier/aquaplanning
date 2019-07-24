@@ -17,8 +17,8 @@ public class ForcedImprovementScheduler extends Scheduler {
 	private int numExhausted = 0;
 	private int nextRunning = 0;
 
-	public ForcedImprovementScheduler(Configuration config, List<CubeSolver> planners) {
-		super(config, planners);
+	public ForcedImprovementScheduler(Configuration config, List<CubeSolver> planners, int id) {
+		super(config, planners,id);
 
 		this.solvers = planners;
 		this.scheduleCount = new ArrayList<Integer>();

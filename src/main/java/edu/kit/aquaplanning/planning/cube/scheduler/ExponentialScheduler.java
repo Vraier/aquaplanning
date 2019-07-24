@@ -20,8 +20,8 @@ public class ExponentialScheduler extends Scheduler {
 	private int queueCycles = -1;
 	private int addedPlanners = 0;
 	
-	public ExponentialScheduler(Configuration config, List<CubeSolver> planners) {
-		super(config, planners);
+	public ExponentialScheduler(Configuration config, List<CubeSolver> planners, int id) {
+		super(config, planners,id);
 		this.initialIterations = config.schedulerIterations;
 		this.initialTime = config.schedulerTime;
 		this.exponentialGrowth = config.schedulerGrowth;

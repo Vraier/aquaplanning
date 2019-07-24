@@ -41,6 +41,10 @@ public class Configuration {
 	@Option(paramLabel = "satFile", names = "-SAT", description = "Output SAT formulae to file(s)")
 	public String satFormulaFile;
 	
+	@Option(paramLabel = "csvOutput", names = "-csvO", description = "Folder name for all csv files" +
+			"that get generatetd while using cube and conquer mode.")
+	public String csvOutputFolder;
+	
 	/* Validation */
 	
 	@Option(paramLabel = "planFile", names = {"-?", "--validate"}, description = "Validate the plan "

@@ -1,6 +1,7 @@
 package edu.kit.aquaplanning.planning;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -13,9 +14,9 @@ import edu.kit.aquaplanning.planning.cube.ForwardSearchCubeSolver;
 import edu.kit.aquaplanning.planning.cube.finder.CubeFinder;
 import edu.kit.aquaplanning.planning.cube.scheduler.Scheduler;
 import edu.kit.aquaplanning.planning.cube.scheduler.Scheduler.ExitStatus;
+import edu.kit.aquaplanning.util.CSVWriter;
 import edu.kit.aquaplanning.util.Logger;
 
-//TODO: check if synchronization works correctly
 public class CubeAndConquerPlanner extends Planner {
 
 	private int numThreads;
@@ -38,15 +39,30 @@ public class CubeAndConquerPlanner extends Planner {
 	public Plan findPlan(GroundPlanningProblem problem) {
 		startSearch();
 
+		CSVWriter.setFolder(config.csvOutputFolder);
+
 		Random random;
 		List<Cube> cubes;
 		CubeFinder cFinder;
 
+		List<String> entrie1 = Arrays.asList("problemFile", "maxSeconds", "numThreads", "numCubes", "cubeFinderMode",
+				"schedulerMode", "schedulerIterations", "schedulerTime", "schedulerExponentialGrowth",
+				"schedulerHillClimb", "cubeFindHeuristic", "cubeFindeHeuristicWeight", "cubeFindSearchStrategy",
+				"cubeSolveHeuristic", "cubeSolveHeuristicWeight", "cubeSolveSearchStrategy");
+		List<String> entrie2 = Arrays.asList(config.problemFile, Integer.toString(config.maxTimeSeconds),
+				Integer.toString(config.numThreads), Integer.toString(config.numCubes),
+				config.cubeFinderMode.toString(), config.schedulerMode.toString(),
+				Integer.toString(config.schedulerIterations), Long.toString(config.schedulerTime),
+				Double.toString(config.schedulerGrowth), Double.toString(config.schedulerHillClimb),
+				config.cubeFindHeuristic.toString(), Integer.toString(config.cubeFindHeuristicWeight),
+				config.cubeFindSearchStrategy.toString(), config.cubeSolveHeuristic.toString(),
+				Integer.toString(config.cubeSolveHeuristicWeight), config.cubeSolveSearchStrategy.toString());
+		CSVWriter.writeFile("configurationInfo.csv", Arrays.asList(entrie1, entrie2));
+
 		// Search for cubes
-		Logger.log(Logger.INFO, "Starting to search for " + config.numCubes + " cubes. Using the configuration: "
-				+ config.cubeFinderMode + ".");
+		Logger.log(Logger.INFO, "Starting to search for cubes.");
 		cFinder = CubeFinder.getCubeFinder(config);
-		cubes = cFinder.findCubes(problem, config.numCubes);
+		cubes = cFinder.findCubes(problem);
 		cFinder.logInformation();
 
 		// check if we already found a Plan
@@ -79,7 +95,6 @@ public class CubeAndConquerPlanner extends Planner {
 					Math.min(partitionSize * (i + 1), cubes.size()));
 
 			Logger.log(Logger.INFO, "Initializing Thread " + threadNum + ".");
-
 			Thread thread = new Thread(new MyThread(config, threadNum, localCubes));
 			threads.add(thread);
 
@@ -114,7 +129,7 @@ public class CubeAndConquerPlanner extends Planner {
 		// Interrupt all planners
 		for (Thread thread : threads) {
 			// This interruption is acknowledged inside each planner thread
-			// when withinComputationalBounds() is checked the next time.
+			// when withinTimeLimit() is checked the next time.
 			thread.interrupt();
 		}
 	}
@@ -127,27 +142,28 @@ public class CubeAndConquerPlanner extends Planner {
 	private class MyThread implements Runnable {
 
 		private Configuration config;
+
 		private int threadNum;
-		private List<Cube> localCubes;
+		private List<CubeSolver> planners;
+		private Scheduler scheduler;
 		private Plan localPlan = null;
 
 		public MyThread(Configuration config, int threadNum, List<Cube> cubes) {
 			this.config = config;
 			this.threadNum = threadNum;
-			this.localCubes = cubes;
-		}
-
-		@Override
-		public void run() {
 
 			// Create planners
-			List<CubeSolver> planners = new ArrayList<CubeSolver>();
-			for (Cube cube : localCubes) {
+			planners = new ArrayList<CubeSolver>();
+			for (Cube cube : cubes) {
 				planners.add(new ForwardSearchCubeSolver(config, cube));
 			}
 
 			// Initialize Scheduler
-			Scheduler scheduler = Scheduler.getScheduler(config, planners);
+			scheduler = Scheduler.getScheduler(config, planners, threadNum);
+		}
+
+		@Override
+		public void run() {
 
 			// Search for a plan
 			Logger.log(Logger.INFO, "Thread " + threadNum + " starting to work for the first time.");
@@ -163,7 +179,7 @@ public class CubeAndConquerPlanner extends Planner {
 				Logger.log(Logger.INFO, "Thread " + threadNum + " found a Plan.");
 				onPlanFound(localPlan);
 			}
-			// We go interrupted or couldn't find a plan
+			// We got interrupted or couldn't find a plan
 			else {
 				Logger.log(Logger.INFO,
 						"Thread " + threadNum + " found no Plan. The interruptFlag is: "

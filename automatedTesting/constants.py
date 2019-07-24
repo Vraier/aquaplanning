@@ -1,7 +1,7 @@
 import os
 import testUtil as util
 
-timeLimit = 1000 # Time after we timeOut in seconds
+timeLimit = 5000 # Time after we timeOut in seconds
 
 # Strings and Paths
 breakSequenze = '###############################################################\n'
@@ -21,11 +21,11 @@ plannerType = ['-p=cubePlanner']
 numThreads = ['-T=8']
 verbosityLevel = ['-v=2']
 #numCubes = ['-c=1', '-c=48', '-c=1000', '-c=100000']
-numCubes = ['-c=16000']
+numCubes = ['-c=2000']
 cubeFinderMode = ['--cubeFinder=forwardSearch'] # '--cubeFinder=backwardSearch'
 cubeFindSearchStrategy = ['-cfs=bestFirst'] # '-cfs=breadthFirst' 
-schedulerMode = ['-sched=bandit', '-sched=banditGreedy'] #['-sched=exponential', '-sched=hillClimbing', '-sched=roundRobin']
-schedulerTime = ['-schedT=2000','-schedT=200']
+schedulerMode = ['-sched=greedyBandit'] #['-sched=bandit', -sched=exponential', '-sched=hillClimbing', '-sched=roundRobin']
+schedulerTime = ['-schedT=4000', '-schedT=1000','-schedT=400', '-schedT=100']
 exponentialGrowth = ['-schedExpG=2']
 #hillClimbPercent = ['-schedHill=0.8', '-schedHill=0.5' , '-schedHill=0.25', '-schedHill=0.1']
 
@@ -35,5 +35,5 @@ commandLists = [maxSeconds, plannerType, numThreads, verbosityLevel, numCubes, c
 # for testSingle
 #arguments = [['-t=5000', '-H=ffWilliams']]
 arguments = util.listCombinations(commandLists)
-outputFolder = 'resultBandit'
+outputFolder = 'FullGreedyBanditTest'
 outputFolderPath = os.path.join(homeDirName, outputFolder)

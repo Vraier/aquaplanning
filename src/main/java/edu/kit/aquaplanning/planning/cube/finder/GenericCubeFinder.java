@@ -23,18 +23,18 @@ public abstract class GenericCubeFinder extends CubeFinder {
 	}
 
 	@Override
-	public List<Cube> findCubes(GroundPlanningProblem problem, int numCubes) {
+	public List<Cube> findCubes(GroundPlanningProblem problem) {
 
 		initializeFrontierWithNode(problem);
 
-		while (!frontier.isEmpty() && frontier.size() < numCubes && withinTimeLimit()) {
+		while (!frontier.isEmpty() && frontier.size() < config.numCubes && withinTimeLimit()) {
 
 			totalIterations++;
 
 			GenericSearchNode node = frontier.get();
-			
-			if(node == null) {
-				assert(frontier.isEmpty());
+
+			if (node == null) {
+				assert (frontier.isEmpty());
 				continue;
 			}
 
@@ -42,7 +42,7 @@ public abstract class GenericCubeFinder extends CubeFinder {
 				Logger.log(Logger.INFO,
 						"Generic Cube Finder already found a plan after " + totalIterations + " steps.");
 				plan = node.getPartialPlan();
-				
+
 				totalFrontierSize = frontier.size();
 				return null;
 			}
@@ -73,7 +73,8 @@ public abstract class GenericCubeFinder extends CubeFinder {
 		}
 
 		Logger.log(Logger.INFO, "Generic Cube Finder stopped search after " + totalIterations + " steps.");
-		Logger.log(Logger.INFO, "Generic Cube Finder found " + totalFrontierSize + " cubes.");
+		Logger.log(Logger.INFO,
+				"Generic Cube Finder schould find " + config.numCubes + " and found " + totalFrontierSize + " cubes.");
 	}
 
 	/**

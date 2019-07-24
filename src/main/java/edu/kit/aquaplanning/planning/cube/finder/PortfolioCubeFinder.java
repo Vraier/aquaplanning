@@ -32,10 +32,10 @@ public class PortfolioCubeFinder extends CubeFinder {
 	}
 
 	@Override
-	public List<Cube> findCubes(GroundPlanningProblem problem, int numCubes) {
+	public List<Cube> findCubes(GroundPlanningProblem problem) {
 
 		// round up integer division
-		int cubeInterval = (numCubes + (numFinder - 1)) / numFinder;
+		int cubeInterval = (config.numCubes + (numFinder - 1)) / numFinder;
 
 		for (int i = 0; i < numFinder; i++) {
 

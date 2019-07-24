@@ -63,7 +63,6 @@ public class TestCubeAndConquer extends TestCase {
 		Configuration config = getDefaultConfig();
 		config.numCubes = 5000;
 
-
 		File benchdir = new File("benchmarks");
 		for (File domdir : benchdir.listFiles()) {
 
@@ -89,10 +88,11 @@ public class TestCubeAndConquer extends TestCase {
 
 					System.out.println("Finding Cubes for Problem " + problem);
 					GenericCubeFinder cFinder = new ForwardSearchCubeFinder(config);
-					List<Cube> cubes = cFinder.findCubes(gpp, config.numCubes);
-					//System.out.println("Generic Cube Finder found " + cFinder.totalFrontierSize + " cubes from which "
-					//		+ cFinder.totalCutOffSize + " were cut off and " + cFinder.totalAnchorSize
-					//		+ " were anchors.");
+					List<Cube> cubes = cFinder.findCubes(gpp);
+					// System.out.println("Generic Cube Finder found " + cFinder.totalFrontierSize +
+					// " cubes from which "
+					// + cFinder.totalCutOffSize + " were cut off and " + cFinder.totalAnchorSize
+					// + " were anchors.");
 
 					Plan plan = cFinder.getPlan();
 					if (plan != null) {
@@ -109,13 +109,14 @@ public class TestCubeAndConquer extends TestCase {
 
 	public void testSchedulerModes() throws FileNotFoundException, IOException {
 
-		//assertTrue("Ignore this.", false);
+		// assertTrue("Ignore this.", false);
 		for (SchedulerMode mode : SchedulerMode.values()) {
 
-			if (mode != SchedulerMode.bandit) continue;
+			if (mode != SchedulerMode.greedyBandit)
+				continue;
 			Configuration config = getDefaultConfig();
 			config.schedulerMode = mode;
-			
+
 			config.numThreads = 2;
 			config.schedulerTime = 200;
 			config.numCubes = 8;
@@ -178,9 +179,10 @@ public class TestCubeAndConquer extends TestCase {
 
 	private Configuration getDefaultConfig() {
 
-		// TODO: these are not the default settings
+		// these are not necessarily the default settings
 		Configuration config = new Configuration();
 
+		config.csvOutputFolder = "testOutput";
 		config.seed = 1337;
 		config.plannerType = PlannerType.cubePlanner;
 		config.numThreads = 4;

@@ -17,8 +17,11 @@ outputFilePath = os.path.join(consts.homeDirName, consts.outputFolder, localFold
 
 commandPrefix = ['java', '-jar', consts.jarPath]
 commandList = []
+ArgumentNumber = 0
 for command in consts.arguments:
-    commandList.append(commandPrefix + [testDomain] + [testFile] + command)
+    csvOutputFolderName = "-csvO=" + localFolder + "_" + name[:-5] + "_" + str(ArgumentNumber)
+    ArgumentNumber = ArgumentNumber + 1
+    commandList.append(commandPrefix + [testDomain] + [testFile] + [csvOutputFolderName] + command)
 
 print('We have ' + str(len(commandList))+ ' argument Combinations')
 for command in commandList:
@@ -29,7 +32,7 @@ for command in commandList:
             if exc.errno != errno.EEXIST:
                 raise
             
-    with open(outputFilePath, 'w') as outputFile:
+    with open(outputFilePath, 'a') as outputFile:
         commandName = ' '.join(command)
         commandName += '\n'
         print('Working on Command: ' + commandName)
