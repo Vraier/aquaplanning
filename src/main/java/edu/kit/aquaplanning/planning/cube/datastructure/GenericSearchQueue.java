@@ -87,6 +87,10 @@ public class GenericSearchQueue {
 		}
 		return size;
 	}
+	
+	public int visitedSize() {
+		return visitedStates.size();
+	}
 
 	public GenericSearchNode get() {
 
@@ -139,11 +143,20 @@ public class GenericSearchQueue {
 		}
 	}
 
-	public List<Cube> getCubes() {
+	public List<Cube> getOpenCubes() {
 
 		List<Cube> cubes = new ArrayList<Cube>();
 		while (!this.isEmpty()) {
 			cubes.add(this.get().getCube());
+		}
+		return cubes;
+	}
+
+	public List<Cube> getClosedCubes() {
+
+		List<Cube> cubes = new ArrayList<Cube>();
+		for (GenericSearchNode n : visitedStates) {
+			cubes.add(n.getCube());
 		}
 		return cubes;
 	}

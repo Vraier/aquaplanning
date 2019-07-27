@@ -46,12 +46,14 @@ public class CubeAndConquerPlanner extends Planner {
 		CubeFinder cFinder;
 
 		List<String> entrie1 = Arrays.asList("problemFile", "maxSeconds", "numThreads", "numCubes", "cubeFinderMode",
-				"schedulerMode", "schedulerIterations", "schedulerTime", "schedulerExponentialGrowth",
-				"schedulerHillClimb", "cubeFindHeuristic", "cubeFindeHeuristicWeight", "cubeFindSearchStrategy",
-				"cubeSolveHeuristic", "cubeSolveHeuristicWeight", "cubeSolveSearchStrategy");
+				"cubeNodeType", "cubePercent", "cubeSparceInterval", "schedulerMode", "schedulerIterations",
+				"schedulerTime", "schedulerExponentialGrowth", "schedulerHillClimb", "cubeFindHeuristic",
+				"cubeFindeHeuristicWeight", "cubeFindSearchStrategy", "cubeSolveHeuristic", "cubeSolveHeuristicWeight",
+				"cubeSolveSearchStrategy");
 		List<String> entrie2 = Arrays.asList(config.problemFile, Integer.toString(config.maxTimeSeconds),
 				Integer.toString(config.numThreads), Integer.toString(config.numCubes),
-				config.cubeFinderMode.toString(), config.schedulerMode.toString(),
+				config.cubeFinderMode.toString(), config.cubeNodeType.toString(), Double.toString(config.cubePercent),
+				Integer.toString(config.cubeSparseInterval), config.schedulerMode.toString(),
 				Integer.toString(config.schedulerIterations), Long.toString(config.schedulerTime),
 				Double.toString(config.schedulerGrowth), Double.toString(config.schedulerHillClimb),
 				config.cubeFindHeuristic.toString(), Integer.toString(config.cubeFindHeuristicWeight),

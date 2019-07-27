@@ -7,6 +7,7 @@ import java.util.List;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.Configuration.CubeFinderMode;
+import edu.kit.aquaplanning.Configuration.CubeNodeType;
 import edu.kit.aquaplanning.Configuration.HeuristicType;
 import edu.kit.aquaplanning.Configuration.PlannerType;
 import edu.kit.aquaplanning.Configuration.SchedulerMode;
@@ -45,9 +46,10 @@ public class TestCubeAndConquer extends TestCase {
 
 	public void testCubeFinderModes() throws FileNotFoundException, IOException {
 
-		assertTrue("Backward Cube Finding not working currently.", false);
+		//assertTrue("Backward Cube Finding not working currently.", false);
 		for (CubeFinderMode mode : CubeFinderMode.values()) {
 
+			if(mode != CubeFinderMode.portfolio) continue;
 			Configuration config = getDefaultConfig();
 			config.cubeFinderMode = mode;
 
@@ -109,7 +111,7 @@ public class TestCubeAndConquer extends TestCase {
 
 	public void testSchedulerModes() throws FileNotFoundException, IOException {
 
-		// assertTrue("Ignore this.", false);
+		assertTrue("Ignore this.", false);
 		for (SchedulerMode mode : SchedulerMode.values()) {
 
 			if (mode != SchedulerMode.greedyBandit)
@@ -171,17 +173,12 @@ public class TestCubeAndConquer extends TestCase {
 		System.out.println("Done.\n");
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-		new File("_tmp_plan.txt").delete();
-	}
-
 	private Configuration getDefaultConfig() {
 
 		// these are not necessarily the default settings
 		Configuration config = new Configuration();
 
+		config.problemFile = "testFile";
 		config.csvOutputFolder = "testOutput";
 		config.seed = 1337;
 		config.plannerType = PlannerType.cubePlanner;
@@ -190,11 +187,15 @@ public class TestCubeAndConquer extends TestCase {
 
 		config.numCubes = 10000;
 		config.cubeFinderMode = CubeFinderMode.forwardSearch;
+		config.cubeNodeType = CubeNodeType.closed;
+		config.cubePercent = 1.0;
+		config.cubeSparseInterval = 1;
 		config.cubeFindSearchStrategy = SearchStrategy.Mode.bestFirst;
 		config.cubeFindHeuristic = HeuristicType.ffTrautmann;
 		config.cubeSolveHeuristicWeight = 10;
 
-		config.schedulerMode = SchedulerMode.bandit;
+		config.schedulerMode = SchedulerMode.exponential;
+		config.schedulerIterations = 0;
 		config.schedulerTime = 4000;
 		config.schedulerGrowth = 1.5;
 		config.schedulerHillClimb = 0.5;
@@ -204,5 +205,11 @@ public class TestCubeAndConquer extends TestCase {
 		config.cubeSolveHeuristicWeight = 10;
 
 		return config;
+	}
+	
+	@Override
+	protected void tearDown() throws Exception {
+		super.tearDown();
+		new File("_tmp_plan.txt").delete();
 	}
 }

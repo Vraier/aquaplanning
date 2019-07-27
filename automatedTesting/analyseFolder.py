@@ -24,10 +24,15 @@ def getCompTimes(testFolder, numTester):
                 for x in range(numTester):
                     if(not util.foundValidPlan(blocks[x])):
                         #print('got timeout at block' + str(x))
-                        groupedTime[x].append(const.timeLimit * 1.1)
+                        groupedTime[x].append(const.timeLimit * 5.1)
                     else:
                         groupedTime[x].append(util.getCalcTime(blocks[x]))
     return groupedTime
+
+resultSE = getCompTimes('resultSequential', 1)
+resultFGB = getCompTimes('FullGreedyBanditTest', 4)
+if len(resultSE[0]) != len(resultFGB[0]): print("Error")
+speedUp = [s/p for (s,p) in zip(sorted(resultSE[0]), sorted(resultFGB[3]))]
 
 resultB1 = getCompTimes('resultBandit', 4)
 resultB2 = getCompTimes('resultBandit2', 4)
@@ -36,7 +41,10 @@ resultFI = getCompTimes('resultForcedImprovement', 4)
 
 #showResult = resultFI
 #showResult = [resultB1[1], resultGB[3], resultFI[3]]
-showResult = [resultGB[2], resultGB[3]]
+#showResult = resultSE + resultFGB
+showResult = resultFGB
+
+
 
 
 

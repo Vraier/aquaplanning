@@ -20,7 +20,7 @@ import edu.kit.aquaplanning.planning.cube.heuristic.GenericWilliams;
 
 public class PortfolioCubeFinder extends CubeFinder {
 
-	private int numFinder = 5;
+	private final int numFinder = 5;
 
 	private Set<GenericSearchNode> currOpenNodes = new HashSet<>();
 	private Set<GenericSearchNode> currFinishedNodes = new HashSet<>();
@@ -34,18 +34,20 @@ public class PortfolioCubeFinder extends CubeFinder {
 	@Override
 	public List<Cube> findCubes(GroundPlanningProblem problem) {
 
-		// round up integer division
+		// round up integer division: numCubes/numFinder
 		int cubeInterval = (config.numCubes + (numFinder - 1)) / numFinder;
 
 		for (int i = 0; i < numFinder; i++) {
 
 			findCubes(i, problem, cubeInterval);
 
+			foundCubeSize += currOpenNodes.size();
 			totalOpenNodes.addAll(currOpenNodes);
 			totalFinishedNodes.addAll(currFinishedNodes);
 			currOpenNodes.clear();
 			currFinishedNodes.clear();
 		}
+		System.out.println("Finished all Heuristics");
 
 		totalOpenNodes.removeAll(totalFinishedNodes);
 		ArrayList<Cube> result = new ArrayList<>();
@@ -53,6 +55,7 @@ public class PortfolioCubeFinder extends CubeFinder {
 		for (GenericSearchNode n : totalOpenNodes) {
 			result.add(n.getCube());
 		}
+		returnedCubeSize = result.size();
 		return result;
 	}
 
@@ -67,32 +70,16 @@ public class PortfolioCubeFinder extends CubeFinder {
 	 * parameter id.
 	 */
 	private void findCubes(int id, GroundPlanningProblem problem, int numCubes) {
+		System.out.println("Trying heuristic with id " + id);
 
-		GenericHeuristic heuristic;
-		switch (id) {
-		case 0:
-			heuristic = new GenericFroleyks();
-			break;
-		case 1:
-			heuristic = new GenericManhattanGoalDistance();
-			break;
-		case 2:
-			heuristic = new GenericRelaxedPathLength();
-			break;
-		case 3:
-			heuristic = new GenericTrautmann();
-			break;
-		case 4:
-			heuristic = new GenericWilliams();
-			break;
-		default:
-			throw new UnsupportedOperationException("No such id available.");
-		}
+		GenericHeuristic heuristic = getHeuristic(id);
 
 		ArrayDeque<GenericSearchNode> history = new ArrayDeque<>();
 		GenericSearchNode node = new ForwardSearchNode(problem);
 
 		while (!node.satisfiesProblem() && currOpenNodes.size() < numCubes && withinTimeLimit()) {
+
+			totalIterations++;
 
 			currFinishedNodes.add(node);
 			currOpenNodes.remove(node);
@@ -131,5 +118,29 @@ public class PortfolioCubeFinder extends CubeFinder {
 			}
 		}
 		return;
+	}
+
+	private GenericHeuristic getHeuristic(int id) {
+		GenericHeuristic heuristic;
+		switch (id) {
+		case 0:
+			heuristic = new GenericFroleyks();
+			break;
+		case 1:
+			heuristic = new GenericManhattanGoalDistance();
+			break;
+		case 2:
+			heuristic = new GenericRelaxedPathLength();
+			break;
+		case 3:
+			heuristic = new GenericTrautmann();
+			break;
+		case 4:
+			heuristic = new GenericWilliams();
+			break;
+		default:
+			throw new UnsupportedOperationException("No such id available for heuristic.");
+		}
+		return heuristic;
 	}
 }

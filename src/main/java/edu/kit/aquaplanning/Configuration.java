@@ -149,7 +149,7 @@ public class Configuration {
 	/* Cube an Conquer planning */
 	
 	@Option(names = {"-c", "--cubes"}, description = "The number of cubes to search for before trying to solve them: "
-			+ USAGE_DEFAULT, defaultValue = "10000")
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "10000")
 	public int numCubes;
 	public enum CubeFinderMode {
 		forwardSearch, backwardSearch, cutOff, portfolio;
@@ -157,18 +157,31 @@ public class Configuration {
 	@Option(names = {"--cubeFinder"}, description = "The desired mode to find the Cubes: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "forwardSearch")
 	public CubeFinderMode cubeFinderMode;
+	public enum CubeNodeType {
+		closed, open;
+	}
+	@Option(names = {"-cnt"}, description = "The type of the node to use as cubes: "
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "open")
+	public CubeNodeType cubeNodeType;
+	@Option(names = {"-cp"}, description = "The amount of cubes that gets solved relative to all found cubes: "
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1.0")
+	public double cubePercent;
+	@Option(names = {"-csi"}, description = "The interval at wich a closed node becomes a cube: "
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1")
+	public int cubeSparseInterval;
+	
 	
 	public enum SchedulerMode {
 		roundRobin, exponential, bandit, greedyBandit, forcedImprovement, hillClimbing;
 	}
 	@Option(names = {"-sched", "--scheduler"}, description = "Which scheduler to use to split up computation time between cubes: "
-			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "bandit")
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "greedyBandit")
 	public SchedulerMode schedulerMode;
 	@Option(names = {"-schedI"}, description = "Amount of iterations each cube gets while beeing scheduled: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "0")
 	public int schedulerIterations;
 	@Option(names = {"-schedT"}, description = "Amount of time each cube gets while beeing scheduled (in milliseconds): "
-			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "4000")
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "100")
 	public long schedulerTime;
 	@Option(names = {"-schedExpG"}, description = "The growth value of the exponential scheduler: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1.5")

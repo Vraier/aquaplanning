@@ -2,10 +2,12 @@ package edu.kit.aquaplanning.planning.cube.finder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.cube.Cube;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
+import edu.kit.aquaplanning.planning.cube.datastructure.ForwardSearchNode;
 import edu.kit.aquaplanning.planning.cube.datastructure.GenericSearchNode;
 import edu.kit.aquaplanning.planning.cube.datastructure.GenericSearchQueue;
 import edu.kit.aquaplanning.util.Logger;
@@ -14,9 +16,6 @@ public abstract class GenericCubeFinder extends CubeFinder {
 
 	// Frontier gets initialized by the call of initializeFrontierWithNode()
 	protected GenericSearchQueue frontier;
-	protected int totalIterations = 0;
-
-	public int totalFrontierSize = 0;
 
 	public GenericCubeFinder(Configuration config) {
 		super(config);
@@ -27,7 +26,8 @@ public abstract class GenericCubeFinder extends CubeFinder {
 
 		initializeFrontierWithNode(problem);
 
-		while (!frontier.isEmpty() && frontier.size() < config.numCubes && withinTimeLimit()) {
+		// we only return cubePercent amount of nodes at the end
+		while (!frontier.isEmpty() && currentCubeSize() * config.cubePercent < config.numCubes && withinTimeLimit()) {
 
 			totalIterations++;
 
@@ -43,7 +43,8 @@ public abstract class GenericCubeFinder extends CubeFinder {
 						"Generic Cube Finder already found a plan after " + totalIterations + " steps.");
 				plan = node.getPartialPlan();
 
-				totalFrontierSize = frontier.size();
+				foundCubeSize = currentCubeSize();
+				returnedCubeSize = 0;
 				return null;
 			}
 
@@ -57,24 +58,52 @@ public abstract class GenericCubeFinder extends CubeFinder {
 			return new ArrayList<Cube>();
 		}
 
-		totalFrontierSize = frontier.size();
+		// We found the required amount of cubes. We now return the requested fraction
+		// of them
+		// get the size of cubes first because a call to extract cubes changes the size
+		// to 0
+		foundCubeSize = currentCubeSize();
+		List<Cube> cubes = extractCubes();
+		returnedCubeSize = Math.min(config.numCubes, cubes.size());
 
-		return frontier.getCubes();
+		// We also add the initial node again to stay complete
+		Random random = new Random(config.seed);
+		java.util.Collections.shuffle(cubes, random);
+		List<Cube> result = cubes.subList(0, returnedCubeSize);
+		result.add(new ForwardSearchNode(problem).getCube());
+		returnedCubeSize++;
+		return result;
 	}
 
-	@Override
-	public void logInformation() {
-		if (!withinTimeLimit()) {
-			Logger.log(Logger.INFO, "Generic Cube Finder exceeded his time limit or got interrupted.");
+	/**
+	 * depending on if we want to use open or closed nodes as cubes we return the
+	 * size of the open or closed nodes.
+	 */
+	private int currentCubeSize() {
+		switch (config.cubeNodeType) {
+		case open:
+			return frontier.size();
+		case closed:
+			return frontier.visitedSize();
+		default:
+			throw new IllegalArgumentException("Cube Type not supported");
 		}
-		if (frontier.isEmpty()) {
-			Logger.log(Logger.INFO,
-					"Generic Cube Finder emptyed his search queue and found no plan. The Problem has no solution.");
-		}
+	}
 
-		Logger.log(Logger.INFO, "Generic Cube Finder stopped search after " + totalIterations + " steps.");
-		Logger.log(Logger.INFO,
-				"Generic Cube Finder schould find " + config.numCubes + " and found " + totalFrontierSize + " cubes.");
+	private List<Cube> extractCubes() {
+
+		List<Cube> cubes;
+		switch (config.cubeNodeType) {
+		case open:
+			cubes = frontier.getOpenCubes();
+			break;
+		case closed:
+			cubes = frontier.getClosedCubes();
+			break;
+		default:
+			throw new IllegalArgumentException("Cube Type not supported");
+		}
+		return cubes;
 	}
 
 	/**

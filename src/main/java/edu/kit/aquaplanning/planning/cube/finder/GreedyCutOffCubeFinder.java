@@ -4,6 +4,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.cube.Cube;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
@@ -14,18 +16,19 @@ import edu.kit.aquaplanning.util.Logger;
 
 public class GreedyCutOffCubeFinder extends CubeFinder {
 
+	//TODO config entries for numAnchors and percent
+	
 	private HashSet<GenericSearchNode> openNodes = new HashSet<>();
 	private HashSet<GenericSearchNode> finishedNodes = new HashSet<>();
 	private ArrayDeque<GenericSearchNode> history = new ArrayDeque<>();
 	private GenericHeuristic heuristic;
 
 	private int numAnchors;
+	private double percent;
 	private HashSet<GenericSearchNode> cutOffNodes = new HashSet<>();
 	private ArrayList<GenericSearchNode> anchors = new ArrayList<>();
 	private ArrayList<Integer> anchorValues = new ArrayList<>();
-	private double percent;
 
-	private int totalIterations = 0;
 	public int totalFrontierSize = 0;
 	public int totalAnchorSize = 0;
 	public int totalCutOffSize = 0;
@@ -102,8 +105,16 @@ public class GreedyCutOffCubeFinder extends CubeFinder {
 		totalFrontierSize = currentCubesSize();
 		totalAnchorSize = anchors.size();
 		totalCutOffSize = cutOffNodes.size();
-		// TODO: retriev correct nodes
-		return null;
+		
+		Set<GenericSearchNode> resultSet = new HashSet<>();
+		List<Cube> result = new ArrayList<>();
+		resultSet.addAll(openNodes);
+		resultSet.addAll(cutOffNodes);
+		
+		for(GenericSearchNode n: resultSet) {
+			result.add(n.getCube());
+		}
+		return result;
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.cube.Cube;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
+import edu.kit.aquaplanning.util.Logger;
 
 public abstract class CubeFinder {
 
@@ -14,6 +15,10 @@ public abstract class CubeFinder {
 
 	protected Configuration config;
 	protected Plan plan = null;
+
+	public int totalIterations = 0;
+	public int foundCubeSize = -1;
+	public int returnedCubeSize = -1;
 
 	public CubeFinder(Configuration config) {
 		this.config = config;
@@ -31,7 +36,14 @@ public abstract class CubeFinder {
 	 */
 	public abstract List<Cube> findCubes(GroundPlanningProblem problem);
 
-	public abstract void logInformation();
+	public void logInformation() {
+		Logger.log(Logger.INFO, "Cube Finder started in mode " + config.cubeFinderMode + ".");
+		if (!withinTimeLimit()) {
+			Logger.log(Logger.INFO, "Cube Finder exceeded his time limit or got interrupted.");
+		}
+		Logger.log(Logger.INFO, "Cube Finder stopped search after " + totalIterations + " steps, schould find "
+				+ config.numCubes + " and found " + foundCubeSize + " and returned " + returnedCubeSize + " cubes.");
+	}
 
 	/**
 	 * This method should only be called if findCubes() returns null. In this case
