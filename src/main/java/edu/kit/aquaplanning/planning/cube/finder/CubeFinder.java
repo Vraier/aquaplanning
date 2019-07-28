@@ -72,6 +72,8 @@ public abstract class CubeFinder {
 			return new GreedyCutOffCubeFinder(config);
 		case portfolio:
 			return new PortfolioCubeFinder(config);
+		case sparse:
+			return new SparseCubeFinder(config);
 		default:
 			throw new UnsupportedOperationException("Cube Finder " + config.cubeFinderMode + " is not available.");
 		}

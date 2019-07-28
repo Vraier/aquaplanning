@@ -23,37 +23,53 @@ def getCompTimes(testFolder, numTester):
                 # fill groupedTime with data
                 for x in range(numTester):
                     if(not util.foundValidPlan(blocks[x])):
-                        #print('got timeout at block' + str(x))
+                        #continue
                         groupedTime[x].append(const.timeLimit * 5.1)
                     else:
                         groupedTime[x].append(util.getCalcTime(blocks[x]))
+
+    for x in range(numTester):
+        groupedTime[x] = sorted(groupedTime[x])
     return groupedTime
+
+def plotCompTimes(listsToShow):
+    for x in range(len(showResult)):
+        plt.plot(showResult[x], marker = '.', linestyle = '-', label = x)
+    plt.xlabel('Test file instance')
+    plt.ylabel('Time in seconds (logarithmic scale)')
+    plt.yscale("symlog")
+    plt.title('Computation time on solving different test instances sorted by time')
+    plt.legend()
+    plt.show()
+
+def plotSpeedUp(list1, list2):
+    speedUp = [s/p for (s,p) in zip(list1, list2)]
+    plt.plot(speedUp, marker = '.', linestyle = 'none')
+
+    plt.axhline(y=1, color='black', linestyle='-')
+    plt.axhline(y=2, color='black', linestyle='-')
+    plt.axhline(y=4, color='black', linestyle='-')
+
+    plt.xlabel('Test file instance')
+    plt.ylabel('Speedup t_1/t_2')
+    plt.title('Speedup relative to two different solver instances')
+    plt.show()
 
 resultSE = getCompTimes('resultSequential', 1)
 resultFGB = getCompTimes('FullGreedyBanditTest', 4)
-if len(resultSE[0]) != len(resultFGB[0]): print("Error")
-speedUp = [s/p for (s,p) in zip(sorted(resultSE[0]), sorted(resultFGB[3]))]
 
 resultB1 = getCompTimes('resultBandit', 4)
 resultB2 = getCompTimes('resultBandit2', 4)
 resultGB = getCompTimes('resultGreedyBandit', 4)
 resultGBCA = getCompTimes('GreedyBanditCubeAmountTest', 4)
 resultFI = getCompTimes('resultForcedImprovement', 4)
+resultNTC = getCompTimes('NodeTypeComparison', 2)
 
-#showResult = [resultGB[3], resultGBCA[2], resultGBCA[3]]
+#showResult = [resultGBCA[1], resultGBCA[2], resultGBCA[3], resultNTC[1]]
+#showResult = resultSE + resultFGB
 showResult = resultGBCA
 
+plotCompTimes(showResult)
+#plotSpeedUp(resultNTC[0], resultNTC[1])
 
 
-
-
-for x in range(len(showResult)):
-    plt.semilogy(sorted(showResult[x]), marker = '.', linestyle = 'None', label = x)
-
-#plt.semilogy(evenTime, color = 'b', marker = '.', linestyle = 'None', label = 'Parallel')
-#plt.semilogy(unevenTime, color = 'r', marker = '.', linestyle = 'None', label = 'Sequential')
-plt.xlabel('Number of testcase')
-plt.ylabel('Time in seconds')
-plt.title('Comparing different approaches to planning')
-plt.legend()
-plt.show()

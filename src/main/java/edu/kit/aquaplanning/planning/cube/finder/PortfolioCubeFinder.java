@@ -96,7 +96,7 @@ public class PortfolioCubeFinder extends CubeFinder {
 					continue;
 				} else {
 					int value = heuristic.value(c);
-					// node cant reach goal. don't add it to open nodes
+					// node can't reach goal. don't add it to open nodes
 					if (value == Integer.MAX_VALUE)
 						continue;
 					// node was never seen before or is open so we consider it for the next

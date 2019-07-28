@@ -149,10 +149,10 @@ public class Configuration {
 	/* Cube an Conquer planning */
 	
 	@Option(names = {"-c", "--cubes"}, description = "The number of cubes to search for before trying to solve them: "
-			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "10000")
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "2000")
 	public int numCubes;
 	public enum CubeFinderMode {
-		forwardSearch, backwardSearch, cutOff, portfolio;
+		forwardSearch, backwardSearch, cutOff, portfolio, sparse;
 	}
 	@Option(names = {"--cubeFinder"}, description = "The desired mode to find the Cubes: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "forwardSearch")
@@ -202,6 +202,13 @@ public class Configuration {
 			description = "Search strategy for forward search while searching for cubes: " + USAGE_OPTIONS_AND_DEFAULT, 
 			defaultValue = "bestFirst")
 	public SearchStrategy.Mode cubeFindSearchStrategy;
+	@Option(names = {"-numAnchors"}, description = "The numbers of anchors to use while searching for cubes: "
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "10")
+	public int cutOffAnchors;
+	@Option(names = {"-distRat"}, description = "The ratio of the distance to cut a node off while searching for cubes: "
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "0.3")
+	public double cutOffDistanceRatio;
+	
 	
 	@Option(paramLabel = "cubeSolveHeuristic", names = {"-csh", "--cube-solve-heuristic"}, 
 			description = "Heuristic for forward search while solving cubes: " + USAGE_OPTIONS_AND_DEFAULT, 

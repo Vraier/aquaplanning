@@ -49,11 +49,11 @@ public class TestCubeAndConquer extends TestCase {
 		//assertTrue("Ignore this.", false);
 		for (CubeFinderMode mode : CubeFinderMode.values()) {
 
-			if (mode != CubeFinderMode.portfolio)
+			if (mode != CubeFinderMode.sparse)
 				continue;
 			Configuration config = getDefaultConfig();
 			config.cubeFinderMode = mode;
-			config.numCubes = 100;
+			config.numCubes = 50;
 
 			for (String domain : DEFAULT_TEST_DOMAINS) {
 				fullTest("testfiles/" + domain + "/domain.pddl", "testfiles/" + domain + "/p01.pddl", config);
@@ -208,11 +208,13 @@ public class TestCubeAndConquer extends TestCase {
 		config.cubeFinderMode = CubeFinderMode.forwardSearch;
 		config.cubeNodeType = CubeNodeType.open;
 		config.cubePercent = 1.0;
-		config.cubeSparseInterval = 1;
+		config.cubeSparseInterval = 3;
 		config.cubeFindSearchStrategy = SearchStrategy.Mode.bestFirst;
 		config.cubeFindHeuristic = HeuristicType.ffTrautmann;
-		config.cubeSolveHeuristicWeight = 10;
-
+		config.cubeFindHeuristicWeight = 10;
+		config.cutOffAnchors = 10;
+		config.cutOffDistanceRatio = 0.3;
+		
 		config.schedulerMode = SchedulerMode.exponential;
 		config.schedulerIterations = 0;
 		config.schedulerTime = 4000;

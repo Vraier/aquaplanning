@@ -35,6 +35,9 @@ public class GreedyCutOffCubeFinder extends CubeFinder {
 
 	public GreedyCutOffCubeFinder(Configuration config) {
 		super(config);
+		numAnchors = config.cutOffAnchors;
+		percent = config.cutOffDistanceRatio;
+		heuristic = GenericHeuristic.getHeuristic(config);
 	}
 
 	@Override
