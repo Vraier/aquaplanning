@@ -46,12 +46,14 @@ public class TestCubeAndConquer extends TestCase {
 
 	public void testCubeFinderModes() throws FileNotFoundException, IOException {
 
-		//assertTrue("Backward Cube Finding not working currently.", false);
+		//assertTrue("Ignore this.", false);
 		for (CubeFinderMode mode : CubeFinderMode.values()) {
 
-			if(mode != CubeFinderMode.portfolio) continue;
+			if (mode != CubeFinderMode.portfolio)
+				continue;
 			Configuration config = getDefaultConfig();
 			config.cubeFinderMode = mode;
+			config.numCubes = 100;
 
 			for (String domain : DEFAULT_TEST_DOMAINS) {
 				fullTest("testfiles/" + domain + "/domain.pddl", "testfiles/" + domain + "/p01.pddl", config);
@@ -129,6 +131,23 @@ public class TestCubeAndConquer extends TestCase {
 		}
 	}
 
+	public void testOpenClosedNodes() throws FileNotFoundException, IOException {
+
+		assertTrue("Ignore this.", false);
+		for (CubeNodeType type : CubeNodeType.values()) {
+
+			Configuration config = getDefaultConfig();
+			config.cubeNodeType = type;
+			config.numThreads = 2;
+			config.schedulerTime = 200;
+			config.numCubes = 40;
+
+			for (String domain : DEFAULT_TEST_DOMAINS) {
+				fullTest("testfiles/" + domain + "/domain.pddl", "testfiles/" + domain + "/p01.pddl", config);
+			}
+		}
+	}
+
 	private void fullTest(String domainFile, String problemFile, Configuration config)
 			throws FileNotFoundException, IOException {
 
@@ -155,7 +174,7 @@ public class TestCubeAndConquer extends TestCase {
 
 		System.out.println("Planning ...");
 		System.out.println("Cube finding mode is: " + config.cubeFinderMode + ", Scheduler mode is: "
-				+ config.schedulerMode + ".");
+				+ config.schedulerMode + ", node Type is: " + config.cubeNodeType + ".");
 		Planner planner = Planner.getPlanner(config);
 		Plan plan = planner.findPlan(gpp);
 
@@ -185,9 +204,9 @@ public class TestCubeAndConquer extends TestCase {
 		config.numThreads = 4;
 		config.maxTimeSeconds = 300;
 
-		config.numCubes = 10000;
+		config.numCubes = 100;
 		config.cubeFinderMode = CubeFinderMode.forwardSearch;
-		config.cubeNodeType = CubeNodeType.closed;
+		config.cubeNodeType = CubeNodeType.open;
 		config.cubePercent = 1.0;
 		config.cubeSparseInterval = 1;
 		config.cubeFindSearchStrategy = SearchStrategy.Mode.bestFirst;
@@ -206,7 +225,7 @@ public class TestCubeAndConquer extends TestCase {
 
 		return config;
 	}
-	
+
 	@Override
 	protected void tearDown() throws Exception {
 		super.tearDown();

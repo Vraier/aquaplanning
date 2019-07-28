@@ -47,7 +47,7 @@ public class PortfolioCubeFinder extends CubeFinder {
 			currOpenNodes.clear();
 			currFinishedNodes.clear();
 		}
-		System.out.println("Finished all Heuristics");
+		// System.out.println("Finished all Heuristics");
 
 		totalOpenNodes.removeAll(totalFinishedNodes);
 		ArrayList<Cube> result = new ArrayList<>();
@@ -70,16 +70,19 @@ public class PortfolioCubeFinder extends CubeFinder {
 	 * parameter id.
 	 */
 	private void findCubes(int id, GroundPlanningProblem problem, int numCubes) {
-		System.out.println("Trying heuristic with id " + id);
+		// System.out.println("Trying heuristic with id " + id);
 
 		GenericHeuristic heuristic = getHeuristic(id);
 
 		ArrayDeque<GenericSearchNode> history = new ArrayDeque<>();
 		GenericSearchNode node = new ForwardSearchNode(problem);
+		history.addLast(node);
 
 		while (!node.satisfiesProblem() && currOpenNodes.size() < numCubes && withinTimeLimit()) {
 
 			totalIterations++;
+			System.out.println("Size of history is: " + history.size() + ", size of finished is: "
+					+ currFinishedNodes.size() + ", size of open is: " + currOpenNodes.size());
 
 			currFinishedNodes.add(node);
 			currOpenNodes.remove(node);
@@ -92,10 +95,13 @@ public class PortfolioCubeFinder extends CubeFinder {
 					// nothing to do here. Node is already explored
 					continue;
 				} else {
+					int value = heuristic.value(c);
+					// node cant reach goal. don't add it to open nodes
+					if (value == Integer.MAX_VALUE)
+						continue;
 					// node was never seen before or is open so we consider it for the next
 					// iteration
 					currOpenNodes.add(c);
-					int value = heuristic.value(c);
 					if (value < bestValue) {
 						bestValue = value;
 						best = c;

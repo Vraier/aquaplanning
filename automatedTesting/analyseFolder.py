@@ -37,12 +37,11 @@ speedUp = [s/p for (s,p) in zip(sorted(resultSE[0]), sorted(resultFGB[3]))]
 resultB1 = getCompTimes('resultBandit', 4)
 resultB2 = getCompTimes('resultBandit2', 4)
 resultGB = getCompTimes('resultGreedyBandit', 4)
+resultGBCA = getCompTimes('GreedyBanditCubeAmountTest', 4)
 resultFI = getCompTimes('resultForcedImprovement', 4)
 
-#showResult = resultFI
-#showResult = [resultB1[1], resultGB[3], resultFI[3]]
-#showResult = resultSE + resultFGB
-showResult = resultFGB
+#showResult = [resultGB[3], resultGBCA[2], resultGBCA[3]]
+showResult = resultGBCA
 
 
 
