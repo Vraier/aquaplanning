@@ -22,7 +22,8 @@ numThreads = ['-T=8']
 verbosityLevel = ['-v=2']
 #numCubes = ['-c=1', '-c=48', '-c=1000', '-c=100000']
 #numCubes = ['-c=8000', '-c=800', '-c=80']
-cubyInterval = ['-c=2000, -csi=1', '-c=200, -csi=10', '-c=20, -csi=100', '-c=80, -csi=1', '-c=80, -csi=10', '-c=80, -csi=100']
+numCubes = ['-c=2000', '-c=200', '-c=20', '-c=80']
+cubeInterval = ['-csi=1', '-csi=10', '-csi=100']
 cubeFinderMode = ['--cubeFinder=sparse'] # '--cubeFinder=backwardSearch'
 cubeFindSearchStrategy = ['-cfs=bestFirst'] # '-cfs=breadthFirst' 
 schedulerMode = ['-sched=greedyBandit'] #['-sched=bandit', -sched=exponential', '-sched=hillClimbing', '-sched=roundRobin']
@@ -31,10 +32,10 @@ exponentialGrowth = ['-schedExpG=2']
 #hillClimbPercent = ['-schedHill=0.8', '-schedHill=0.5' , '-schedHill=0.25', '-schedHill=0.1']
 
 
-commandLists = [maxSeconds, plannerType, numThreads, verbosityLevel, cubyInterval, cubeFinderMode, cubeFindSearchStrategy, schedulerMode, schedulerTime, exponentialGrowth]
+commandLists = [maxSeconds, plannerType, numThreads, verbosityLevel, numCubes, cubeInterval, cubeFinderMode, cubeFindSearchStrategy, schedulerMode, schedulerTime, exponentialGrowth]
 
 # for testSingle
 #arguments = [['-t=5000', '-H=ffWilliams']]
-arguments = util.listCombinations(commandLists)
+arguments = filter(lambda x: x[4] == '-c=80' or (x[4] == '-c=2000' and x[5] == '-csi=1') or (x[4] == '-c=200' and x[5] == '-csi=10') or (x[4] == '-c=20' and x[5] == '-csi=100'),util.listCombinations(commandLists))
 outputFolder = 'CubeSparseTest'
 outputFolderPath = os.path.join(homeDirName, outputFolder)
