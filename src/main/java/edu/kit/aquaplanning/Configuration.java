@@ -152,7 +152,7 @@ public class Configuration {
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "2000")
 	public int numCubes;
 	public enum CubeFinderMode {
-		forwardSearch, backwardSearch, cutOff, portfolio, sparse;
+		forwardSearch, backwardSearch, cutOff, portfolio, sparse, randomGreedy;
 	}
 	@Option(names = {"--cubeFinder"}, description = "The desired mode to find the Cubes: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "forwardSearch")
@@ -161,7 +161,7 @@ public class Configuration {
 		closed, open;
 	}
 	@Option(names = {"-cnt"}, description = "The type of the node to use as cubes: "
-			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "open")
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "closed")
 	public CubeNodeType cubeNodeType;
 	@Option(names = {"-cp"}, description = "The amount of cubes that gets solved relative to all found cubes: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1.0")
@@ -169,6 +169,9 @@ public class Configuration {
 	@Option(names = {"-csi"}, description = "The interval at wich a closed node becomes a cube: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1")
 	public int cubeSparseInterval;
+	@Option(names = {"-csd"}, description = "The amount of different cube finding searches when using a random approach: "
+			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "1")
+	public int cubeFindDescents;
 	
 	
 	public enum SchedulerMode {

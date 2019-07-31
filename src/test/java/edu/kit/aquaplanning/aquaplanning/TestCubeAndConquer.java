@@ -49,7 +49,7 @@ public class TestCubeAndConquer extends TestCase {
 		//assertTrue("Ignore this.", false);
 		for (CubeFinderMode mode : CubeFinderMode.values()) {
 
-			if (mode != CubeFinderMode.sparse)
+			if (mode != CubeFinderMode.forwardSearch)
 				continue;
 			Configuration config = getDefaultConfig();
 			config.cubeFinderMode = mode;
@@ -206,9 +206,10 @@ public class TestCubeAndConquer extends TestCase {
 
 		config.numCubes = 100;
 		config.cubeFinderMode = CubeFinderMode.forwardSearch;
-		config.cubeNodeType = CubeNodeType.open;
-		config.cubePercent = 1.0;
+		config.cubeNodeType = CubeNodeType.closed;
+		config.cubePercent = 0.3;
 		config.cubeSparseInterval = 3;
+		config.cubeFindDescents = 5;
 		config.cubeFindSearchStrategy = SearchStrategy.Mode.bestFirst;
 		config.cubeFindHeuristic = HeuristicType.ffTrautmann;
 		config.cubeFindHeuristicWeight = 10;

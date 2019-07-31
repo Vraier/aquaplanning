@@ -24,7 +24,7 @@ def getCompTimes(testFolder, numTester):
                 for x in range(numTester):
                     if(not util.foundValidPlan(blocks[x])):
                         #continue
-                        groupedTime[x].append(const.timeLimit * 5.1)
+                        groupedTime[x].append(const.timeLimit * 10)
                     else:
                         groupedTime[x].append(util.getCalcTime(blocks[x]))
 
@@ -33,8 +33,9 @@ def getCompTimes(testFolder, numTester):
     return groupedTime
 
 def plotCompTimes(listsToShow):
+    markers = ['.', '+', 'x', '1', '2', '3', '4']
     for x in range(len(showResult)):
-        plt.plot(showResult[x], marker = '.', linestyle = '-', label = x)
+        plt.plot(showResult[x], marker = markers[x], linestyle = '-', label = x)
     plt.xlabel('Test file instance')
     plt.ylabel('Time in seconds (logarithmic scale)')
     plt.yscale("symlog")
@@ -56,20 +57,34 @@ def plotSpeedUp(list1, list2):
     plt.show()
 
 resultSE = getCompTimes('resultSequential', 1)
+resultBSE = getCompTimes('bigSequentialTest', 1)
 resultFGB = getCompTimes('FullGreedyBanditTest', 4)
 
+resultSSE = getCompTimes('smallSequentialTest', 1)
 resultB1 = getCompTimes('resultBandit', 4)
 resultB2 = getCompTimes('resultBandit2', 4)
 resultGB = getCompTimes('resultGreedyBandit', 4)
 resultGBCA = getCompTimes('GreedyBanditCubeAmountTest', 4)
 resultFI = getCompTimes('resultForcedImprovement', 4)
 resultNTC = getCompTimes('NodeTypeComparison', 2)
+resultSP = getCompTimes('SparseTest', 6)
 
-#showResult = [resultGBCA[1], resultGBCA[2], resultGBCA[3], resultNTC[1]]
-#showResult = resultSE + resultFGB
-showResult = resultGBCA
+
+#showResult = resultFGB # Different sched Time intervals -schedT=4000, 1000, 400, 100
+#showResult = resultSE + [resultFGB[3]] # compare sequential with the greedy bandit approach
+#plotSpeedUp(resultSE[0], resultFGB[3]) # look at speedup for sequential and parallel
+
+#showResult = resultGBCA # -c=8000, 2000, 800, 80
+#showResult = resultSSE + [resultSP[4]]
+#showResult = resultNTC + [resultGBCA[3]] # nodes open and closed (-c=2000) and best cube amount open (-c=80)
+#plotSpeedUp(resultNTC[0], resultNTC[1]) # look at speedup for open and closed nodes
+#showResult = [resultSP[0]] + [resultNTC[1]] #sanity check with node type closed
+#showResult = resultSP[0:3] # -c=2000, 200, 20 -interval=1, 10, 100
+#showResult = resultSP[3:6] # -c=80 -interval=1, 10, 100
+#showResult = [resultSP[1]] + [resultSP[4]] # compare -c=200, 80 and -interval=10
+
+showResult = resultSE + resultBSE + [resultFGB[3]]
 
 plotCompTimes(showResult)
-#plotSpeedUp(resultNTC[0], resultNTC[1])
 
 

@@ -46,20 +46,21 @@ public class CubeAndConquerPlanner extends Planner {
 		CubeFinder cFinder;
 
 		List<String> entrie1 = Arrays.asList("problemFile", "maxSeconds", "numThreads", "numCubes", "cubeFinderMode",
-				"cubeNodeType", "cubePercent", "cubeSparceInterval", "schedulerMode", "schedulerIterations",
-				"schedulerTime", "schedulerExponentialGrowth", "schedulerHillClimb", "cubeFindHeuristic",
-				"cubeFindeHeuristicWeight", "cubeFindSearchStrategy", "cutOffAnchors", "cutOffDistanceRatio",
-				"cubeSolveHeuristic", "cubeSolveHeuristicWeight", "cubeSolveSearchStrategy");
+				"cubeNodeType", "cubePercent", "cubeSparceInterval", "cubeFindDescents", "schedulerMode",
+				"schedulerIterations", "schedulerTime", "schedulerExponentialGrowth", "schedulerHillClimb",
+				"cubeFindHeuristic", "cubeFindeHeuristicWeight", "cubeFindSearchStrategy", "cutOffAnchors",
+				"cutOffDistanceRatio", "cubeSolveHeuristic", "cubeSolveHeuristicWeight", "cubeSolveSearchStrategy");
 		List<String> entrie2 = Arrays.asList(config.problemFile, Integer.toString(config.maxTimeSeconds),
 				Integer.toString(config.numThreads), Integer.toString(config.numCubes),
 				config.cubeFinderMode.toString(), config.cubeNodeType.toString(), Double.toString(config.cubePercent),
-				Integer.toString(config.cubeSparseInterval), config.schedulerMode.toString(),
-				Integer.toString(config.schedulerIterations), Long.toString(config.schedulerTime),
-				Double.toString(config.schedulerGrowth), Double.toString(config.schedulerHillClimb),
-				config.cubeFindHeuristic.toString(), Integer.toString(config.cubeFindHeuristicWeight),
-				config.cubeFindSearchStrategy.toString(), Integer.toString(config.cutOffAnchors),
-				Double.toString(config.cutOffDistanceRatio), config.cubeSolveHeuristic.toString(),
-				Integer.toString(config.cubeSolveHeuristicWeight), config.cubeSolveSearchStrategy.toString());
+				Integer.toString(config.cubeSparseInterval), Integer.toString(config.cubeFindDescents),
+				config.schedulerMode.toString(), Integer.toString(config.schedulerIterations),
+				Long.toString(config.schedulerTime), Double.toString(config.schedulerGrowth),
+				Double.toString(config.schedulerHillClimb), config.cubeFindHeuristic.toString(),
+				Integer.toString(config.cubeFindHeuristicWeight), config.cubeFindSearchStrategy.toString(),
+				Integer.toString(config.cutOffAnchors), Double.toString(config.cutOffDistanceRatio),
+				config.cubeSolveHeuristic.toString(), Integer.toString(config.cubeSolveHeuristicWeight),
+				config.cubeSolveSearchStrategy.toString());
 		CSVWriter.writeFile("configurationInfo.csv", Arrays.asList(entrie1, entrie2));
 
 		// Search for cubes

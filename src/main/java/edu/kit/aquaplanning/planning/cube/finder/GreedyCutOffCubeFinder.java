@@ -15,8 +15,6 @@ import edu.kit.aquaplanning.planning.cube.heuristic.GenericHeuristic;
 import edu.kit.aquaplanning.util.Logger;
 
 public class GreedyCutOffCubeFinder extends CubeFinder {
-
-	//TODO config entries for numAnchors and percent
 	
 	private HashSet<GenericSearchNode> openNodes = new HashSet<>();
 	private HashSet<GenericSearchNode> finishedNodes = new HashSet<>();
