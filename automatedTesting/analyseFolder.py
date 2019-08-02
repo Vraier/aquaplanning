@@ -74,7 +74,7 @@ resultSP = getCompTimes('SparseTest', 6)
 #showResult = resultSE + [resultFGB[3]] # compare sequential with the greedy bandit approach
 #plotSpeedUp(resultSE[0], resultFGB[3]) # look at speedup for sequential and parallel
 
-#showResult = resultGBCA # -c=8000, 2000, 800, 80
+showResult = resultGBCA # -c=8000, 2000, 800, 80
 #showResult = resultSSE + [resultSP[4]]
 #showResult = resultNTC + [resultGBCA[3]] # nodes open and closed (-c=2000) and best cube amount open (-c=80)
 #plotSpeedUp(resultNTC[0], resultNTC[1]) # look at speedup for open and closed nodes
@@ -83,7 +83,7 @@ resultSP = getCompTimes('SparseTest', 6)
 #showResult = resultSP[3:6] # -c=80 -interval=1, 10, 100
 #showResult = [resultSP[1]] + [resultSP[4]] # compare -c=200, 80 and -interval=10
 
-showResult = resultSE + resultBSE + [resultFGB[3]]
+#showResult = resultSE + resultBSE + [resultFGB[3]]
 
 plotCompTimes(showResult)
 

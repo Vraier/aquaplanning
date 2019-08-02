@@ -1,5 +1,8 @@
 package edu.kit.aquaplanning.planning.cube;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.cube.Cube;
 import edu.kit.aquaplanning.model.ground.Action;
@@ -24,9 +27,9 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 	private SearchStrategy strategy;
 	private SearchQueue frontier;
 	
-	public ForwardSearchCubeSolver(Configuration config, Cube cube) {
+	public ForwardSearchCubeSolver(Configuration config, Cube cube, Set<SearchNode> visitedNodes) {
 
-		super(config, cube);
+		super(config, cube, visitedNodes);
 
 		// Create new Configuration to use it with the already existing Planner Classes
 		Configuration newConfig = config.copy();
@@ -49,6 +52,10 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 		}
 		frontier.add(new SearchNode(null, state));
 	}
+	
+	public ForwardSearchCubeSolver(Configuration config, Cube cube) {
+		this(config, cube, new HashSet<>());
+	}
 
 	@Override
 	public Plan calculateSteps() {
@@ -59,6 +66,7 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 		while (withinTimeLimit() && withinComputationalBounds(iterations) && !frontier.isEmpty()) {
 
 			SearchNode node = frontier.get();
+			if(visitedNodes.contains(node)) continue;
 
 			// Is the goal reached?
 			if (goal.isSatisfied(node.state)) {

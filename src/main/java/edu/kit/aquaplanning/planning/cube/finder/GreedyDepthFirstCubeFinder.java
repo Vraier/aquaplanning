@@ -95,16 +95,18 @@ public class GreedyDepthFirstCubeFinder extends CubeFinder {
 	}
 
 	private GenericSearchNode getRandomNode(List<GenericSearchNode> feasibleChilds) {
-		double sum = 0;
+		double max = 0;
 		double weightsSum = 0;
 		List<Double> weights = new ArrayList<>();
 
 		for (GenericSearchNode n : feasibleChilds) {
-			sum += n.heuristicValue;
+			max = Math.max(max, n.heuristicValue);
 		}
-		assert (sum != 0);
+		assert (max != 0);
+
+		max += 1;
 		for (int i = 0; i < feasibleChilds.size(); i++) {
-			double weight = 1.0 - ((double) feasibleChilds.get(i).heuristicValue / sum);
+			double weight = 1.0 - ((double) feasibleChilds.get(i).heuristicValue / max);
 			weightsSum += weight;
 			weights.add(weight);
 		}

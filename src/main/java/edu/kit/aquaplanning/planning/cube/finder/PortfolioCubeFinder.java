@@ -22,9 +22,7 @@ public class PortfolioCubeFinder extends CubeFinder {
 
 	private final int numFinder = 5;
 
-	private Set<GenericSearchNode> currOpenNodes = new HashSet<>();
 	private Set<GenericSearchNode> currFinishedNodes = new HashSet<>();
-	private Set<GenericSearchNode> totalOpenNodes = new HashSet<>();
 	private Set<GenericSearchNode> totalFinishedNodes = new HashSet<>();
 
 	public PortfolioCubeFinder(Configuration config) {
@@ -41,28 +39,18 @@ public class PortfolioCubeFinder extends CubeFinder {
 
 			findCubes(i, problem, cubeInterval);
 
-			foundCubeSize += currOpenNodes.size();
-			totalOpenNodes.addAll(currOpenNodes);
+			foundCubeSize += currFinishedNodes.size();
 			totalFinishedNodes.addAll(currFinishedNodes);
-			currOpenNodes.clear();
 			currFinishedNodes.clear();
 		}
 		// System.out.println("Finished all Heuristics");
 
-		totalOpenNodes.removeAll(totalFinishedNodes);
 		ArrayList<Cube> result = new ArrayList<>();
-
-		for (GenericSearchNode n : totalOpenNodes) {
+		for (GenericSearchNode n : totalFinishedNodes) {
 			result.add(n.getCube());
 		}
 		returnedCubeSize = result.size();
 		return result;
-	}
-
-	@Override
-	public void logInformation() {
-		// TODO Auto-generated method stub
-
 	}
 
 	/**
@@ -70,7 +58,6 @@ public class PortfolioCubeFinder extends CubeFinder {
 	 * parameter id.
 	 */
 	private void findCubes(int id, GroundPlanningProblem problem, int numCubes) {
-		// System.out.println("Trying heuristic with id " + id);
 
 		GenericHeuristic heuristic = getHeuristic(id);
 
@@ -78,14 +65,11 @@ public class PortfolioCubeFinder extends CubeFinder {
 		GenericSearchNode node = new ForwardSearchNode(problem);
 		history.addLast(node);
 
-		while (!node.satisfiesProblem() && currOpenNodes.size() < numCubes && withinTimeLimit()) {
+		while (!node.satisfiesProblem() && currFinishedNodes.size() < numCubes && withinTimeLimit()) {
 
 			totalIterations++;
-			System.out.println("Size of history is: " + history.size() + ", size of finished is: "
-					+ currFinishedNodes.size() + ", size of open is: " + currOpenNodes.size());
 
 			currFinishedNodes.add(node);
-			currOpenNodes.remove(node);
 
 			GenericSearchNode best = null;
 			int bestValue = Integer.MAX_VALUE;
@@ -101,7 +85,6 @@ public class PortfolioCubeFinder extends CubeFinder {
 						continue;
 					// node was never seen before or is open so we consider it for the next
 					// iteration
-					currOpenNodes.add(c);
 					if (value < bestValue) {
 						bestValue = value;
 						best = c;
@@ -111,7 +94,6 @@ public class PortfolioCubeFinder extends CubeFinder {
 
 			if (best == null) {
 				if (history.size() == 0) {
-					assert (currOpenNodes.size() == 0);
 					return;
 				}
 				// backtracking

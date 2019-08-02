@@ -1,12 +1,17 @@
 package edu.kit.aquaplanning.planning.cube;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.cube.Cube;
 import edu.kit.aquaplanning.model.ground.Plan;
+import edu.kit.aquaplanning.planning.datastructures.SearchNode;
 
 public abstract class CubeSolver {
 
 	// Variables that hold the state of the planner
+	protected Set<SearchNode> visitedNodes;
 	protected Cube cube;
 	protected Configuration config;
 	protected boolean isExhausted = false;
@@ -18,9 +23,14 @@ public abstract class CubeSolver {
 	protected int iterationLimit = 0;
 	protected long timeLimit = 0;
 
-	public CubeSolver(Configuration config, Cube cube) {
+	public CubeSolver(Configuration config, Cube cube, Set<SearchNode> visitedNodes) {
 		this.config = config;
 		this.cube = cube;
+		this.visitedNodes = visitedNodes;
+	}
+	
+	public CubeSolver(Configuration config, Cube cube) {
+		this(config, cube, new HashSet<>());
 	}
 
 	/**

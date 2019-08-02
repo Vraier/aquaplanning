@@ -49,7 +49,7 @@ public class TestCubeAndConquer extends TestCase {
 		//assertTrue("Ignore this.", false);
 		for (CubeFinderMode mode : CubeFinderMode.values()) {
 
-			if (mode != CubeFinderMode.forwardSearch)
+			if (mode != CubeFinderMode.randomGreedy)
 				continue;
 			Configuration config = getDefaultConfig();
 			config.cubeFinderMode = mode;

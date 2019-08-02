@@ -2,8 +2,10 @@ package edu.kit.aquaplanning.planning;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.model.cube.Cube;
@@ -14,6 +16,7 @@ import edu.kit.aquaplanning.planning.cube.ForwardSearchCubeSolver;
 import edu.kit.aquaplanning.planning.cube.finder.CubeFinder;
 import edu.kit.aquaplanning.planning.cube.scheduler.Scheduler;
 import edu.kit.aquaplanning.planning.cube.scheduler.Scheduler.ExitStatus;
+import edu.kit.aquaplanning.planning.datastructures.SearchNode;
 import edu.kit.aquaplanning.util.CSVWriter;
 import edu.kit.aquaplanning.util.Logger;
 
@@ -22,6 +25,7 @@ public class CubeAndConquerPlanner extends Planner {
 	private int numThreads;
 	private List<Thread> threads;
 	private Plan plan = null;
+	//private Set<SearchNode> visitedStates;
 
 	/**
 	 * Creates a new parallel planner. This planner uses a cube and conquer
@@ -68,6 +72,11 @@ public class CubeAndConquerPlanner extends Planner {
 		cFinder = CubeFinder.getCubeFinder(config);
 		cubes = cFinder.findCubes(problem);
 		cFinder.logInformation();
+
+		/*visitedStates = new HashSet<>();
+		for (Cube c : cubes) {
+			visitedStates.add(new SearchNode(null, c.getProblem().getInitialState()));
+		}*/
 
 		// check if we already found a Plan
 		plan = cFinder.getPlan();
@@ -210,7 +219,6 @@ public class CubeAndConquerPlanner extends Planner {
 					return false;
 				}
 			}
-
 			return true;
 		}
 	}
