@@ -68,13 +68,15 @@ resultGBCA = getCompTimes('GreedyBanditCubeAmountTest', 4)
 resultFI = getCompTimes('resultForcedImprovement', 4)
 resultNTC = getCompTimes('NodeTypeComparison', 2)
 resultSP = getCompTimes('SparseTest', 6)
+resultRSP = getCompTimes('CubeRandomSparseTest', 6)
+resultPARG = getCompTimes('CubeFindPortfolioAndRandom', 8)
 
 
 #showResult = resultFGB # Different sched Time intervals -schedT=4000, 1000, 400, 100
 #showResult = resultSE + [resultFGB[3]] # compare sequential with the greedy bandit approach
 #plotSpeedUp(resultSE[0], resultFGB[3]) # look at speedup for sequential and parallel
 
-showResult = resultGBCA # -c=8000, 2000, 800, 80
+#showResult = resultGBCA # -c=8000, 2000, 800, 80
 #showResult = resultSSE + [resultSP[4]]
 #showResult = resultNTC + [resultGBCA[3]] # nodes open and closed (-c=2000) and best cube amount open (-c=80)
 #plotSpeedUp(resultNTC[0], resultNTC[1]) # look at speedup for open and closed nodes
@@ -84,6 +86,11 @@ showResult = resultGBCA # -c=8000, 2000, 800, 80
 #showResult = [resultSP[1]] + [resultSP[4]] # compare -c=200, 80 and -interval=10
 
 #showResult = resultSE + resultBSE + [resultFGB[3]]
+#showResult = resultSP[0:3] + resultRSP[0:3]
+#showResult = resultSP[3:6] + resultRSP[3:6]
+showResult =  [resultRSP[2]] + resultSSE # best finder so far?
+#showResult = [resultPARG[0], resultPARG[4]] + resultSSE # Portfolio with 2000 and 800 Cubes
+#showResult = resultPARG[1:4] + resultPARG[5:8] + resultSSE # randomGreedy with 2000 cubes and 1, 5, 20 descents and 800 cubes
 
 plotCompTimes(showResult)
 
