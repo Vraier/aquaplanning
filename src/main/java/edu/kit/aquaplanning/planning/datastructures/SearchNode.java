@@ -17,6 +17,7 @@ public class SearchNode {
 	public State state;
 	public Action lastAction;
 	public int heuristicValue;
+	public double randomValue;
 	
 	public SearchNode(SearchNode parent, State state) {
 		if (parent != null)

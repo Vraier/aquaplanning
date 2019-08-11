@@ -151,8 +151,11 @@ public class Configuration {
 	@Option(names = {"-c", "--cubes"}, description = "The number of cubes to search for before trying to solve them: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "2000")
 	public int numCubes;
+	@Option(names = {"-svs", "--share-visited-states"}, description = "Share the states found while finding cubes with the cube solvers ")
+	public boolean shareVisitedStates;
+	
 	public enum CubeFinderMode {
-		forwardSearch, backwardSearch, cutOff, portfolio, sparse, randomGreedy;
+		forwardSearch, backwardSearch, cutOff, portfolio, sparse, randomGreedy, randomBestFirst;
 	}
 	@Option(names = {"--cubeFinder"}, description = "The desired mode to find the Cubes: "
 			+ USAGE_OPTIONS_AND_DEFAULT, defaultValue = "forwardSearch")
@@ -213,6 +216,13 @@ public class Configuration {
 	public double cutOffDistanceRatio;
 	
 	
+	public enum SolveMode {
+		forwardSearch, randomSearch;
+	}
+	@Option(paramLabel = "cubeSolveMode", names = {"-csm", "--cube-solve-mode"}, 
+			description = "The mode that is used for solving the cubes: " + USAGE_OPTIONS_AND_DEFAULT, 
+			defaultValue = "forwardSearch")
+	public SolveMode solveMode;
 	@Option(paramLabel = "cubeSolveHeuristic", names = {"-csh", "--cube-solve-heuristic"}, 
 			description = "Heuristic for forward search while solving cubes: " + USAGE_OPTIONS_AND_DEFAULT, 
 			defaultValue = "ffWilliams")

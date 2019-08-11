@@ -12,7 +12,6 @@ import edu.kit.aquaplanning.model.cube.Cube;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
 import edu.kit.aquaplanning.planning.cube.CubeSolver;
-import edu.kit.aquaplanning.planning.cube.ForwardSearchCubeSolver;
 import edu.kit.aquaplanning.planning.cube.finder.CubeFinder;
 import edu.kit.aquaplanning.planning.cube.scheduler.Scheduler;
 import edu.kit.aquaplanning.planning.cube.scheduler.Scheduler.ExitStatus;
@@ -25,7 +24,15 @@ public class CubeAndConquerPlanner extends Planner {
 	private int numThreads;
 	private List<Thread> threads;
 	private Plan plan = null;
-	//private Set<SearchNode> visitedStates;
+	private Set<SearchNode> visitedStates;
+
+	// log variables
+	long totalSearchTime = -1;
+	long totalCubeFindTime = -1;
+	long totalCubeSolveTime = -1;
+	int numFoundCubes = -1;
+	int planSize = -1;
+	boolean foundPlanWhileCubeing = false;
 
 	/**
 	 * Creates a new parallel planner. This planner uses a cube and conquer
@@ -49,43 +56,56 @@ public class CubeAndConquerPlanner extends Planner {
 		List<Cube> cubes;
 		CubeFinder cFinder;
 
-		List<String> entrie1 = Arrays.asList("problemFile", "maxSeconds", "numThreads", "numCubes", "cubeFinderMode",
-				"cubeNodeType", "cubePercent", "cubeSparceInterval", "cubeFindDescents", "schedulerMode",
-				"schedulerIterations", "schedulerTime", "schedulerExponentialGrowth", "schedulerHillClimb",
-				"cubeFindHeuristic", "cubeFindeHeuristicWeight", "cubeFindSearchStrategy", "cutOffAnchors",
-				"cutOffDistanceRatio", "cubeSolveHeuristic", "cubeSolveHeuristicWeight", "cubeSolveSearchStrategy");
+		List<String> entrie1 = Arrays.asList("problemFile", "maxSeconds", "numThreads", "numCubes",
+				"shareVisitedStates", "cubeFinderMode", "cubeNodeType", "cubePercent", "cubeSparceInterval",
+				"cubeFindDescents", "schedulerMode", "schedulerIterations", "schedulerTime",
+				"schedulerExponentialGrowth", "schedulerHillClimb", "cubeFindHeuristic", "cubeFindeHeuristicWeight",
+				"cubeFindSearchStrategy", "cutOffAnchors", "cutOffDistanceRatio", "cubeSolverMode",
+				"cubeSolveHeuristic", "cubeSolveHeuristicWeight", "cubeSolveSearchStrategy");
 		List<String> entrie2 = Arrays.asList(config.problemFile, Integer.toString(config.maxTimeSeconds),
 				Integer.toString(config.numThreads), Integer.toString(config.numCubes),
-				config.cubeFinderMode.toString(), config.cubeNodeType.toString(), Double.toString(config.cubePercent),
+				Boolean.toString(config.shareVisitedStates), config.cubeFinderMode.toString(),
+				config.cubeNodeType.toString(), Double.toString(config.cubePercent),
 				Integer.toString(config.cubeSparseInterval), Integer.toString(config.cubeFindDescents),
 				config.schedulerMode.toString(), Integer.toString(config.schedulerIterations),
 				Long.toString(config.schedulerTime), Double.toString(config.schedulerGrowth),
 				Double.toString(config.schedulerHillClimb), config.cubeFindHeuristic.toString(),
 				Integer.toString(config.cubeFindHeuristicWeight), config.cubeFindSearchStrategy.toString(),
 				Integer.toString(config.cutOffAnchors), Double.toString(config.cutOffDistanceRatio),
-				config.cubeSolveHeuristic.toString(), Integer.toString(config.cubeSolveHeuristicWeight),
-				config.cubeSolveSearchStrategy.toString());
+				config.solveMode.toString(), config.cubeSolveHeuristic.toString(),
+				Integer.toString(config.cubeSolveHeuristicWeight), config.cubeSolveSearchStrategy.toString());
 		CSVWriter.writeFile("configurationInfo.csv", Arrays.asList(entrie1, entrie2));
 
 		// Search for cubes
 		Logger.log(Logger.INFO, "Starting to search for cubes.");
 		cFinder = CubeFinder.getCubeFinder(config);
 		cubes = cFinder.findCubes(problem);
+		totalCubeFindTime = System.currentTimeMillis() - config.startTimeMillis;
 		cFinder.logInformation();
-
-		/*visitedStates = new HashSet<>();
-		for (Cube c : cubes) {
-			visitedStates.add(new SearchNode(null, c.getProblem().getInitialState()));
-		}*/
 
 		// check if we already found a Plan
 		plan = cFinder.getPlan();
 		if (plan != null) {
 			Logger.log(Logger.INFO, "Already found a plan while searching for cubes.");
+			foundPlanWhileCubeing = true;
+			totalSearchTime = System.currentTimeMillis() - config.startTimeMillis;
+			planSize = plan.getLength();
+			logInformation();
 			return plan;
 		} else if (cubes.size() == 0) {
 			Logger.log(Logger.INFO, "Unable to find any cubes. Problem has no solution.");
+			totalSearchTime = System.currentTimeMillis() - config.startTimeMillis;
+			planSize = plan.getLength();
+			logInformation();
 			return null;
+		}
+		numFoundCubes = cubes.size();
+
+		visitedStates = new HashSet<>();
+		if (config.shareVisitedStates) {
+			for (Cube c : cubes) {
+				visitedStates.add(new SearchNode(null, c.getProblem().getInitialState()));
+			}
 		}
 
 		// Shuffle Cubes
@@ -126,7 +146,15 @@ public class CubeAndConquerPlanner extends Planner {
 			}
 		}
 
+		entrie1 = Arrays.asList("compututuionTime", "cubeSearchTime", "cubeSolveTime", "foundCubes",
+				"foundPlanWhileCubing", "planSize");
+		entrie2 = Arrays.asList(Long.toString(System.currentTimeMillis() - config.startTimeMillis));
+		CSVWriter.writeFile("globalInfo.csv", Arrays.asList(entrie1, entrie2));
+
 		// Plan is not null iff any planner was successful
+		totalSearchTime = System.currentTimeMillis() - config.startTimeMillis;
+		planSize = plan.getLength();
+		logInformation();
 		return plan;
 	}
 
@@ -138,6 +166,7 @@ public class CubeAndConquerPlanner extends Planner {
 			// Another planner already found a plan
 			return;
 		}
+		totalCubeSolveTime = (System.currentTimeMillis() - config.startTimeMillis) - totalCubeFindTime;
 		this.plan = plan;
 		// Interrupt all planners
 		for (Thread thread : threads) {
@@ -145,6 +174,15 @@ public class CubeAndConquerPlanner extends Planner {
 			// when withinTimeLimit() is checked the next time.
 			thread.interrupt();
 		}
+	}
+
+	private void logInformation() {
+		List<String> entrie1 = Arrays.asList("compututuionTime", "cubeSearchTime", "cubeSolveTime", "foundCubes",
+				"foundPlanWhileCubing", "planSize");
+		List<String> entrie2 = Arrays.asList(Long.toString(totalSearchTime), Long.toString(totalCubeFindTime),
+				Long.toString(totalCubeSolveTime), Integer.toString(numFoundCubes),
+				Boolean.toString(foundPlanWhileCubeing));
+		CSVWriter.writeFile("globalInfo.csv", Arrays.asList(entrie1, entrie2));
 	}
 
 	/**
@@ -168,7 +206,7 @@ public class CubeAndConquerPlanner extends Planner {
 			// Create planners
 			planners = new ArrayList<CubeSolver>();
 			for (Cube cube : cubes) {
-				planners.add(new ForwardSearchCubeSolver(config, cube));
+				planners.add(CubeSolver.getCubeSolver(config, cube, visitedStates));
 			}
 
 			// Initialize Scheduler

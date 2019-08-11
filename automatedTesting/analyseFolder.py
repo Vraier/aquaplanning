@@ -61,15 +61,16 @@ resultBSE = getCompTimes('bigSequentialTest', 1)
 resultFGB = getCompTimes('FullGreedyBanditTest', 4)
 
 resultSSE = getCompTimes('smallSequentialTest', 1)
-resultB1 = getCompTimes('resultBandit', 4)
-resultB2 = getCompTimes('resultBandit2', 4)
-resultGB = getCompTimes('resultGreedyBandit', 4)
-resultGBCA = getCompTimes('GreedyBanditCubeAmountTest', 4)
-resultFI = getCompTimes('resultForcedImprovement', 4)
+#resultB1 = getCompTimes('resultBandit', 4)
+#resultB2 = getCompTimes('resultBandit2', 4)
+#resultGB = getCompTimes('resultGreedyBandit', 4)
+#resultGBCA = getCompTimes('GreedyBanditCubeAmountTest', 4)
+#resultFI = getCompTimes('resultForcedImprovement', 4)
 resultNTC = getCompTimes('NodeTypeComparison', 2)
 resultSP = getCompTimes('SparseTest', 6)
 resultRSP = getCompTimes('CubeRandomSparseTest', 6)
 resultPARG = getCompTimes('CubeFindPortfolioAndRandom', 8)
+resultSVS = getCompTimes('ShareVisitedStates', 4)
 
 
 #showResult = resultFGB # Different sched Time intervals -schedT=4000, 1000, 400, 100
@@ -85,12 +86,14 @@ resultPARG = getCompTimes('CubeFindPortfolioAndRandom', 8)
 #showResult = resultSP[3:6] # -c=80 -interval=1, 10, 100
 #showResult = [resultSP[1]] + [resultSP[4]] # compare -c=200, 80 and -interval=10
 
-#showResult = resultSE + resultBSE + [resultFGB[3]]
-#showResult = resultSP[0:3] + resultRSP[0:3]
+showResult = resultSE + resultBSE + [resultFGB[3]] #we didnt get twice as fast but made the sequential one twice as slow
+showResult = [resultPARG[0], resultPARG[4]] + resultSSE # Portfolio with 2000 and 800 Cubes
+showResult = resultPARG[1:4] + resultPARG[5:8] + resultSSE # randomGreedy with 2000 cubes and 1, 5, 20 descents and 800 cubes
+showResult = resultSP[0:3] + resultRSP[0:3] # normal forward search and taking random x% of cubes
 #showResult = resultSP[3:6] + resultRSP[3:6]
 showResult =  [resultRSP[2]] + resultSSE # best finder so far?
-#showResult = [resultPARG[0], resultPARG[4]] + resultSSE # Portfolio with 2000 and 800 Cubes
-#showResult = resultPARG[1:4] + resultPARG[5:8] + resultSSE # randomGreedy with 2000 cubes and 1, 5, 20 descents and 800 cubes
+#showResult = resultSVS # sharing visited States
+showResult = resultSSE + [resultNTC[1]] + [resultSVS[1]] # comparing it with closed
 
 plotCompTimes(showResult)
 

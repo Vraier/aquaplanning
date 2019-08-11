@@ -28,9 +28,20 @@ public abstract class CubeSolver {
 		this.cube = cube;
 		this.visitedNodes = visitedNodes;
 	}
-	
+
 	public CubeSolver(Configuration config, Cube cube) {
 		this(config, cube, new HashSet<>());
+	}
+
+	public static CubeSolver getCubeSolver(Configuration config, Cube cube, Set<SearchNode> visitedNodes) {
+		switch (config.solveMode) {
+		case forwardSearch:
+			return new ForwardSearchCubeSolver(config, cube, visitedNodes);
+		case randomSearch:
+			return new RandomBestFirstCubeSolver(config, cube, visitedNodes);
+		default:
+			throw new IllegalArgumentException("Colve mode not supported");
+		}
 	}
 
 	/**
@@ -56,7 +67,7 @@ public abstract class CubeSolver {
 	 * 
 	 * @return an approximation of the distance to its goal.
 	 */
-	public abstract int getBestDistance();
+	public abstract double getBestDistance();
 
 	public int getTotalIterations() {
 		return totalIterations;

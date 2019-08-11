@@ -3,7 +3,6 @@ package edu.kit.aquaplanning.aquaplanning;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 
 import edu.kit.aquaplanning.Configuration;
 import edu.kit.aquaplanning.Configuration.CubeFinderMode;
@@ -11,16 +10,14 @@ import edu.kit.aquaplanning.Configuration.CubeNodeType;
 import edu.kit.aquaplanning.Configuration.HeuristicType;
 import edu.kit.aquaplanning.Configuration.PlannerType;
 import edu.kit.aquaplanning.Configuration.SchedulerMode;
+import edu.kit.aquaplanning.Configuration.SolveMode;
 import edu.kit.aquaplanning.grounding.Grounder;
 import edu.kit.aquaplanning.grounding.PlanningGraphGrounder;
-import edu.kit.aquaplanning.model.cube.Cube;
 import edu.kit.aquaplanning.model.ground.GroundPlanningProblem;
 import edu.kit.aquaplanning.model.ground.Plan;
 import edu.kit.aquaplanning.model.lifted.PlanningProblem;
 import edu.kit.aquaplanning.parsing.ProblemParser;
 import edu.kit.aquaplanning.planning.Planner;
-import edu.kit.aquaplanning.planning.cube.finder.ForwardSearchCubeFinder;
-import edu.kit.aquaplanning.planning.cube.finder.GenericCubeFinder;
 import edu.kit.aquaplanning.planning.datastructures.SearchStrategy;
 import edu.kit.aquaplanning.validation.Validator;
 import junit.framework.TestCase;
@@ -46,10 +43,10 @@ public class TestCubeAndConquer extends TestCase {
 
 	public void testCubeFinderModes() throws FileNotFoundException, IOException {
 
-		//assertTrue("Ignore this.", false);
+		// assertTrue("Ignore this.", false);
 		for (CubeFinderMode mode : CubeFinderMode.values()) {
 
-			if (mode != CubeFinderMode.randomGreedy)
+			if (mode != CubeFinderMode.randomBestFirst)
 				continue;
 			Configuration config = getDefaultConfig();
 			config.cubeFinderMode = mode;
@@ -57,56 +54,6 @@ public class TestCubeAndConquer extends TestCase {
 
 			for (String domain : DEFAULT_TEST_DOMAINS) {
 				fullTest("testfiles/" + domain + "/domain.pddl", "testfiles/" + domain + "/p01.pddl", config);
-			}
-		}
-	}
-
-	public void testCutOffHeuristic() throws FileNotFoundException, IOException {
-
-		assertTrue("Ignore this.", false);
-		Configuration config = getDefaultConfig();
-		config.numCubes = 5000;
-
-		File benchdir = new File("benchmarks");
-		for (File domdir : benchdir.listFiles()) {
-
-			String domain = domdir.getCanonicalPath() + "/domain.pddl";
-			File testFile = new File(domain);
-			if (!testFile.exists()) {
-				continue;
-			}
-
-			for (File f : domdir.listFiles()) {
-				if (f.getName().startsWith("p") && f.getName().endsWith(".pddl")) {
-					String problem = f.getCanonicalPath();
-
-					System.out.println("Parsing ...");
-					pp = new ProblemParser().parse(domain, problem);
-					String out = pp.toString();
-					assertTrue("String representation of problem is null", out != null);
-
-					System.out.println("Grounding ...");
-					Grounder grounder = new PlanningGraphGrounder(config);
-					gpp = grounder.ground(pp);
-					out = gpp.toString();
-
-					System.out.println("Finding Cubes for Problem " + problem);
-					GenericCubeFinder cFinder = new ForwardSearchCubeFinder(config);
-					List<Cube> cubes = cFinder.findCubes(gpp);
-					// System.out.println("Generic Cube Finder found " + cFinder.totalFrontierSize +
-					// " cubes from which "
-					// + cFinder.totalCutOffSize + " were cut off and " + cFinder.totalAnchorSize
-					// + " were anchors.");
-
-					Plan plan = cFinder.getPlan();
-					if (plan != null) {
-						System.out.println("Found a plan while searching for cubes.");
-					} else {
-						System.out.println("We have " + cubes.size() + " cubes.");
-					}
-
-					System.out.println("");
-				}
 			}
 		}
 	}
@@ -205,6 +152,7 @@ public class TestCubeAndConquer extends TestCase {
 		config.maxTimeSeconds = 300;
 
 		config.numCubes = 100;
+		config.shareVisitedStates = true;
 		config.cubeFinderMode = CubeFinderMode.forwardSearch;
 		config.cubeNodeType = CubeNodeType.closed;
 		config.cubePercent = 0.3;
@@ -215,13 +163,14 @@ public class TestCubeAndConquer extends TestCase {
 		config.cubeFindHeuristicWeight = 10;
 		config.cutOffAnchors = 10;
 		config.cutOffDistanceRatio = 0.3;
-		
-		config.schedulerMode = SchedulerMode.exponential;
+
+		config.schedulerMode = SchedulerMode.greedyBandit;
 		config.schedulerIterations = 0;
 		config.schedulerTime = 4000;
 		config.schedulerGrowth = 1.5;
 		config.schedulerHillClimb = 0.5;
 
+		config.solveMode = SolveMode.forwardSearch;
 		config.cubeSolveSearchStrategy = SearchStrategy.Mode.bestFirst;
 		config.cubeSolveHeuristic = HeuristicType.ffTrautmann;
 		config.cubeSolveHeuristicWeight = 10;

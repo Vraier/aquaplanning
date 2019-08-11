@@ -33,7 +33,7 @@ public class ForcedImprovementScheduler extends Scheduler {
 	public ExitStatus scheduleNext() {
 
 		if (nextRunning == 0) {
-			solvers.sort((s1, s2) -> Integer.compare(s1.getBestDistance(), s2.getBestDistance()));
+			solvers.sort((s1, s2) -> Double.compare(s1.getBestDistance(), s2.getBestDistance()));
 		}
 
 		if (iterations == 0 && time == 0) {
@@ -60,7 +60,7 @@ public class ForcedImprovementScheduler extends Scheduler {
 				currentPlanner.setTimeLimit(time);
 			}
 
-			int initialHeuristic = currentPlanner.getBestDistance();
+			double initialHeuristic = currentPlanner.getBestDistance();
 			plan = currentPlanner.calculateSteps();
 			scheduleCount.set(nextRunning, scheduleCount.get(nextRunning) + 1);
 			totalScheduled++;

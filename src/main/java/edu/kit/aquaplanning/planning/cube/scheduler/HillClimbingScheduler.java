@@ -60,7 +60,7 @@ public class HillClimbingScheduler extends Scheduler {
 				candidate.solver.setTimeLimit(time);
 			}
 			// calculate steps and add the new difference to the average
-			int currentDistance = candidate.solver.getBestDistance();
+			double currentDistance = candidate.solver.getBestDistance();
 			plan = candidate.solver.calculateSteps();
 			if (plan != null) {
 				return ExitStatus.foundPlan;
@@ -104,7 +104,7 @@ public class HillClimbingScheduler extends Scheduler {
 
 	private class MySolver {
 
-		ArrayList<Integer> differences = new ArrayList<>();
+		ArrayList<Double> differences = new ArrayList<>();
 		int sum = 0;
 		CubeSolver solver;
 
@@ -112,7 +112,7 @@ public class HillClimbingScheduler extends Scheduler {
 			this.solver = solver;
 		}
 
-		void addDifference(int difference) {
+		void addDifference(double difference) {
 			differences.add(difference);
 			sum += difference;
 		}

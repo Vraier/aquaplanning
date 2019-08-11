@@ -51,6 +51,7 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 			frontier = new SearchQueue(strategy);
 		}
 		frontier.add(new SearchNode(null, state));
+		this.visitedNodes.remove(new SearchNode(null, state));
 	}
 	
 	public ForwardSearchCubeSolver(Configuration config, Cube cube) {
@@ -118,7 +119,7 @@ public class ForwardSearchCubeSolver extends CubeSolver {
 	}
 
 	@Override
-	public int getBestDistance() {
+	public double getBestDistance() {
 		if(heuristic == null) {
 			throw new UnsupportedOperationException("Need a heuristic to provide distances");
 		}

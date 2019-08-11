@@ -13,6 +13,7 @@ import edu.kit.aquaplanning.model.ground.State;
 public abstract class GenericSearchNode {
 
 	public int depth;
+	public double randomValue;
 	public GenericSearchNode parent;
 	public GroundPlanningProblem problem;
 	public Action lastAction;
