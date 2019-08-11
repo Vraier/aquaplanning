@@ -21,17 +21,17 @@ public class RandomBestFirstCubeSolver extends CubeSolver {
 
 	public RandomBestFirstCubeSolver(Configuration config, Cube cube, Set<SearchNode> visitedNodes) {
 		super(config, cube, visitedNodes);
-		
+
 		Configuration tempConfig = config.copy();
 		tempConfig.cubeFindHeuristic = config.cubeSolveHeuristic;
 		heuristic = GenericHeuristic.getHeuristic(tempConfig);
-		
-		frontier = new PriorityQueue<>((n1, n2) -> Double.compare(n1.randomValue, n2.randomValue));
-		GenericSearchNode initialNode = new ForwardSearchNode(cube.getProblem());
-		initialNode.randomValue = heuristic.value(initialNode);
-		frontier.add(initialNode);
 
 		random = new Random(config.seed);
+
+		frontier = new PriorityQueue<>((n1, n2) -> Double.compare(n1.randomValue, n2.randomValue));
+		GenericSearchNode initialNode = new ForwardSearchNode(cube.getProblem());
+		initialNode.randomValue = heuristic.value(initialNode) * (0.9 + (random.nextDouble() * 0.2));
+		frontier.add(initialNode);
 	}
 
 	@Override
