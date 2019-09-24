@@ -43,10 +43,10 @@ public class TestCubeAndConquer extends TestCase {
 
 	public void testCubeFinderModes() throws FileNotFoundException, IOException {
 
-		// assertTrue("Ignore this.", false);
+		assertTrue("Ignore this.", false);
 		for (CubeFinderMode mode : CubeFinderMode.values()) {
 
-			if (mode != CubeFinderMode.randomBestFirst)
+			if (mode != CubeFinderMode.forwardSearch)
 				continue;
 			Configuration config = getDefaultConfig();
 			config.cubeFinderMode = mode;
@@ -60,10 +60,10 @@ public class TestCubeAndConquer extends TestCase {
 
 	public void testSchedulerModes() throws FileNotFoundException, IOException {
 
-		assertTrue("Ignore this.", false);
+		//assertTrue("Ignore this.", false);
 		for (SchedulerMode mode : SchedulerMode.values()) {
 
-			if (mode != SchedulerMode.greedyBandit)
+			if (mode != SchedulerMode.roundRobin)
 				continue;
 			Configuration config = getDefaultConfig();
 			config.schedulerMode = mode;

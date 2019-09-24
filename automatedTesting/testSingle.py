@@ -23,7 +23,7 @@ for command in consts.arguments:
     ArgumentNumber = ArgumentNumber + 1
     commandList.append(commandPrefix + [testDomain] + [testFile] + [csvOutputFolderName] + command)
 
-print('We have ' + str(len(commandList))+ ' argument Combinations')
+print('We have ' + str(len(commandList))+ ' argument Combinations.')
 for command in commandList:
     if not os.path.exists(os.path.dirname(outputFilePath)):
         try:

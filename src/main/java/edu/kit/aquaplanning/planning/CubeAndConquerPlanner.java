@@ -146,11 +146,6 @@ public class CubeAndConquerPlanner extends Planner {
 			}
 		}
 
-		entrie1 = Arrays.asList("compututuionTime", "cubeSearchTime", "cubeSolveTime", "foundCubes",
-				"foundPlanWhileCubing", "planSize");
-		entrie2 = Arrays.asList(Long.toString(System.currentTimeMillis() - config.startTimeMillis));
-		CSVWriter.writeFile("globalInfo.csv", Arrays.asList(entrie1, entrie2));
-
 		// Plan is not null iff any planner was successful
 		totalSearchTime = System.currentTimeMillis() - config.startTimeMillis;
 		planSize = plan.getLength();
