@@ -2,8 +2,7 @@ import os
 import testUtil as util
 
 # Variable Strings
-outputFolder = 'RandomBestFirstCubeFinidng'
-outputFolderPath = os.path.join(homeDirName, outputFolder)
+outputFolder = 'ttDOSTUFFHEREEEEEEEEE'
 
 # Constant strings and paths
 breakSequenze = '###############################################################\n'
@@ -15,6 +14,7 @@ homeDirName = os.path.dirname(__file__)
 outputFilePath = os.path.join(homeDirName, outpuFile)
 jarPath = os.path.join(homeDirName, relativeJarPath)
 benchmarkPath = os.path.join(homeDirName, relativeBenchmarkPath)
+outputFolderPath = os.path.join(homeDirName, outputFolder)
 
 # Command Arguments for testCombinations
 timeLimit = 2000 # Time after we timeOut in seconds for parallel test
