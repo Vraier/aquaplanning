@@ -148,7 +148,11 @@ public class CubeAndConquerPlanner extends Planner {
 
 		// Plan is not null iff any planner was successful
 		totalSearchTime = System.currentTimeMillis() - config.startTimeMillis;
-		planSize = plan.getLength();
+		if (plan != null) {
+			planSize = plan.getLength();
+		} else {
+			planSize = -1;
+		}
 		logInformation();
 		return plan;
 	}

@@ -158,7 +158,8 @@ public class TestCubeAndConquer extends TestCase {
 		config.cubePercent = 0.3;
 		config.cubeSparseInterval = 3;
 		config.cubeFindDescents = 5;
-		config.cubeFindSearchStrategy = SearchStrategy.Mode.bestFirst;
+		//config.cubeFindSearchStrategy = SearchStrategy.Mode.bestFirst;
+		config.cubeFindSearchStrategy = SearchStrategy.Mode.breadthFirst;
 		config.cubeFindHeuristic = HeuristicType.ffTrautmann;
 		config.cubeFindHeuristicWeight = 10;
 		config.cutOffAnchors = 10;
