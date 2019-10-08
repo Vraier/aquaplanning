@@ -15,6 +15,9 @@ import edu.kit.aquaplanning.planning.cube.datastructure.GenericSearchNode;
 import edu.kit.aquaplanning.planning.cube.heuristic.GenericHeuristic;
 import edu.kit.aquaplanning.util.Logger;
 
+/**
+ * This cube finder does multiple randomized best first searches
+ */
 public class RandomBestFirstCubeFinder extends CubeFinder {
 
 	private PriorityQueue<GenericSearchNode> frontier;
@@ -30,7 +33,6 @@ public class RandomBestFirstCubeFinder extends CubeFinder {
 		heuristic = GenericHeuristic.getHeuristic(config);
 		random = new Random(config.seed);
 		numDescents = config.cubeFindDescents;
-
 	}
 
 	@Override
@@ -79,7 +81,7 @@ public class RandomBestFirstCubeFinder extends CubeFinder {
 			}
 
 			for (GenericSearchNode child : node.getPredecessors()) {
-				// calculate a new random value for the child
+				// calculate a new random value by multiplying with 0.9 <= r <= 1.1
 				int value = heuristic.value(child);
 				double randomFactor = 0.9 + (random.nextDouble() * 0.2);
 				child.randomValue = randomFactor * (double) value;

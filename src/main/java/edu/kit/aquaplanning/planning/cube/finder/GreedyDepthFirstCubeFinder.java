@@ -14,6 +14,9 @@ import edu.kit.aquaplanning.planning.cube.datastructure.ForwardSearchNode;
 import edu.kit.aquaplanning.planning.cube.datastructure.GenericSearchNode;
 import edu.kit.aquaplanning.planning.cube.heuristic.GenericHeuristic;
 
+/**
+ * This cube finder does multiple randomized depth first searches into the graph.
+ */
 public class GreedyDepthFirstCubeFinder extends CubeFinder {
 
 	private HashSet<GenericSearchNode> allVisitedNodes = new HashSet<>();
@@ -72,7 +75,7 @@ public class GreedyDepthFirstCubeFinder extends CubeFinder {
 					plan = c.getPartialPlan();
 					return null;
 				}
-				if (value < Integer.MAX_VALUE) {
+				if (value < Integer.MAX_VALUE && !visitedNodes.contains(c)) {
 					feasibleChilds.add(c);
 				}
 			}

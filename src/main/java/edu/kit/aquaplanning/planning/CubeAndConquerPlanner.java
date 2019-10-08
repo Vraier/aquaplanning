@@ -180,7 +180,7 @@ public class CubeAndConquerPlanner extends Planner {
 				"foundPlanWhileCubing", "planSize");
 		List<String> entrie2 = Arrays.asList(Long.toString(totalSearchTime), Long.toString(totalCubeFindTime),
 				Long.toString(totalCubeSolveTime), Integer.toString(numFoundCubes),
-				Boolean.toString(foundPlanWhileCubeing));
+				Boolean.toString(foundPlanWhileCubeing), Integer.toString(planSize));
 		CSVWriter.writeFile("globalInfo.csv", Arrays.asList(entrie1, entrie2));
 	}
 

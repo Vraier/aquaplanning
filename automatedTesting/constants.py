@@ -23,15 +23,14 @@ plannerType = ['-p=cubePlanner']
 numThreads = ['-T=4']
 verbosityLevel = ['-v=2']
 #numCubes = ['-c=8000', '-c=2000', '-c=800', '-c=80']
-numCubes = ['-c=600', '-c=60']
+numCubes = ['-c=400', '-c=40']
 #shareVisitedStates = ['-svs']
 #cubeFindDescents = ['-csd=1', '-csd=5', '-csd=20']
 #cubeInterval = ['-csi=1', '-csi=10', '-csi=100']
 #cubePercent = ['-cp=1.0', '-cp=0.1', '-cp=0.01']
 cubeNodeType = ['-cnt=closed'] #'-cnt=closed', '-cnt=open'
-#cubeFinderMode = ['--cubeFinder=portfolio', '--cubeFinder=randomGreedy'] # '--cubeFinder=backwardSearch'
-#cubeFinderMode = ['--cubeFinder=randomBestFirst']
-cubeFinderMode = ['--cubeFinder=forwardSearch']
+cubeFinderMode = ['--cubeFinder=randomBestFirst'] #forwardSearch, backwardSearch, cutOff, portfolio, sparse, randomGreedy, randomBestFirst
+cubeFindeDescents = ['-csd=1', '-csd=5', '-csd=25']
 cubeFindSearchStrategy = ['-cfs=bestFirst'] # '-cfs=breadthFirst' '-cfs=bestFirst'
 schedulerMode = ['-sched=greedyBandit'] #['-sched=bandit', -sched=exponential', '-sched=hillClimbing', '-sched=roundRobin', '-sched=greedyBandit']
 schedulerTime = ['-schedT=100', '-schedT=10']
